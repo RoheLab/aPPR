@@ -80,6 +80,9 @@ Tracker <- R6Class("Tracker", list(
   # assumes that node is not in the tracker yet
   add_node = function(graph, node, preference = 0) {
 
+    # add a step to check whether data is available on node
+    # this should be a generic
+
     self$stats <- add_row(
       self$stats,
       name  = node,
@@ -101,6 +104,12 @@ Tracker <- R6Class("Tracker", list(
 
     if (!in_tracker(v))
       self$add_node(graph, v)
+
+    # sometimes adding a node will fail (for example, attempting to
+    # sample a protected user). in this case, we just pretend this user
+    # isn't in the neighborhood of u
+
+    # TODO: add some sort of boolean update
 
     u_index <- which(self$stats$name == u)
     v_index <- which(self$stats$name == v)
