@@ -1,11 +1,14 @@
 
 #' @export
 twittercache_graph <- function() {
+
+  # TODO: allow user to specify number of sampling attempts to account for
+  # API downtime and issues
   new_abstract_graph("tc_graph")
 }
 
 #' @export
-print.tc_graph <- function() {
+print.tc_graph <- function(x, ...) {
   cat("twittercache graph connection\n")
 }
 
@@ -34,19 +37,16 @@ out_degree.tc_graph <- function(graph, node) {
 neighborhood.tc_graph <- function(graph, node, directed = TRUE) {
 
   if (!twittercache:::in_cache(node))
-    sample_node(node)
+    sample_node(graph, node)
 
   path <- twittercache:::get_edge_path(node)
   edge_data <- readr::read_rds(path)
 
   # issue: there will be edges to protected nodes that we can't sample
 
+  as.character(edge_data[edge_data$from == node, ]$to)
+}
 
-  _data$friends_count
-
-  # check if node is in the cache
-
-  # if it isn't, sample it and save it to the cache
-
-  # return a character vector of users followed by node
+sample_node <- function(graph, node) {
+  stop("Trying to sample node not in Twittercache")
 }

@@ -18,3 +18,5 @@ Depends:
     R6
 URL: https://github.com/RoheLab/aPPR
 BugReports: https://github.com/RoheLab/aPPR/issues
+Imports: 
+    tibble
