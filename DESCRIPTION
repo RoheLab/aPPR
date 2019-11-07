@@ -8,15 +8,23 @@ Authors@R:
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
-License: What license it uses
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
-    twittercache
+    twittercache,
+    testthat (>= 2.1.0)
 RoxygenNote: 6.1.1
 Depends: 
     R6
 URL: https://github.com/RoheLab/aPPR
 BugReports: https://github.com/RoheLab/aPPR/issues
 Imports: 
-    tibble
+    tibble,
+    ellipsis
+Collate: 
+    'abstract-graph.R'
+    'aPPR.R'
+    'graph-igraph.R'
+    'graph-rtweet.R'
+    'graph-twittercache.R'

@@ -53,7 +53,7 @@ p <- appr(graph, seed)
 ```{r}
 alpha = 0.15
 epsilon = 1e-6
-adjust = TRUE
+adjust = FALSE
 tau = 0
 
 alpha_prime <- alpha / (2 - alpha)
@@ -70,12 +70,12 @@ while (length(remaining) > 0) {
   
   # TODO: test edge case when remaining is a single integer node
   # TODO: second issue: returning a tibble, not a character vector
-  u <- if (length(remaining) == 1) u else sample(remaining, size = 1)
+  u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
   
   tracker$update_p(u, alpha_prime)  # u is a node name
   
   for (v in neighborhood(graph, u)) {
-    tracker$update_r_neighbor(graph, u, v)
+    tracker$update_r_neighbor(graph, u, v, alpha_prime)
   }
   
   tracker$update_r_self(u, alpha_prime)

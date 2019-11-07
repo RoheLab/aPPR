@@ -1,19 +1,50 @@
+#' Approximate personalized pageranks
+#'
+#' @param graph TODO
+#' @param seeds TODO
+#' @param alpha TODO
+#' @param epsilon TODO
+#' @param adjust TODO
+#' @param tau TODO
+#' @param ... Ignored. Passing arguments to `...` results in a warning.
+#'
+#' @return TODO
 #' @export
-appr <- function(graph, ...) {
+#'
+#' @examples
+#'
+#' #### on a concrete, local igraph object
+#'
+#' library(igraph)
+#'
+#' set.seed(27)
+#'
+#' ig <- sample_pa(100)
+#'
+#' gcon <- igraph_connection(ig)
+#'
+#' in_degree(gcon, "1")
+#' out_degree(gcon, "1")
+#' neighborhood(gcon, "1")
+#'
+#' ##### on the twitter graph via rtweet
+#'
+#' # TODO
+#'
+#' ##### on the twitter graph via twittercache
+#'
+#' # TODO
+#'
+appr <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
+                 adjust = TRUE, tau = 0, ...) {
+  ellipsis::check_dots_used()
   UseMethod("appr")
-}
-
-appr.default <- function(graph) {
-  stop(
-    paste("No `appr` method exists for objects of class ", class(graph)[1]),
-    call. = FALSE
-  )
 }
 
 #' @include abstract-graph.R
 #' @export
 appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
-                                adjust = TRUE, tau = 0) {
+                                adjust = TRUE, tau = 0, ...) {
 
   alpha_prime <- alpha / (2 - alpha)
 
@@ -28,12 +59,12 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
   while (length(remaining) > 0) {
 
     # TODO: test edge case when remaining is a single integer node
-    u <- sample(remaining, size = 1)
+    u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
 
     tracker$update_p(u, alpha_prime)  # u is a node name
 
     for (v in neighborhood(graph, u)) {
-      tracker$update_r_neighbor(graph, u, v)
+      tracker$update_r_neighbor(graph, u, v, alpha_prime)
     }
 
     tracker$update_r_self(u, alpha_prime)
@@ -41,13 +72,18 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
     remaining <- tracker$remaining(epsilon)
   }
 
-  if (!adjust)
-    return(tracker$stats$p)
-
-  # TODO: maybe there is a smarter way to guestimate tau
-  # based on the observed nodes
-
-  tracker$stats$p / (tracker$stats$in_degree + tau)
+  tracker$stats
+  #
+  # if (!adjust)
+  #   return(tracker$stats$p)
+  #
+  # # TODO: maybe there is a smarter way to guestimate tau
+  # # based on the observed nodes
+  #
+  # # TODO: divide by zero issue -- will this happen?
+  # #   what if you get a graph with a singleton node
+  #
+  # trackertracker$stats$p / (tracker$stats$in_degree + tau)
 }
 
 Tracker <- R6Class("Tracker", list(
@@ -101,7 +137,7 @@ Tracker <- R6Class("Tracker", list(
       alpha_prime * self$stats[[node_index, "r"]]
   },
 
-  update_r_neighbor = function(graph, u, v) {
+  update_r_neighbor = function(graph, u, v, alpha_prime) {
 
     if (!self$in_tracker(v))
       self$add_node(graph, v)
@@ -117,7 +153,7 @@ Tracker <- R6Class("Tracker", list(
 
     self$stats[[v_index, "r"]] <- self$stats[[v_index, "r"]] +
       (1 - alpha_prime) * self$stats[[u_index, "r"]] /
-      (2 * self$stats[[u_index, "degree_out"]])
+      (2 * self$stats[[u_index, "out_degree"]])
 
   },
 
