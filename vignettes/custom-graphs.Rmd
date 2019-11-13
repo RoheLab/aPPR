@@ -1,0 +1,19 @@
+---
+title: "Using aPPR with Custom Graphs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using aPPR with Custom Graphs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(aPPR)
+```

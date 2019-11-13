@@ -1,15 +1,62 @@
 #' Approximate personalized pageranks
 #'
-#' @param graph TODO
-#' @param seeds TODO
-#' @param alpha TODO
-#' @param epsilon TODO
-#' @param adjust TODO
-#' @param tau TODO
+#' @param graph An [abstract_graph()] object, such as those created by
+#'   [rtweet_graph()] and [twittercache_graph()], and [igraph::igraph()]
+#'   object. This argument is required.
+#'
+#' @param seeds A character vector of seeds for the personalized pagerank.
+#'   The personalized pagerank will return to each of these seeds with
+#'   probability `alpha` at each node transition. At the moment,
+#'   all seeds are given equal weighting. This argument is required.
+#'
+#' @param alpha Teleporting factor. The teleportation factor is the
+#'   probability of returning to a seed node at each node transition.
+#'   Defaults to `0.15`. This is the inverse of the "dampening factor"
+#'   in the original PageRank paper, so `alpha = 0.15` corresponds
+#'   to a dampening factor of `0.85`.
+#'
+#' @param epsilon Desired accuracy of approximation. Small `epsilon`
+#'   can result in long runtimes. Defaults to `1e-6`.
+#'
+#' @param tau Regularization term. Additionally inflates the in degree
+#'   of each observation by this term by performing the degree
+#'   adjustment described in Algorithm 3 and Algorithm 4, which
+#'   are described in `vignette("Mathematical details")`. Defaults to
+#'   `NULL`, in which case `tau` is set to the average in degree of
+#'   the observed nodes. In general, setting it's reasonable to
+#'   set `tau` to the average degree of the graph.
+#'
 #' @param ... Ignored. Passing arguments to `...` results in a warning.
 #'
-#' @return TODO
+#' @return A [tibble::tibble()] with the following columns:
+#'
+#'   - `name`: Name of a node (character).
+#'   - `p`: Estimated personalized pagerank of a node.
+#'   - `r`: Estimated error of pagerank estimate for a node.
+#'   - `in_degree`: Number of incoming edges to a node.
+#'   - `out_degree`: Number of outcoming edges from a node.
+#'   - `degree_adjusted`: The personalized pagerank divided by the
+#'     node in-degree.
+#'   - `regularized`: The personalized pagerank divide by the node
+#'     in-degree plus `tau`.
+#'
+#' When `graph` is an
+#'
+#'   - `rtweet_graph` get `user_id` not screen names
+#'
+#'
+#'
 #' @export
+#'
+#' @details
+#'
+#' Note that, due to the inspection paradox, the average observed
+#' degree of the network will be higher than the average degree of
+#' the entire network. This means that the default value for `tau`
+#' many be a bit high. In practice, we do not observe that the
+#' small changes in the value of `tau` substantively changes results,
+#' you really just need to regularize enough so that low in degree
+#' nodes don't look overly important after degree correction.
 #'
 #' @examples
 #'
@@ -35,8 +82,7 @@
 #'
 #' # TODO
 #'
-appr <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
-                 adjust = TRUE, tau = 0, ...) {
+appr <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6, tau = NULL, ...) {
   ellipsis::check_dots_used()
   UseMethod("appr")
 }
@@ -44,7 +90,7 @@ appr <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
 #' @include abstract-graph.R
 #' @export
 appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
-                                adjust = TRUE, tau = 0, ...) {
+                                tau = NULL, ...) {
 
   alpha_prime <- alpha / (2 - alpha)
 
@@ -58,7 +104,6 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
 
   while (length(remaining) > 0) {
 
-    # TODO: test edge case when remaining is a single integer node
     u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
 
     tracker$update_p(u, alpha_prime)  # u is a node name
@@ -72,94 +117,13 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
     remaining <- tracker$remaining(epsilon)
   }
 
-  tracker$stats
-  #
-  # if (!adjust)
-  #   return(tracker$stats$p)
-  #
-  # # TODO: maybe there is a smarter way to guestimate tau
-  # # based on the observed nodes
-  #
-  # # TODO: divide by zero issue -- will this happen?
-  # #   what if you get a graph with a singleton node
-  #
-  # trackertracker$stats$p / (tracker$stats$in_degree + tau)
+  ppr <- tracker$stats
+
+  if (is.null(tau)) {
+    tau <- mean(ppr$in_degree)  # TODO: in_degree or out_degree here?
+  }
+
+  ppr$degree_adjusted <- ppr$p / ppr$in_degree      # might divide by 0 here
+  ppr$regularized <- ppr$p / (ppr$in_degree + tau)
 }
 
-Tracker <- R6Class("Tracker", list(
-  stats = NULL,
-
-  initialize = function() {
-    self$stats <- tibble::tibble(
-      name = character(0),
-      r = numeric(0),
-      p = numeric(0),
-      in_degree = numeric(0),
-      out_degree = numeric(0)
-    )
-  },
-
-  print = function() {
-    print(self$stats)
-    invisible(self)
-  },
-
-  remaining = function(epsilon) {
-    s <- self$stats
-    s[s$r > epsilon * s$out_degree, ]$name
-  },
-
-  in_tracker = function(node) {
-    node %in% self$stats$name
-  },
-
-  # assumes that node is not in the tracker yet
-  add_node = function(graph, node, preference = 0) {
-
-    # add a step to check whether data is available on node
-    # this should be a generic
-
-    self$stats <- tibble::add_row(
-      self$stats,
-      name  = node,
-      p = 0,
-      r = preference,
-      in_degree = in_degree(graph, node),
-      out_degree = out_degree(graph, node)
-    )
-
-  },
-
-  update_p = function(node, alpha_prime) {
-
-    node_index <- which(self$stats$name == node)
-    self$stats[[node_index, "p"]] <- self$stats[[node_index, "p"]] +
-      alpha_prime * self$stats[[node_index, "r"]]
-  },
-
-  update_r_neighbor = function(graph, u, v, alpha_prime) {
-
-    if (!self$in_tracker(v))
-      self$add_node(graph, v)
-
-    # sometimes adding a node will fail (for example, attempting to
-    # sample a protected user). in this case, we just pretend this user
-    # isn't in the neighborhood of u
-
-    # TODO: add some sort of boolean update
-
-    u_index <- which(self$stats$name == u)
-    v_index <- which(self$stats$name == v)
-
-    self$stats[[v_index, "r"]] <- self$stats[[v_index, "r"]] +
-      (1 - alpha_prime) * self$stats[[u_index, "r"]] /
-      (2 * self$stats[[u_index, "out_degree"]])
-
-  },
-
-  update_r_self = function(node, alpha_prime) {
-    node_index <- which(self$stats$name == node)
-    self$stats[[node_index, "r"]] <- (1 - alpha_prime) *
-      self$stats[[node_index, "r"]] / 2
-  }
-))
