@@ -34,21 +34,12 @@ You can install the development version from [GitHub](https://github.com/) with:
 devtools::install_github("RoheLab/aPPR")
 ```
 
-## Find the personalized pagerank of a Twitter user using `rtweet`
-
-```{r rtweet-example, eval = FALSE}
-library(aPPR)
-
-graph <- rtweet_graph()
-
-appr(graph, "alexpghayes")
-```
-
 ## Find the personalized pagerank of a node in an `igraph` graph
 
 This is a basic example which shows you how to solve a common problem:
 
 ```{r igraph-example}
+library(aPPR)
 library(igraph)
 
 set.seed(27)
@@ -58,6 +49,13 @@ graph2 <- sample_pa(100)
 appr(graph2, seeds = "5")
 ```
 
+## Find the personalized pagerank of a Twitter user using `rtweet`
+
+```{r rtweet-example, eval = FALSE}
+graph <- rtweet_graph()
+
+appr(graph, "alexpghayes")
+```
 
 # References
 

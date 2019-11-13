@@ -26,21 +26,12 @@ You can install the development version from
 devtools::install_github("RoheLab/aPPR")
 ```
 
-## Find the personalized pagerank of a Twitter user using `rtweet`
-
-``` r
-library(aPPR)
-
-graph <- rtweet_graph()
-
-appr(graph, "alexpghayes")
-```
-
 ## Find the personalized pagerank of a node in an `igraph` graph
 
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
+library(aPPR)
 library(igraph)
 
 set.seed(27)
@@ -48,7 +39,20 @@ set.seed(27)
 graph2 <- sample_pa(100)
 
 appr(graph2, seeds = "5")
-#> Error in appr(graph2, seeds = "5"): could not find function "appr"
+#> # A tibble: 3 x 7
+#>   name            r     p in_degree out_degree degree_adjusted regularized
+#>   <chr>       <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
+#> 1 5     0.000000833 0.150         2          1         0.0750      0.0105 
+#> 2 4     0.000000579 0.127         4          1         0.0319      0.00781
+#> 3 1     0           0.108        31          0         0.00350     0.00250
+```
+
+## Find the personalized pagerank of a Twitter user using `rtweet`
+
+``` r
+graph <- rtweet_graph()
+
+appr(graph, "alexpghayes")
 ```
 
 # References

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Approximate Personalized Page Rank • aPPR</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Approximate Personalized Page Rank">
@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">aPPR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9000</span>
       </span>
     </div>
 
@@ -58,6 +58,9 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="articles/custom-graphs.html">Using aPPR with Custom Graphs</a>
+    </li>
+    <li>
+      <a href="articles/mathematical-details.html">Mathematical Details</a>
     </li>
   </ul>
 </li>
@@ -98,28 +101,32 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># install.packages("devtools")</span></a>
 <a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"RoheLab/aPPR"</span>)</a></code></pre></div>
 </div>
-<div id="find-the-personalized-pagerank-of-a-twitter-user-using-rtweet" class="section level2">
-<h2 class="hasAnchor">
-<a href="#find-the-personalized-pagerank-of-a-twitter-user-using-rtweet" class="anchor"></a>Find the personalized pagerank of a Twitter user using <code>rtweet</code>
-</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(aPPR)</a>
-<a class="sourceLine" id="cb2-2" title="2"></a>
-<a class="sourceLine" id="cb2-3" title="3">graph &lt;-<span class="st"> </span><span class="kw"><a href="reference/rtweet_graph.html">rtweet_graph</a></span>()</a>
-<a class="sourceLine" id="cb2-4" title="4"></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="kw"><a href="reference/appr.html">appr</a></span>(graph, <span class="st">"alexpghayes"</span>)</a></code></pre></div>
-</div>
 <div id="find-the-personalized-pagerank-of-a-node-in-an-igraph-graph" class="section level2">
 <h2 class="hasAnchor">
 <a href="#find-the-personalized-pagerank-of-a-node-in-an-igraph-graph" class="anchor"></a>Find the personalized pagerank of a node in an <code>igraph</code> graph</h2>
 <p>This is a basic example which shows you how to solve a common problem:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(igraph)</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(aPPR)</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(igraph)</a>
+<a class="sourceLine" id="cb2-3" title="3"></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">27</span>)</a>
+<a class="sourceLine" id="cb2-5" title="5"></a>
+<a class="sourceLine" id="cb2-6" title="6">graph2 &lt;-<span class="st"> </span><span class="kw">sample_pa</span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb2-7" title="7"></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="kw"><a href="reference/appr.html">appr</a></span>(graph2, <span class="dt">seeds =</span> <span class="st">"5"</span>)</a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; # A tibble: 3 x 7</span></a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt;   name            r     p in_degree out_degree degree_adjusted regularized</span></a>
+<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;           &lt;dbl&gt;       &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt; 1 5     0.000000833 0.150         2          1         0.0750      0.0105 </span></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt; 2 4     0.000000579 0.127         4          1         0.0319      0.00781</span></a>
+<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt; 3 1     0           0.108        31          0         0.00350     0.00250</span></a></code></pre></div>
+</div>
+<div id="find-the-personalized-pagerank-of-a-twitter-user-using-rtweet" class="section level2">
+<h2 class="hasAnchor">
+<a href="#find-the-personalized-pagerank-of-a-twitter-user-using-rtweet" class="anchor"></a>Find the personalized pagerank of a Twitter user using <code>rtweet</code>
+</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">graph &lt;-<span class="st"> </span><span class="kw"><a href="reference/rtweet_graph.html">rtweet_graph</a></span>()</a>
 <a class="sourceLine" id="cb3-2" title="2"></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">27</span>)</a>
-<a class="sourceLine" id="cb3-4" title="4"></a>
-<a class="sourceLine" id="cb3-5" title="5">graph2 &lt;-<span class="st"> </span><span class="kw">sample_pa</span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb3-6" title="6"></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="kw"><a href="reference/appr.html">appr</a></span>(graph2, <span class="dt">seeds =</span> <span class="st">"5"</span>)</a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; Error in appr(graph2, seeds = "5"): could not find function "appr"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw"><a href="reference/appr.html">appr</a></span>(graph, <span class="st">"alexpghayes"</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="references" class="section level1">
