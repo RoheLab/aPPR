@@ -41,12 +41,12 @@ in_degree.rtweet_graph <- function(graph, node) {
   rtweet::lookup_users(node)$followers_count
 }
 
-out_degree.igraph <- function(graph, node) {
+out_degree.rtweet_graph <- function(graph, node) {
   rtweet::lookup_users(node)$friends_count
 }
 
 # TODO: rate limiting, token usage, blargh
-neighborhood.igraph <- function(graph, node) {
+neighborhood.rtweet_graph <- function(graph, node) {
   rtweet::get_friends(node)$user_id
 }
 

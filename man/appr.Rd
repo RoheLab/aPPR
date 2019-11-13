@@ -72,27 +72,20 @@ nodes don't look overly important after degree correction.
 }
 \examples{
 
-#### on a concrete, local igraph object
-
+library(aPPR)
 library(igraph)
 
 set.seed(27)
 
-ig <- sample_pa(100)
+graph <- rtweet_graph()
 
-gcon <- igraph_connection(ig)
+\dontrun{
+appr(graph, "alexpghayes")
+}
 
-in_degree(gcon, "1")
-out_degree(gcon, "1")
-neighborhood(gcon, "1")
+graph2 <- sample_pa(100)
 
-##### on the twitter graph via rtweet
-
-# TODO
-
-##### on the twitter graph via twittercache
-
-# TODO
+appr(graph2, seeds = "5")
 
 
 library(igraph)
