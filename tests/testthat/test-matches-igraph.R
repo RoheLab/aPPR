@@ -26,16 +26,13 @@ test_that("matches igraph calculations on connected graph", {
   # graph without sink nodes (i.e. every node has an outgoing edge)
   g3 <- make_ring(10)
 
-  # TODO: can cut this step out, it's unnecessary
-  gcon <- igraph_connection(g3)
-
   # make every node a seed node to recover page rank
-  appr_pr <- appr(gcon, seeds = as.character(1:10))
+  appr_pr <- appr(g3, seeds = as.character(1:10))
 
   # close enough but currently failing
   expect_equal(sum(appr_pr$p), 1, tolerance = 1e-4)
 
-  appr_ppr <- appr(gcon, seeds = "1")
+  appr_ppr <- appr(g3, seeds = "1")
 
   igraph_ppr <- page_rank(g3, personalized = prefer(1, 10))$vector
 
@@ -49,16 +46,13 @@ test_that("matches igraph calculations on graph with sink nodes", {
 
   ig <- sample_pa(100)
 
-  # TODO: can cut this step out, it's unnecessary
-  gcon <- igraph_connection(ig)
-
   # make every node a seed node to recover page rank
-  appr_pr <- appr(gcon, seeds = as.character(1:10))
+  appr_pr <- appr(ig, seeds = as.character(1:10))
 
   # close enough but currently failing
   expect_equal(sum(appr_pr$p), 1, tolerance = 1e-5)
 
-  appr_ppr <- appr(gcon, seeds = "1")
+  appr_ppr <- appr(ig, seeds = "1")
 
   igraph_ppr <- page_rank(ig, personalized = prefer(1, 10))$vector
 

@@ -8,7 +8,7 @@
 \usage{
 appr(graph, seeds, alpha = 0.15, epsilon = 1e-06, tau = NULL, ...)
 
-\method{appr}{igraph}(graph, seeds, alpha = 0.15, epsilon = 1e-06, tau = NULL, ...)
+\method{appr}{igraph}(graph, seeds, ...)
 
 \method{appr}{rtweet_graph}(graph, seeds, alpha = 0.15, epsilon = 1e-06, tau = NULL, ...)
 }
@@ -22,7 +22,7 @@ The personalized pagerank will return to each of these seeds with
 probability `alpha` at each node transition. At the moment,
 all seeds are given equal weighting. This argument is required.}
 
-\item{alpha}{Teleporting factor. The teleportation factor is the
+\item{alpha}{Teleportation constant. The teleportation constant is the
 probability of returning to a seed node at each node transition.
 Defaults to `0.15`. This is the inverse of the "dampening factor"
 in the original PageRank paper, so `alpha = 0.15` corresponds
@@ -86,14 +86,5 @@ appr(graph, "alexpghayes")
 graph2 <- sample_pa(100)
 
 appr(graph2, seeds = "5")
-
-
-library(igraph)
-
-set.seed(27)
-
-graph <- sample_pa(100)
-
-appr(graph, seeds = "5")
 
 }

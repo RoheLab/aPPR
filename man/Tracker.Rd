@@ -8,12 +8,11 @@ R6 class to manage personalized pagerank calculations
 
 R6 class to manage personalized pagerank calculations
 }
-\details{
-Blargh blarh blargh
-}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
+\item{\code{seeds}}{A character vector of the seed nodes.}
+
 \item{\code{stats}}{A [tibble::tibble()] with one row for each visited
   node and the following columns:
 
@@ -22,6 +21,8 @@ Blargh blarh blargh
   - `p`: Current estimate of the pagerank for a node.
   - `in_degree`: Number of incoming edges to a node.
   - `out_degree`: Number of outcoming edges from a node.}
+
+\item{\code{failed}}{A character vector of nodes that could not be visited.}
 }
 \if{html}{\out{</div>}}
 }
@@ -32,9 +33,13 @@ Blargh blarh blargh
 \item \href{#method-print}{\code{Tracker$print()}}
 \item \href{#method-remaining}{\code{Tracker$remaining()}}
 \item \href{#method-in_tracker}{\code{Tracker$in_tracker()}}
+\item \href{#method-in_failed}{\code{Tracker$in_failed()}}
+\item \href{#method-add_seed}{\code{Tracker$add_seed()}}
 \item \href{#method-add_node}{\code{Tracker$add_node()}}
+\item \href{#method-add_failed}{\code{Tracker$add_failed()}}
 \item \href{#method-update_p}{\code{Tracker$update_p()}}
 \item \href{#method-update_r_neighbor}{\code{Tracker$update_r_neighbor()}}
+\item \href{#method-update_r_bad_v}{\code{Tracker$update_r_bad_v()}}
 \item \href{#method-update_r_self}{\code{Tracker$update_r_self()}}
 \item \href{#method-clone}{\code{Tracker$clone()}}
 }
@@ -103,6 +108,50 @@ Check if there is already a row for a particular node
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-in_failed"></a>}}
+\subsection{Method \code{in_failed()}}{
+Check if we previously failed to visit a node
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$in_failed(node)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{node}}{Character name of a node in the graph.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+`TRUE` if we failed to visit `node`, `FALSE` otherwise.
+  Note that this function will return `FALSE` if `node` is new
+  and we haven't seen it before.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-add_seed"></a>}}
+\subsection{Method \code{add_seed()}}{
+Create an entry for `node` in the tracker. Assumes that
+`node` is not in the tracker yet, and does not check if
+this is the case.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$add_seed(graph, node, preference)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{graph}}{The graph object.}
+
+\item{\code{node}}{The name of the node in the graph as a length 1
+character vector.}
+
+\item{\code{preference}}{TODO: recall what on earth this is.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_node"></a>}}
 \subsection{Method \code{add_node()}}{
 Create an entry for `node` in the tracker. Assumes that
@@ -121,6 +170,25 @@ this is the case.
 character vector.}
 
 \item{\code{preference}}{TODO: recall what on earth this is.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-add_failed"></a>}}
+\subsection{Method \code{add_failed()}}{
+Add `node` to the list of nodes we failed to visit.
+Assumes that `node` is not in the failed list yet, and
+does not check if this is the case.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$add_failed(node)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{node}}{The name of the node in the graph as a length 1
+character vector.}
 }
 \if{html}{\out{</div>}}
 }
@@ -146,9 +214,34 @@ Update the estimate of the personalized pagerank for a given node
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_r_neighbor"></a>}}
 \subsection{Method \code{update_r_neighbor()}}{
-Update the residual of a node in the neighborhood of current node
+Update the residual of a *good* node in the neighborhood of
+the current node, adding it to the tracker if necessary
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Tracker$update_r_neighbor(graph, u, v, alpha_prime)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{graph}}{The graph object.}
+
+\item{\code{u}}{Character name of the node we are currently visiting.}
+
+\item{\code{v}}{Character name of a neighborhor of `u`.}
+
+\item{\code{alpha_prime}}{Transformed teleportation constant from Algorithm 3.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_r_bad_v"></a>}}
+\subsection{Method \code{update_r_bad_v()}}{
+Update residuals based on a *bad* node in the neighborhood
+of the current node by updating the residuals of the seeds
+and adding the bad node to the list of failed nodes
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$update_r_bad_v(graph, u, v, alpha_prime)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

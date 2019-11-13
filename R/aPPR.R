@@ -9,7 +9,7 @@
 #'   probability `alpha` at each node transition. At the moment,
 #'   all seeds are given equal weighting. This argument is required.
 #'
-#' @param alpha Teleporting factor. The teleportation factor is the
+#' @param alpha Teleportation constant. The teleportation constant is the
 #'   probability of returning to a seed node at each node transition.
 #'   Defaults to `0.15`. This is the inverse of the "dampening factor"
 #'   in the original PageRank paper, so `alpha = 0.15` corresponds
@@ -81,31 +81,118 @@ appr <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6, tau = NULL, ...) {
 #' @include abstract-graph.R
 #' @export
 appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
-                                tau = NULL, ...) {
+                                tau = NULL, verbose = FALSE, ...) {
+
+  if (verbose)
+    message("Initializing the tracker.")
 
   alpha_prime <- alpha / (2 - alpha)
 
   tracker <- Tracker$new()
 
   for (seed in seeds) {
-    tracker$add_node(graph, seed, preference = 1 / length(seeds))
+
+    if (!check(graph, seed))
+      stop(paste("Could not access information on seed", seed), call. = FALSE)
+
+    tracker$add_seed(graph, seed, preference = 1 / length(seeds))
+
+    if (verbose)
+      message(paste("Adding seed", seed, "to tracker."))
   }
 
   remaining <- tracker$remaining(epsilon)
+
+  if (verbose)
+    message(paste("There are", length(remaining), "remaining nodes."))
 
   while (length(remaining) > 0) {
 
     u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
 
-    tracker$update_p(u, alpha_prime)  # u is a node name
+    if (verbose)
+      message(paste("Visiting p for node", u))
+
+    tracker$update_p(u, alpha_prime)
+
+    # here we come into contact with reality and must depart from the
+    # warm embrace of algorithm 3
+
+    # this is where we learn about new nodes. there are two kinds of new
+    # nodes: "good" nodes that we can visit, and "bad" nodes that we can't
+    # visit, such as protected Twitter accounts or nodes that the API fails
+    # to get for some reason. we want to:
+    #
+    #   - update the good nodes are we typically would
+    #   - pretend the bad nodes don't exist
+    #
+    # also note that we only want to *check* each node once
+
+
+    if (verbose)
+      message(paste("Sampling the neighborhood for node", u))
 
     for (v in neighborhood(graph, u)) {
-      tracker$update_r_neighbor(graph, u, v, alpha_prime)
+
+      if (verbose)
+        message(paste("Processing item", v, "in neighbhorhood of", u))
+
+      # two cases if we've already seen v
+
+      if (tracker$in_tracker(v)) {
+
+        if (verbose)
+          message(paste("Case:", v, "is in the tracker"))
+
+        # we've already seen v and know v is good because
+        # we never add bad v into the tracker
+
+        tracker$update_r_neighbor(graph, u, v, alpha_prime)
+
+      } else if (tracker$in_failed(v)) {
+
+
+        if (verbose)
+          message(paste("Case:", v, "is in the failed list"))
+
+        # we've already seen v and know v is bad
+        tracker$update_r_bad_v(graph, u, v, alpha_prime)
+
+      } else if (check(graph, v)) {
+
+        if (verbose)
+          message(paste("Case:", v, "is a good new node"))
+
+        # v is not in the tracker, or the failed list,
+        # so v is a new node. we then check v and v turns out
+        # to be good, so we can add it to the tracker
+
+        tracker$update_r_neighbor(graph, u, v, alpha_prime)
+
+        # v is a new node, and we can't access information
+        # about it, so we pretend that it doesn't exist and
+
+      } else {
+
+        if (verbose)
+          message(paste("Case:", v, "is a new, bad node"))
+
+        # v is bad, and new to us, so we return r_v to the seed
+        # nodes uniformly and add v to the failed list
+
+        tracker$update_r_bad_v(graph, u, v, alpha_prime)
+      }
     }
+
+    if (verbose)
+      message(paste("Successful dealt with neighborhood of", u))
 
     tracker$update_r_self(u, alpha_prime)
 
     remaining <- tracker$remaining(epsilon)
+
+    if (verbose)
+      message(paste("There are", length(remaining), "remaining nodes."))
   }
 
   ppr <- tracker$stats

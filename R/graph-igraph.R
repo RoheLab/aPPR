@@ -1,19 +1,7 @@
 
 #' @rdname appr
 #' @export
-#'
-#' @examples
-#'
-#' library(igraph)
-#'
-#' set.seed(27)
-#'
-#' graph <- sample_pa(100)
-#'
-#' appr(graph, seeds = "5")
-#'
-appr.igraph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
-                        tau = NULL, ...) {
+appr.igraph <- function(graph, seeds, ...) {
 
   if (!requireNamespace("igraph", quietly = TRUE))
     stop("`igraph` package must be installed to use igraphs.", call. = FALSE)
@@ -21,10 +9,11 @@ appr.igraph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
   if (is.null(V(graph)$names))
     V(graph)$names <- as.character(1:gorder(graph))
 
-  if (!all(seeds %in% V(graph)$names))
-    stop("All `seeds` must be nodes in `graph`.", call. = FALSE)
-
   appr.abstract_graph(graph = graph, seeds = seeds, ...)
+}
+
+check.igraph <- function(graph, node) {
+  node %in% V(graph)$names
 }
 
 in_degree.igraph <- function(graph, node) {

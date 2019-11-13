@@ -37,16 +37,20 @@ appr.rtweet_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
   NextMethod()
 }
 
+check.rtweet_graph <- function(graph, node) {
+  node_data <- safe_lookup_users(node, attempts = graph$attempts)
+  !is.null(node_data) && nrow(node_data) > 0
+}
+
 in_degree.rtweet_graph <- function(graph, node) {
-  rtweet::lookup_users(node)$followers_count
+  safe_lookup_users(node, attempts = graph$attempts)$followers_count
 }
 
 out_degree.rtweet_graph <- function(graph, node) {
-  rtweet::lookup_users(node)$friends_count
+  safe_lookup_users(node, attempts = graph$attempts)$friends_count
 }
 
-# TODO: rate limiting, token usage, blargh
 neighborhood.rtweet_graph <- function(graph, node) {
-  rtweet::get_friends(node)$user_id
+  safe_get_friends(node, attempts = graph$attempts)$user_id
 }
 

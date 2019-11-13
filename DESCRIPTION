@@ -40,5 +40,6 @@ Collate:
     'graph-igraph.R'
     'graph-rtweet.R'
     'graph-twittercache.R'
+    'rtweet-utilities.R'
     'tracker.R'
 VignetteBuilder: knitr
