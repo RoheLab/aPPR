@@ -47,7 +47,10 @@ Tracker <- R6Class("Tracker", list(
 
   #' @description
   #'
-  #' Determine nodes that need to be visited
+  #' Determine nodes that need to be visited. Note that,
+  #' if there is a node with zero out degree, you will always
+  #' need to visit that node. So it is important to make sure
+  #' we never add nodes with zero out degree into the tracker.
   #'
   #' @param epsilon The error tolerance / convergence parameter in
   #'   Algorithm 3.
@@ -139,9 +142,7 @@ Tracker <- R6Class("Tracker", list(
   #'   character vector.
   #'
   add_failed = function(node) {
-
     self$failed <- c(self$failed, node)
-
   },
 
   #' @description
@@ -177,37 +178,6 @@ Tracker <- R6Class("Tracker", list(
     v_index <- which(self$stats$name == v)
 
     self$stats[[v_index, "r"]] <- self$stats[[v_index, "r"]] +
-      (1 - alpha_prime) * self$stats[[u_index, "r"]] /
-      (2 * self$stats[[u_index, "out_degree"]])
-
-  },
-
-  #' @description
-  #'
-  #' Update residuals based on a *bad* node in the neighborhood
-  #' of the current node by updating the residuals of the seeds
-  #' and adding the bad node to the list of failed nodes
-  #'
-  #' @param graph The graph object.
-  #' @param u Character name of the node we are currently visiting.
-  #' @param v Character name of a neighborhor of `u`.
-  #' @param alpha_prime Transformed teleportation constant from Algorithm 3.
-  #'
-  update_r_bad_v = function(graph, u, v, alpha_prime) {
-
-    if (!self$in_failed(v))
-      self$add_failed(graph, v)
-
-    # sometimes adding a node will fail (for example, attempting to
-    # sample a protected user). in this case, we just pretend this user
-    # isn't in the neighborhood of u
-
-    u_index <- which(self$stats$name == u)
-
-    # give all the residual that would have gone to v to u, for
-    # the time being
-
-    self$stats[[u_index, "r"]] <- self$stats[[u_index, "r"]] +
       (1 - alpha_prime) * self$stats[[u_index, "r"]] /
       (2 * self$stats[[u_index, "out_degree"]])
 

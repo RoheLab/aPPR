@@ -8,7 +8,7 @@
 #'
 #' @export
 rtweet_graph <- function(attempts = 5) {
-  agraph <- new_abstract_graph("rtweet_graph")
+  agraph <- abstract_graph("rtweet_graph")
   agraph$attempts <- attempts
   agraph
 }
@@ -25,7 +25,7 @@ appr.rtweet_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
     )
   }
 
-  seed_data <- rtweet::lookup_users(seeds)
+  seed_data <- safe_lookup_users(seeds)
 
   if (any(seed_data$protected)) {
     stop("Seed nodes should not be protected Twitter accounts.", call. = FALSE)
@@ -38,8 +38,13 @@ appr.rtweet_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
 }
 
 check.rtweet_graph <- function(graph, node) {
+
   node_data <- safe_lookup_users(node, attempts = graph$attempts)
-  !is.null(node_data) && nrow(node_data) > 0
+
+  !is.null(node_data) &&
+    nrow(node_data) > 0 &&
+    !node_data$protected &&
+    node_data$friends_count > 0
 }
 
 in_degree.rtweet_graph <- function(graph, node) {
@@ -51,6 +56,10 @@ out_degree.rtweet_graph <- function(graph, node) {
 }
 
 neighborhood.rtweet_graph <- function(graph, node) {
-  safe_get_friends(node, attempts = graph$attempts)$user_id
+
+  # if a user doesn't follow anyone, safe_get_friends returns an empty
+  # tibble, but instead it should return an empty character vector?
+  friends <- safe_get_friends(node, attempts = graph$attempts)
+  if (nrow(friends) < 1) character(0) else friends$user_id
 }
 

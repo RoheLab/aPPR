@@ -4,7 +4,7 @@ twittercache_graph <- function() {
 
   # TODO: allow user to specify number of sampling attempts to account for
   # API downtime and issues
-  new_abstract_graph("tc_graph")
+  abstract_graph("tc_graph")
 }
 
 #' @export
@@ -20,7 +20,7 @@ in_degree.tc_graph <- function(graph, node) {
     sample_node(node)
 
   path <- twittercache:::get_node_path(node)
-  node_data <- readr::read_rds(path)
+  node_data <- readRDS(path)
   node_data$followers_count
 }
 
@@ -29,7 +29,7 @@ out_degree.tc_graph <- function(graph, node) {
     sample_node(node)
 
   path <- twittercache:::get_node_path(node)
-  node_data <- readr::read_rds(path)
+  node_data <- readRDS(path)
   node_data$friends_count
 }
 
@@ -40,7 +40,7 @@ neighborhood.tc_graph <- function(graph, node, directed = TRUE) {
     sample_node(graph, node)
 
   path <- twittercache:::get_edge_path(node)
-  edge_data <- readr::read_rds(path)
+  edge_data <- readRDS(path)
 
   # issue: there will be edges to protected nodes that we can't sample
 

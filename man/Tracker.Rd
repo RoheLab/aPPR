@@ -39,7 +39,6 @@ R6 class to manage personalized pagerank calculations
 \item \href{#method-add_failed}{\code{Tracker$add_failed()}}
 \item \href{#method-update_p}{\code{Tracker$update_p()}}
 \item \href{#method-update_r_neighbor}{\code{Tracker$update_r_neighbor()}}
-\item \href{#method-update_r_bad_v}{\code{Tracker$update_r_bad_v()}}
 \item \href{#method-update_r_self}{\code{Tracker$update_r_self()}}
 \item \href{#method-clone}{\code{Tracker$clone()}}
 }
@@ -69,7 +68,10 @@ calculation.
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-remaining"></a>}}
 \subsection{Method \code{remaining()}}{
-Determine nodes that need to be visited
+Determine nodes that need to be visited. Note that,
+if there is a node with zero out degree, you will always
+need to visit that node. So it is important to make sure
+we never add nodes with zero out degree into the tracker.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Tracker$remaining(epsilon)}\if{html}{\out{</div>}}
 }
@@ -218,30 +220,6 @@ Update the residual of a *good* node in the neighborhood of
 the current node, adding it to the tracker if necessary
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Tracker$update_r_neighbor(graph, u, v, alpha_prime)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{graph}}{The graph object.}
-
-\item{\code{u}}{Character name of the node we are currently visiting.}
-
-\item{\code{v}}{Character name of a neighborhor of `u`.}
-
-\item{\code{alpha_prime}}{Transformed teleportation constant from Algorithm 3.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_r_bad_v"></a>}}
-\subsection{Method \code{update_r_bad_v()}}{
-Update residuals based on a *bad* node in the neighborhood
-of the current node by updating the residuals of the seeds
-and adding the bad node to the list of failed nodes
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$update_r_bad_v(graph, u, v, alpha_prime)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

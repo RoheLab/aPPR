@@ -93,7 +93,10 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
   for (seed in seeds) {
 
     if (!check(graph, seed))
-      stop(paste("Could not access information on seed", seed), call. = FALSE)
+      stop(
+        paste("Seed", seed, "must be available and have positive out degree."),
+        call. = FALSE
+      )
 
     tracker$add_seed(graph, seed, preference = 1 / length(seeds))
 
@@ -101,7 +104,7 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
       message(paste("Adding seed", seed, "to tracker."))
   }
 
-  remaining <- tracker$remaining(epsilon)
+  remaining <- seeds
 
   if (verbose)
     message(paste("There are", length(remaining), "remaining nodes."))
@@ -111,7 +114,7 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
     u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
 
     if (verbose)
-      message(paste("Visiting p for node", u))
+      message(paste("Updating p for node", u))
 
     tracker$update_p(u, alpha_prime)
 
@@ -127,7 +130,6 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
     #   - pretend the bad nodes don't exist
     #
     # also note that we only want to *check* each node once
-
 
     if (verbose)
       message(paste("Sampling the neighborhood for node", u))
@@ -151,12 +153,8 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
 
       } else if (tracker$in_failed(v)) {
 
-
         if (verbose)
           message(paste("Case:", v, "is in the failed list"))
-
-        # we've already seen v and know v is bad
-        tracker$update_r_bad_v(graph, u, v, alpha_prime)
 
       } else if (check(graph, v)) {
 
@@ -175,19 +173,21 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
       } else {
 
         if (verbose)
-          message(paste("Case:", v, "is a new, bad node"))
+          message(paste("Case:", v, "is a bad new node"))
 
-        # v is bad, and new to us, so we return r_v to the seed
-        # nodes uniformly and add v to the failed list
-
-        tracker$update_r_bad_v(graph, u, v, alpha_prime)
       }
+
+      if (verbose)
+        print(dplyr::arrange(tracker$stats, desc(r)))
     }
 
     if (verbose)
-      message(paste("Successful dealt with neighborhood of", u))
+      message(paste("Successfully dealt with neighborhood of", u))
 
     tracker$update_r_self(u, alpha_prime)
+
+    if (verbose)
+      message(paste("Successfully updated r for", u))
 
     remaining <- tracker$remaining(epsilon)
 

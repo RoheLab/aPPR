@@ -7,13 +7,14 @@ appr.igraph <- function(graph, seeds, ...) {
     stop("`igraph` package must be installed to use igraphs.", call. = FALSE)
 
   if (is.null(V(graph)$names))
-    V(graph)$names <- as.character(1:gorder(graph))
+    igraph::V(graph)$names <- as.character(1:igraph::gorder(graph))
 
   appr.abstract_graph(graph = graph, seeds = seeds, ...)
 }
 
 check.igraph <- function(graph, node) {
-  node %in% V(graph)$names
+  node %in% igraph::V(graph)$names &&
+    igraph::degree(graph, v = node, mode = "out") > 0
 }
 
 in_degree.igraph <- function(graph, node) {
@@ -32,6 +33,6 @@ neighborhood.igraph <- function(graph, node) {
   )
 
   nodes <- int_node_list[[1]]
-  V(graph)$names[nodes]
+  igraph::V(graph)$names[nodes]
 }
 

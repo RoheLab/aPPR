@@ -54,13 +54,19 @@ appr(graph2, seeds = "5")
 ```{r rtweet-example, eval = FALSE}
 graph <- rtweet_graph()
 
-appr(graph, "alexpghayes")
+appr(graph, "fchen365", epsilon = 1e-4, )
 ```
+
+## Limitations
+
+- Connected graph assumption, what results look like when we violate this assumption
+- Sampling is one node at a time
 
 # References
 
-1. Targeted sampling from massive Blockmodel graphs with personalized PageRank
+1. [Targeted sampling from massive Blockmodel graphs with personalized PageRank][chen]
 
 2. [Local Graph Partitioning using PageRank Vectors][andersen]
 
+[chen]: https://arxiv.org/abs/1910.12937
 [andersen]: http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf
