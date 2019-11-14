@@ -15,8 +15,7 @@ rtweet_graph <- function(attempts = 5) {
 
 #' @rdname appr
 #' @export
-appr.rtweet_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
-                              tau = NULL, ...) {
+appr.rtweet_graph <- function(graph, seeds, ...) {
 
   if (!requireNamespace("rtweet", quietly = TRUE)) {
     stop(
@@ -25,7 +24,7 @@ appr.rtweet_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
     )
   }
 
-  seed_data <- safe_lookup_users(seeds)
+  seed_data <- safe_lookup_users(seeds, attempts = graph$attempts)
 
   if (any(seed_data$protected)) {
     stop("Seed nodes should not be protected Twitter accounts.", call. = FALSE)
@@ -34,7 +33,7 @@ appr.rtweet_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
   # convert seeds, potentially passed as screen names, to user ids
   seeds <- seed_data$user_id
 
-  NextMethod()
+  batch_appr(graph, seeds, ...)
 }
 
 check.rtweet_graph <- function(graph, node) {
@@ -45,6 +44,19 @@ check.rtweet_graph <- function(graph, node) {
     nrow(node_data) > 0 &&
     !node_data$protected &&
     node_data$friends_count > 0
+}
+
+# return character vector of all good nodes in the batch
+check_batch <- function(graph, nodes) {
+
+  node_data <- safe_lookup_users(nodes, attempts = graph$attempts)
+
+  if (is.null(node_data) || nrow(node_data) < 1)
+    return(character(0))
+
+  good_nodes <- !node_data$protected && node_data$friends_count > 0
+
+  node_data$user_id[good_nodes]
 }
 
 in_degree.rtweet_graph <- function(graph, node) {

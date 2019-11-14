@@ -166,13 +166,17 @@ Tracker <- R6Class("Tracker", list(
   #'
   #' @param graph The graph object.
   #' @param u Character name of the node we are currently visiting.
-  #' @param v Character name of a neighborhor of `u`.
+  #' @param v Names of neighbors of `u` as a character vector. Can
+  #'   contain multiple elements.
   #' @param alpha_prime Transformed teleportation constant from Algorithm 3.
   #'
   update_r_neighbor = function(graph, u, v, alpha_prime) {
 
-    if (!self$in_tracker(v))
-      self$add_node(graph, v)
+    stopifnot(length(u) == 1)
+
+    for (node in v)
+      if (!self$in_tracker(node))
+        self$add_node(graph, node)
 
     u_index <- which(self$stats$name == u)
     v_index <- which(self$stats$name == v)

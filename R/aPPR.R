@@ -137,7 +137,7 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
     for (v in neighborhood(graph, u)) {
 
       if (verbose)
-        message(paste("Processing item", v, "in neighbhorhood of", u))
+        message(paste("Processing item", v, "in neighborhood of", u))
 
       # two cases if we've already seen v
 
