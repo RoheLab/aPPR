@@ -13,6 +13,10 @@ rtweet_graph <- function(attempts = 5) {
   agraph
 }
 
+appr_rtweet <- function(seeds, ...) {
+  batch_appr(rtweet_graph(), seeds, ...)
+}
+
 #' @rdname appr
 #' @export
 appr.rtweet_graph <- function(graph, seeds, ...) {
@@ -84,12 +88,17 @@ check_batch.rtweet_graph <- function(graph, nodes) {
   node_data$user_id[good_nodes]
 }
 
-in_degree.rtweet_graph <- function(graph, nodes) {
-  safe_lookup_users(nodes, attempts = graph$attempts)$followers_count
-}
+node_degrees.rtweet_graph <- function(graph, nodes) {
 
-out_degree.rtweet_graph <- function(graph, nodes) {
-  safe_lookup_users(nodes, attempts = graph$attempts)$friends_count
+  # assumes that you want any errors / empty rows when accessing this
+  # data, i.e. that the nodes have already been checked
+
+  node_data <- safe_lookup_users(nodes, attempts = graph$attempts)
+
+  list(
+    in_degree = node_data$followers_count,
+    out_degree = node_data$friends_count
+  )
 }
 
 neighborhood.rtweet_graph <- function(graph, node) {

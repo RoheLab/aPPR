@@ -106,12 +106,14 @@ batch_appr.abstract_graph <- function(graph, seeds, alpha = 0.15,
   }
 
   remaining <- seeds
+  visited <- character(0)
 
   if (verbose) {
     message(paste("There are", length(remaining), "remaining nodes."))
   }
 
   while (length(remaining) > 0) {
+
     u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
 
     if (verbose) {
@@ -139,6 +141,11 @@ batch_appr.abstract_graph <- function(graph, seeds, alpha = 0.15,
 
     neighbors <- memo_neighborhood(graph, u)
 
+    visited <- unique(c(visited, u))
+
+    if (verbose)
+      message(paste("Number of visits so far:", length(visited)))
+
     # first deal with the good neighbors we've already seen all
     # at once
 
@@ -150,61 +157,12 @@ batch_appr.abstract_graph <- function(graph, seeds, alpha = 0.15,
     new_good <- check_batch(graph, unknown)
     new_bad <- setdiff(unknown, new_good)
 
-    if (verbose) {
-      message(paste("Total neighbors:", length(neighbors)))
-      message(paste("Known good:", length(known_good)))
-      message(paste("Known bad:", length(known_bad)))
-      message(paste("Unknown:", length(unknown)))
-      message(paste("New good:", length(new_good)))
-      message(paste("New bad:", length(new_bad)))
-    }
-
     tracker$add_failed(new_bad)
-
-    if (verbose)
-      message("Add new bad.")
-
     tracker$update_r_neighbor(graph, u, known_good, alpha_prime)
-
-    if (verbose)
-      message("Updated known good.")
-
     tracker$update_r_neighbor(graph, u, new_good, alpha_prime)
-
-    if (verbose)
-      message("Updated new good.")
 
     if (verbose) {
       print(dplyr::arrange(tracker$stats, desc(r)))
-    }
-
-    if (verbose) {
-      message(paste("Successfully dealt with neighborhood of", u))
-    }
-
-    for (v in memo_neighborhood(graph, u)) {
-      if (verbose) {
-        message(paste("Processing item", v, "in neighborhood of", u))
-      }
-
-      if (memo_check(graph, v)) {
-        if (verbose) {
-          message(paste("Case:", v, "is a good node"))
-        }
-
-        # we've already seen v and know v is good because
-        # we never add bad v into the tracker
-
-        tracker$update_r_neighbor(graph, u, v, alpha_prime)
-
-        if (verbose) {
-          print(dplyr::arrange(tracker$stats, desc(r)))
-        }
-      }
-    }
-
-    if (verbose) {
-      message(paste("Successfully dealt with neighborhood of", u))
     }
 
     tracker$update_r_self(u, alpha_prime)

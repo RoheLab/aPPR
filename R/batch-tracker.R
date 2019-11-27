@@ -120,13 +120,15 @@ BatchTracker <- R6Class("BatchTracker", list(
   #'
   add_nodes = function(graph, nodes, preference = 0) {
 
+    degree <- node_degrees(graph, nodes)
+
     self$stats <- tibble::add_row(
       self$stats,
       name  = nodes,
       p = 0,
       r = preference,
-      in_degree = in_degree(graph, nodes),
-      out_degree = out_degree(graph, nodes)
+      in_degree = degree$in_degree,
+      out_degree = degree$out_degree
     )
 
   },
@@ -181,16 +183,8 @@ BatchTracker <- R6Class("BatchTracker", list(
     if (length(new_nodes) > 0)
       self$add_nodes(graph, new_nodes)
 
-    print(self$stats)
-
-    # browser()
-
     u_index <- which(self$stats$name == u)
     v_index <- match(v, self$stats$name)
-
-    print(self$stats[v_index, "r"])
-    print(self$stats[[u_index, "r"]])
-    print(self$stats[[u_index, "out_degree"]])
 
     self$stats[v_index, "r"] <- self$stats[v_index, "r"] +
       (1 - alpha_prime) * self$stats[[u_index, "r"]] /
