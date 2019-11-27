@@ -46,21 +46,29 @@ set.seed(27)
 
 graph2 <- sample_pa(100)
 
-appr(graph2, seeds = "5")
+appr(graph2, seeds = "5", verbose = TRUE)
 ```
 
 ## Find the personalized pagerank of a Twitter user using `rtweet`
 
 ```{r rtweet-example, eval = FALSE}
-graph <- rtweet_graph()
-
-appr(graph, "fchen365", epsilon = 1e-4, )
+appr_rtweet(graph, "fchen365", epsilon = 1e-4, verbose = TRUE)
 ```
 
 ## Limitations
 
 - Connected graph assumption, what results look like when we violate this assumption
 - Sampling is one node at a time
+
+## Speed ideas
+
+compute is not an issue relative to actually getting data
+
+Compute time ~ access from Ram time << access from disk time << access from network time.
+
+Make requests to API in bulk, memoize everything, cache / write to disk in a separate process?
+
+General pattern: cache on disk, and also in RAM
 
 # References
 
