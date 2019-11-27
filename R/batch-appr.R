@@ -1,38 +1,122 @@
-batch_appr <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
-                       tau = NULL, verbose = FALSE, ...) {
+#' Approximate personalized pageranks
+#'
+#' @param graph An [abstract_graph()] object, such as those created by
+#'   [rtweet_graph()] and [twittercache_graph()], and [igraph::igraph()]
+#'   object. This argument is required.
+#'
+#' @param seeds A character vector of seeds for the personalized pagerank.
+#'   The personalized pagerank will return to each of these seeds with
+#'   probability `alpha` at each node transition. At the moment,
+#'   all seeds are given equal weighting. This argument is required.
+#'
+#' @param alpha Teleportation constant. The teleportation constant is the
+#'   probability of returning to a seed node at each node transition.
+#'   Defaults to `0.15`. This is the inverse of the "dampening factor"
+#'   in the original PageRank paper, so `alpha = 0.15` corresponds
+#'   to a dampening factor of `0.85`.
+#'
+#' @param epsilon Desired accuracy of approximation. Small `epsilon`
+#'   can result in long runtimes. Defaults to `1e-6`.
+#'
+#' @param tau Regularization term. Additionally inflates the in degree
+#'   of each observation by this term by performing the degree
+#'   adjustment described in Algorithm 3 and Algorithm 4, which
+#'   are described in `vignette("Mathematical details")`. Defaults to
+#'   `NULL`, in which case `tau` is set to the average in degree of
+#'   the observed nodes. In general, setting it's reasonable to
+#'   set `tau` to the average degree of the graph.
+#'
+#' @param ... Ignored. Passing arguments to `...` results in a warning.
+#'
+#' @return A [tibble::tibble()] with the following columns:
+#'
+#'   - `name`: Name of a node (character).
+#'   - `p`: Estimated personalized pagerank of a node.
+#'   - `r`: Estimated error of pagerank estimate for a node.
+#'   - `in_degree`: Number of incoming edges to a node.
+#'   - `out_degree`: Number of outcoming edges from a node.
+#'   - `degree_adjusted`: The personalized pagerank divided by the
+#'     node in-degree.
+#'   - `regularized`: The personalized pagerank divide by the node
+#'     in-degree plus `tau`.
+#'
+#' When `graph` is an
+#'
+#'   - `rtweet_graph` get `user_id` not screen names
+#'
+#' @export
+#'
+#' @details
+#'
+#' Note that, due to the inspection paradox, the average observed
+#' degree of the network will be higher than the average degree of
+#' the entire network. This means that the default value for `tau`
+#' many be a bit high. In practice, we do not observe that the
+#' small changes in the value of `tau` substantively changes results,
+#' you really just need to regularize enough so that low in degree
+#' nodes don't look overly important after degree correction.
+#'
+#' @examples
+#'
+#' library(aPPR)
+#' library(igraph)
+#'
+#' set.seed(27)
+#'
+#' graph <- rtweet_graph()
+#' \dontrun{
+#' batch_appr(graph, "alexpghayes")
+#' }
+#'
+batch_appr <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6, tau = NULL,
+                       verbose = FALSE, ...) {
+  ellipsis::check_dots_used()
+  UseMethod("batch_appr")
+}
 
-  if (verbose)
+#' @include abstract-graph.R
+#' @export
+batch_appr.abstract_graph <- function(graph, seeds, alpha = 0.15,
+                                      epsilon = 1e-6, tau = NULL,
+                                      verbose = FALSE, ...) {
+  if (verbose) {
     message("Initializing the tracker.")
+  }
 
   alpha_prime <- alpha / (2 - alpha)
 
-  tracker <- Tracker$new()
+  tracker <- BatchTracker$new()
+
+  memo_neighborhood <- memoise::memoise(neighborhood)
+  memo_check <- memoise::memoise(check)
 
   for (seed in seeds) {
-
-    if (!check(graph, seed))
+    if (!memo_check(graph, seed)) {
       stop(
         paste("Seed", seed, "must be available and have positive out degree."),
         call. = FALSE
       )
+    }
 
     tracker$add_seed(graph, seed, preference = 1 / length(seeds))
 
-    if (verbose)
+    if (verbose) {
       message(paste("Adding seed", seed, "to tracker."))
+    }
   }
 
   remaining <- seeds
 
-  if (verbose)
+  if (verbose) {
     message(paste("There are", length(remaining), "remaining nodes."))
+  }
 
   while (length(remaining) > 0) {
-
     u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
 
-    if (verbose)
+    if (verbose) {
       message(paste("Updating p for node", u))
+    }
 
     tracker$update_p(u, alpha_prime)
 
@@ -49,10 +133,11 @@ batch_appr <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
     #
     # also note that we only want to *check* each node once
 
-    if (verbose)
+    if (verbose) {
       message(paste("Sampling the neighborhood for node", u))
+    }
 
-    neighbors <- neighborhood(graph, u)
+    neighbors <- memo_neighborhood(graph, u)
 
     # first deal with the good neighbors we've already seen all
     # at once
@@ -65,35 +150,83 @@ batch_appr <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
     new_good <- check_batch(graph, unknown)
     new_bad <- setdiff(unknown, new_good)
 
-    tracker$update_r_neighbor(graph, u, known_good, alpha_prime)
-    tracker$update_r_neighbor(graph, u, new_good, alpha_prime)
+    if (verbose) {
+      message(paste("Total neighbors:", length(neighbors)))
+      message(paste("Known good:", length(known_good)))
+      message(paste("Known bad:", length(known_bad)))
+      message(paste("Unknown:", length(unknown)))
+      message(paste("New good:", length(new_good)))
+      message(paste("New bad:", length(new_bad)))
+    }
+
     tracker$add_failed(new_bad)
 
     if (verbose)
-      print(dplyr::arrange(tracker$stats, desc(r)))
+      message("Add new bad.")
+
+    tracker$update_r_neighbor(graph, u, known_good, alpha_prime)
 
     if (verbose)
+      message("Updated known good.")
+
+    tracker$update_r_neighbor(graph, u, new_good, alpha_prime)
+
+    if (verbose)
+      message("Updated new good.")
+
+    if (verbose) {
+      print(dplyr::arrange(tracker$stats, desc(r)))
+    }
+
+    if (verbose) {
       message(paste("Successfully dealt with neighborhood of", u))
+    }
+
+    for (v in memo_neighborhood(graph, u)) {
+      if (verbose) {
+        message(paste("Processing item", v, "in neighborhood of", u))
+      }
+
+      if (memo_check(graph, v)) {
+        if (verbose) {
+          message(paste("Case:", v, "is a good node"))
+        }
+
+        # we've already seen v and know v is good because
+        # we never add bad v into the tracker
+
+        tracker$update_r_neighbor(graph, u, v, alpha_prime)
+
+        if (verbose) {
+          print(dplyr::arrange(tracker$stats, desc(r)))
+        }
+      }
+    }
+
+    if (verbose) {
+      message(paste("Successfully dealt with neighborhood of", u))
+    }
 
     tracker$update_r_self(u, alpha_prime)
 
-    if (verbose)
+    if (verbose) {
       message(paste("Successfully updated r for", u))
+    }
 
     remaining <- tracker$remaining(epsilon)
 
-    if (verbose)
+    if (verbose) {
       message(paste("There are", length(remaining), "remaining nodes."))
+    }
   }
 
   ppr <- tracker$stats
 
   if (is.null(tau)) {
-    tau <- mean(ppr$in_degree)  # TODO: in_degree or out_degree here?
+    tau <- mean(ppr$in_degree) # TODO: in_degree or out_degree here?
   }
 
-  ppr$degree_adjusted <- ppr$p / ppr$in_degree      # might divide by 0 here
+  ppr$degree_adjusted <- ppr$p / ppr$in_degree # might divide by 0 here
   ppr$regularized <- ppr$p / (ppr$in_degree + tau)
   ppr
 }
-

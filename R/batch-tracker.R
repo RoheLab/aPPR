@@ -1,6 +1,6 @@
 #' R6 class to manage personalized pagerank calculations
 #'
-Tracker <- R6Class("Tracker", list(
+BatchTracker <- R6Class("BatchTracker", list(
 
   #' @field seeds A character vector of the seed nodes.
   seeds = character(0),
@@ -67,13 +67,13 @@ Tracker <- R6Class("Tracker", list(
   #'
   #' Check if there is already a row for a particular node
   #'
-  #' @param node Character name of a node in the graph.
+  #' @param nodes Character name of node(s) in the graph.
   #'
   #' @return `TRUE` if there is a row for `node`, `FALSE` if there
   #'   is not a row for `node`.
   #'
-  in_tracker = function(node) {
-    node %in% self$stats$name
+  in_tracker = function(nodes) {
+    nodes %in% self$stats$name
   },
 
   #' @description
@@ -102,9 +102,9 @@ Tracker <- R6Class("Tracker", list(
   #'
   #' @param preference TODO: recall what on earth this is.
   #'
-  add_seed = function(graph, node, preference) {
-    self$seeds <- c(self$seeds, node)
-    self$add_node(graph = graph, node = node, preference = preference)
+  add_seed = function(graph, seeds, preference) {
+    self$seeds <- c(self$seeds, seeds)
+    self$add_nodes(graph = graph, nodes = seeds, preference = preference)
   },
 
   #' @description
@@ -114,20 +114,19 @@ Tracker <- R6Class("Tracker", list(
   #' this is the case.
   #'
   #' @param graph The graph object.
-  #' @param node The name of the node in the graph as a length 1
-  #'   character vector.
+  #' @param nodes The name(s) of node(s) in the graph as a character vector.
   #'
   #' @param preference TODO: recall what on earth this is.
   #'
-  add_node = function(graph, node, preference = 0) {
+  add_nodes = function(graph, nodes, preference = 0) {
 
     self$stats <- tibble::add_row(
       self$stats,
-      name  = node,
+      name  = nodes,
       p = 0,
       r = preference,
-      in_degree = in_degree(graph, node),
-      out_degree = out_degree(graph, node)
+      in_degree = in_degree(graph, nodes),
+      out_degree = out_degree(graph, nodes)
     )
 
   },
@@ -167,21 +166,33 @@ Tracker <- R6Class("Tracker", list(
   #' @param graph The graph object.
   #' @param u Character name of the node we are currently visiting.
   #' @param v Names of neighbors of `u` as a character vector. Can
-  #'   contain multiple elements.
+  #'   contain multiple elements. Can also contain zero elements.
   #' @param alpha_prime Transformed teleportation constant from Algorithm 3.
   #'
   update_r_neighbor = function(graph, u, v, alpha_prime) {
 
     stopifnot(length(u) == 1)
 
-    for (node in v)
-      if (!self$in_tracker(node))
-        self$add_node(graph, node)
+    if (length(v) < 1)
+      return(invisible())
+
+    new_nodes <- v[!self$in_tracker(v)]
+
+    if (length(new_nodes) > 0)
+      self$add_nodes(graph, new_nodes)
+
+    print(self$stats)
+
+    # browser()
 
     u_index <- which(self$stats$name == u)
-    v_index <- which(self$stats$name == v)
+    v_index <- match(v, self$stats$name)
 
-    self$stats[[v_index, "r"]] <- self$stats[[v_index, "r"]] +
+    print(self$stats[v_index, "r"])
+    print(self$stats[[u_index, "r"]])
+    print(self$stats[[u_index, "out_degree"]])
+
+    self$stats[v_index, "r"] <- self$stats[v_index, "r"] +
       (1 - alpha_prime) * self$stats[[u_index, "r"]] /
       (2 * self$stats[[u_index, "out_degree"]])
 

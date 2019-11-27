@@ -30,6 +30,11 @@ check <- function(graph, node) {
 }
 
 #' @export
+check_batch <- function(graph, node) {
+  UseMethod("check_batch")
+}
+
+#' @export
 in_degree <- function(graph, node) {
   UseMethod("in_degree")
 }

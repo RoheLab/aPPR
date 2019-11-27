@@ -73,7 +73,8 @@
 #'
 #' appr(graph2, seeds = "5")
 #'
-appr <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6, tau = NULL, ...) {
+appr <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6, tau = NULL,
+                 verbose = FALSE, ...) {
   ellipsis::check_dots_used()
   UseMethod("appr")
 }
@@ -90,9 +91,12 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
 
   tracker <- Tracker$new()
 
+  memo_neighborhood <- memoise::memoise(neighborhood)
+  memo_check <- memoise::memoise(check)
+
   for (seed in seeds) {
 
-    if (!check(graph, seed))
+    if (!memo_check(graph, seed))
       stop(
         paste("Seed", seed, "must be available and have positive out degree."),
         call. = FALSE
@@ -134,51 +138,25 @@ appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
     if (verbose)
       message(paste("Sampling the neighborhood for node", u))
 
-    for (v in neighborhood(graph, u)) {
+    for (v in memo_neighborhood(graph, u)) {
 
       if (verbose)
         message(paste("Processing item", v, "in neighborhood of", u))
 
-      # two cases if we've already seen v
-
-      if (tracker$in_tracker(v)) {
+      if (memo_check(graph, v)) {
 
         if (verbose)
-          message(paste("Case:", v, "is in the tracker"))
+          message(paste("Case:", v, "is a good node"))
 
         # we've already seen v and know v is good because
         # we never add bad v into the tracker
 
         tracker$update_r_neighbor(graph, u, v, alpha_prime)
 
-      } else if (tracker$in_failed(v)) {
-
         if (verbose)
-          message(paste("Case:", v, "is in the failed list"))
-
-      } else if (check(graph, v)) {
-
-        if (verbose)
-          message(paste("Case:", v, "is a good new node"))
-
-        # v is not in the tracker, or the failed list,
-        # so v is a new node. we then check v and v turns out
-        # to be good, so we can add it to the tracker
-
-        tracker$update_r_neighbor(graph, u, v, alpha_prime)
-
-        # v is a new node, and we can't access information
-        # about it, so we pretend that it doesn't exist and
-
-      } else {
-
-        if (verbose)
-          message(paste("Case:", v, "is a bad new node"))
+          print(dplyr::arrange(tracker$stats, desc(r)))
 
       }
-
-      if (verbose)
-        print(dplyr::arrange(tracker$stats, desc(r)))
     }
 
     if (verbose)

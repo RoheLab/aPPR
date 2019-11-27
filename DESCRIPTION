@@ -39,6 +39,8 @@ RoxygenNote: 7.0.0
 Collate: 
     'abstract-graph.R'
     'aPPR.R'
+    'batch-appr.R'
+    'batch-tracker.R'
     'deduplicate_tokens.R'
     'graph-igraph.R'
     'graph-rtweet.R'
