@@ -12,17 +12,20 @@ appr.igraph <- function(graph, seeds, ...) {
   appr.abstract_graph(graph = graph, seeds = seeds, ...)
 }
 
-check.igraph <- function(graph, node) {
-  node %in% igraph::V(graph)$names &&
-    igraph::degree(graph, v = node, mode = "out") > 0
+# TODO: use vectorized version blergh
+check.igraph <- function(graph, nodes) {
+
+  node_names <- igraph::V(graph)$names
+
+  node_names[nodes %in% node_names &
+               igraph::degree(graph, v = nodes, mode = "out") > 0]
 }
 
-in_degree.igraph <- function(graph, node) {
-  igraph::degree(graph, v = node, mode = "in")
-}
-
-out_degree.igraph <- function(graph, node) {
-  igraph::degree(graph, v = node, mode = "out")
+node_degrees.igraph <- function(graph, nodes) {
+  list(
+    in_degree = igraph::degree(graph, v = nodes, mode = "in"),
+    out_degree = igraph::degree(graph, v = nodes, mode = "out")
+  )
 }
 
 # character list of neighboring nodes

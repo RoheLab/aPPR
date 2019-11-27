@@ -46,7 +46,7 @@ set.seed(27)
 
 graph2 <- sample_pa(100)
 
-appr(graph2, seeds = "5")
+appr(graph2, seeds = "5", verbose = TRUE)
 ```
 
 ## Find the personalized pagerank of a Twitter user using `rtweet`

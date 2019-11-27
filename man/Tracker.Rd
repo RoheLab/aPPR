@@ -13,6 +13,9 @@ R6 class to manage personalized pagerank calculations
 \describe{
 \item{\code{seeds}}{A character vector of the seed nodes.}
 
+\item{\code{path}}{A character vector of nodes whose neighborhoods we
+examine.}
+
 \item{\code{stats}}{A [tibble::tibble()] with one row for each visited
   node and the following columns:
 
@@ -35,7 +38,8 @@ R6 class to manage personalized pagerank calculations
 \item \href{#method-in_tracker}{\code{Tracker$in_tracker()}}
 \item \href{#method-in_failed}{\code{Tracker$in_failed()}}
 \item \href{#method-add_seed}{\code{Tracker$add_seed()}}
-\item \href{#method-add_node}{\code{Tracker$add_node()}}
+\item \href{#method-add_to_path}{\code{Tracker$add_to_path()}}
+\item \href{#method-add_nodes}{\code{Tracker$add_nodes()}}
 \item \href{#method-add_failed}{\code{Tracker$add_failed()}}
 \item \href{#method-update_p}{\code{Tracker$update_p()}}
 \item \href{#method-update_r_neighbor}{\code{Tracker$update_r_neighbor()}}
@@ -94,13 +98,13 @@ A character vector of node names with current residuals
 \subsection{Method \code{in_tracker()}}{
 Check if there is already a row for a particular node
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$in_tracker(node)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$in_tracker(nodes)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{node}}{Character name of a node in the graph.}
+\item{\code{nodes}}{Character name of node(s) in the graph.}
 }
 \if{html}{\out{</div>}}
 }
@@ -137,7 +141,7 @@ Create an entry for `node` in the tracker. Assumes that
 `node` is not in the tracker yet, and does not check if
 this is the case.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$add_seed(graph, node, preference)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$add_seed(graph, seeds, preference)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -145,7 +149,7 @@ this is the case.
 \describe{
 \item{\code{graph}}{The graph object.}
 
-\item{\code{node}}{The name of the node in the graph as a length 1
+\item{\code{seeds}}{The name of the node in the graph as a length 1
 character vector.}
 
 \item{\code{preference}}{TODO: recall what on earth this is.}
@@ -154,13 +158,30 @@ character vector.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_node"></a>}}
-\subsection{Method \code{add_node()}}{
+\if{html}{\out{<a id="method-add_to_path"></a>}}
+\subsection{Method \code{add_to_path()}}{
+TODO
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$add_to_path(node)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{node}}{The name of the node in the graph as a length 1
+character vector.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-add_nodes"></a>}}
+\subsection{Method \code{add_nodes()}}{
 Create an entry for `node` in the tracker. Assumes that
 `node` is not in the tracker yet, and does not check if
 this is the case.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$add_node(graph, node, preference = 0)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$add_nodes(graph, nodes, preference = 0)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -168,8 +189,7 @@ this is the case.
 \describe{
 \item{\code{graph}}{The graph object.}
 
-\item{\code{node}}{The name of the node in the graph as a length 1
-character vector.}
+\item{\code{nodes}}{The name(s) of node(s) in the graph as a character vector.}
 
 \item{\code{preference}}{TODO: recall what on earth this is.}
 }
@@ -230,7 +250,7 @@ the current node, adding it to the tracker if necessary
 \item{\code{u}}{Character name of the node we are currently visiting.}
 
 \item{\code{v}}{Names of neighbors of `u` as a character vector. Can
-contain multiple elements.}
+contain multiple elements. Can also contain zero elements.}
 
 \item{\code{alpha_prime}}{Transformed teleportation constant from Algorithm 3.}
 }

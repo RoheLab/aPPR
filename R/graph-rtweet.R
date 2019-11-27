@@ -13,8 +13,17 @@ rtweet_graph <- function(attempts = 5) {
   agraph
 }
 
+#' Convenience function to run aPPR via rtweet
+#'
+#' @param seeds TODO
+#'
+#' @inheritDotParams appr.rtweet_graph
+#'
+#' @export
+#'
+#'
 appr_rtweet <- function(seeds, ...) {
-  batch_appr(rtweet_graph(), seeds, ...)
+  appr(rtweet_graph(), seeds, ...)
 }
 
 #' @rdname appr
@@ -65,18 +74,8 @@ batch_appr.rtweet_graph <- function(graph, seeds, ...) {
   # appr(graph, seeds, ...)
 }
 
-check.rtweet_graph <- function(graph, node) {
-
-  node_data <- safe_lookup_users(node, attempts = graph$attempts)
-
-  !is.null(node_data) &&
-    nrow(node_data) > 0 &&
-    !node_data$protected &&
-    node_data$friends_count > 0
-}
-
 # return character vector of all good nodes in the batch
-check_batch.rtweet_graph <- function(graph, nodes) {
+check.rtweet_graph <- function(graph, nodes) {
 
   node_data <- safe_lookup_users(nodes, attempts = graph$attempts)
 
