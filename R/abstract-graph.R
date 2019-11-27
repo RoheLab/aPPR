@@ -18,19 +18,6 @@ abstract_graph <- function(subclass, ...) {
 
 #' Check if a node an abstract graph is acceptable for inclusion in PPR
 #'
-#' @param graph A graph object.
-#' @param node The name of a node as a character vector.
-#'
-#' @return Returns `TRUE` if information on `node` is available, and
-#'   `node` has at least one outgoing edge.
-#'
-#' @export
-check <- function(graph, node) {
-  UseMethod("check")
-}
-
-#' Check if a node an abstract graph is acceptable for inclusion in PPR
-#'
 #' Inclusion criteria:
 #'
 #'   - At least one outgoing edge

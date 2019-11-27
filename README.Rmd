@@ -52,9 +52,7 @@ appr(graph2, seeds = "5", verbose = TRUE)
 ## Find the personalized pagerank of a Twitter user using `rtweet`
 
 ```{r rtweet-example, eval = FALSE}
-graph <- rtweet_graph()
-
-batch_appr(graph, "fchen365", epsilon = 1e-4, verbose = TRUE)
+appr_rtweet(graph, "fchen365", epsilon = 1e-4, verbose = TRUE)
 ```
 
 ## Limitations

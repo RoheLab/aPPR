@@ -16,9 +16,9 @@ appr.igraph <- function(graph, seeds, ...) {
 check.igraph <- function(graph, nodes) {
 
   node_names <- igraph::V(graph)$names
+  nodes_in_graph <- nodes[nodes %in% node_names]
 
-  node_names[nodes %in% node_names &
-               igraph::degree(graph, v = nodes, mode = "out") > 0]
+  nodes_in_graph[igraph::degree(graph, v = nodes_in_graph, mode = "out") > 0]
 }
 
 node_degrees.igraph <- function(graph, nodes) {
