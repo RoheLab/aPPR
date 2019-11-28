@@ -89,13 +89,8 @@
 #'
 #' appr(graph2, seeds = "5")
 #'
-<<<<<<< Updated upstream
-appr <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6, tau = NULL, ...) {
-=======
 appr <- function(graph, seeds, ..., alpha = 0.15, epsilon = 1e-6, tau = NULL,
                  verbose = FALSE) {
-
->>>>>>> Stashed changes
   ellipsis::check_dots_used()
 
   if (alpha <= 0 || alpha >= 1)
@@ -112,50 +107,41 @@ appr <- function(graph, seeds, ..., alpha = 0.15, epsilon = 1e-6, tau = NULL,
 
 #' @include abstract-graph.R
 #' @export
-<<<<<<< Updated upstream
-appr.abstract_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
-                                tau = NULL, verbose = FALSE, ...) {
-
-  if (verbose)
-    message("Initializing the tracker.")
-=======
 appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
                                 epsilon = 1e-6, tau = NULL,
                                 verbose = FALSE) {
 
   if (verbose)
     message(Sys.time(), " Starting aPPR.")
->>>>>>> Stashed changes
 
   alpha_prime <- alpha / (2 - alpha)
 
   tracker <- Tracker$new()
 
+  memo_neighborhood <- memoise::memoise(neighborhood)
+  memo_check <- memoise::memoise(check)
+
   for (seed in seeds) {
 
-    if (!check(graph, seed))
+    if (!(seed %in% memo_check(graph, seed))) {
       stop(
         paste("Seed", seed, "must be available and have positive out degree."),
         call. = FALSE
       )
+    }
 
     tracker$add_seed(graph, seed, preference = 1 / length(seeds))
 
-    if (verbose)
+    if (verbose) {
       message(paste("Adding seed", seed, "to tracker."))
+    }
   }
 
   remaining <- seeds
 
-  if (verbose)
-    message(paste("There are", length(remaining), "remaining nodes."))
-
   while (length(remaining) > 0) {
 
     u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
-
-    if (verbose)
-      message(paste("Updating p for node", u))
 
     tracker$update_p(u, alpha_prime)
 
@@ -172,71 +158,40 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
     #
     # also note that we only want to *check* each node once
 
-    if (verbose)
-      message(paste("Sampling the neighborhood for node", u))
+    neighbors <- memo_neighborhood(graph, u)
 
-    for (v in neighborhood(graph, u)) {
+    tracker$add_to_path(u)
 
-      if (verbose)
-        message(paste("Processing item", v, "in neighbhorhood of", u))
+    # first deal with the good neighbors we've already seen all
+    # at once
 
-      # two cases if we've already seen v
+    known_good <- neighbors[tracker$in_tracker(neighbors)]
+    known_bad <- neighbors[tracker$in_failed(neighbors)]
 
-      if (tracker$in_tracker(v)) {
+    unknown <- setdiff(neighbors, c(known_good, known_bad))
 
-        if (verbose)
-          message(paste("Case:", v, "is in the tracker"))
+    new_good <- check(graph, unknown)
+    new_bad <- setdiff(unknown, new_good)
 
-        # we've already seen v and know v is good because
-        # we never add bad v into the tracker
+    tracker$add_failed(new_bad)
+    tracker$update_r_neighbor(graph, u, known_good, alpha_prime)
+    tracker$update_r_neighbor(graph, u, new_good, alpha_prime)
 
-        tracker$update_r_neighbor(graph, u, v, alpha_prime)
-
-      } else if (tracker$in_failed(v)) {
-
-        if (verbose)
-          message(paste("Case:", v, "is in the failed list"))
-
-      } else if (check(graph, v)) {
-
-        if (verbose)
-          message(paste("Case:", v, "is a good new node"))
-
-        # v is not in the tracker, or the failed list,
-        # so v is a new node. we then check v and v turns out
-        # to be good, so we can add it to the tracker
-
-<<<<<<< Updated upstream
-        tracker$update_r_neighbor(graph, u, v, alpha_prime)
-
-        # v is a new node, and we can't access information
-        # about it, so we pretend that it doesn't exist and
-
-      } else {
-
-        if (verbose)
-          message(paste("Case:", v, "is a bad new node"))
-
-      }
-
-      if (verbose)
-        print(dplyr::arrange(tracker$stats, desc(r)))
-    }
-
-    if (verbose)
-      message(paste("Successfully dealt with neighborhood of", u))
-
-=======
->>>>>>> Stashed changes
     tracker$update_r_self(u, alpha_prime)
-
-    if (verbose)
-      message(paste("Successfully updated r for", u))
 
     remaining <- tracker$remaining(epsilon)
 
-    if (verbose)
-      message(paste("There are", length(remaining), "remaining nodes."))
+    if (verbose) {
+      message(
+        paste0(
+          "Visits: ",
+          length(tracker$path), " total / ",
+          length(unique(tracker$path)), " unique / ",
+          length(remaining), " remaining"
+        )
+      )
+    }
+
   }
 
 
@@ -246,12 +201,11 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
   ppr <- tracker$stats
 
   if (is.null(tau)) {
-    tau <- mean(ppr$in_degree)  # TODO: in_degree or out_degree here?
+    tau <- mean(ppr$in_degree) # TODO: in_degree or out_degree here?
   }
 
-  ppr$degree_adjusted <- ppr$p / ppr$in_degree      # might divide by 0 here
+  ppr$degree_adjusted <- ppr$p / ppr$in_degree # might divide by 0 here
   ppr$regularized <- ppr$p / (ppr$in_degree + tau)
   tracker$stats <- ppr
   tracker
 }
-

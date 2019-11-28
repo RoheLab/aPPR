@@ -38,8 +38,7 @@ LazyData: true
 RoxygenNote: 7.0.0
 Collate: 
     'abstract-graph.R'
-    'aPPR.R'
-    'deduplicate_tokens.R'
+    'appr.R'
     'graph-igraph.R'
     'graph-rtweet.R'
     'graph-twittercache.R'

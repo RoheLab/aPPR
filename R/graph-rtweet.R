@@ -13,10 +13,22 @@ rtweet_graph <- function(attempts = 5) {
   agraph
 }
 
+#' Convenience function to run aPPR via rtweet
+#'
+#' @param seeds TODO
+#'
+#' @inheritDotParams appr.rtweet_graph
+#'
+#' @export
+#'
+#'
+appr_rtweet <- function(seeds, ...) {
+  appr(rtweet_graph(), seeds, ...)
+}
+
 #' @rdname appr
 #' @export
-appr.rtweet_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
-                              tau = NULL, ...) {
+appr.rtweet_graph <- function(graph, seeds, ...) {
 
   if (!requireNamespace("rtweet", quietly = TRUE)) {
     stop(
@@ -25,7 +37,7 @@ appr.rtweet_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
     )
   }
 
-  seed_data <- safe_lookup_users(seeds)
+  seed_data <- safe_lookup_users(seeds, attempts = graph$attempts)
 
   if (any(seed_data$protected)) {
     stop("Seed nodes should not be protected Twitter accounts.", call. = FALSE)
@@ -35,24 +47,57 @@ appr.rtweet_graph <- function(graph, seeds, alpha = 0.15, epsilon = 1e-6,
   seeds <- seed_data$user_id
 
   NextMethod()
+  # appr(graph, seeds, ...)
 }
 
-check.rtweet_graph <- function(graph, node) {
+#' @rdname appr
+#' @export
+batch_appr.rtweet_graph <- function(graph, seeds, ...) {
 
-  node_data <- safe_lookup_users(node, attempts = graph$attempts)
+  if (!requireNamespace("rtweet", quietly = TRUE)) {
+    stop(
+      "`rtweet` package must be installed to use `rtweet_graph()`",
+      call. = FALSE
+    )
+  }
 
-  !is.null(node_data) &&
-    nrow(node_data) > 0 &&
-    !node_data$protected &&
-    node_data$friends_count > 0
+  seed_data <- safe_lookup_users(seeds, attempts = graph$attempts)
+
+  if (any(seed_data$protected)) {
+    stop("Seed nodes should not be protected Twitter accounts.", call. = FALSE)
+  }
+
+  # convert seeds, potentially passed as screen names, to user ids
+  seeds <- seed_data$user_id
+
+  NextMethod()
+  # appr(graph, seeds, ...)
 }
 
-in_degree.rtweet_graph <- function(graph, node) {
-  safe_lookup_users(node, attempts = graph$attempts)$followers_count
+# return character vector of all good nodes in the batch
+check.rtweet_graph <- function(graph, nodes) {
+
+  node_data <- safe_lookup_users(nodes, attempts = graph$attempts)
+
+  if (is.null(node_data) || nrow(node_data) < 1)
+    return(character(0))
+
+  good_nodes <- !node_data$protected & node_data$friends_count > 0
+
+  node_data$user_id[good_nodes]
 }
 
-out_degree.rtweet_graph <- function(graph, node) {
-  safe_lookup_users(node, attempts = graph$attempts)$friends_count
+node_degrees.rtweet_graph <- function(graph, nodes) {
+
+  # assumes that you want any errors / empty rows when accessing this
+  # data, i.e. that the nodes have already been checked
+
+  node_data <- safe_lookup_users(nodes, attempts = graph$attempts)
+
+  list(
+    in_degree = node_data$followers_count,
+    out_degree = node_data$friends_count
+  )
 }
 
 neighborhood.rtweet_graph <- function(graph, node) {

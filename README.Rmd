@@ -46,7 +46,7 @@ set.seed(27)
 
 graph2 <- sample_pa(100)
 
-appr(graph2, seeds = "5")
+appr(graph2, seeds = "5", verbose = TRUE)
 ```
 
 ## Why should I use aPPR?
@@ -64,9 +64,7 @@ comment on `p = 0` versus `p != 0`
 ## Find the personalized pagerank of a Twitter user using `rtweet`
 
 ```{r rtweet-example, eval = FALSE}
-graph <- rtweet_graph()
-
-appr(graph, "fchen365", epsilon = 1e-4, )
+appr_rtweet(graph, "fchen365", epsilon = 1e-4, verbose = TRUE)
 ```
 
 ## Advice on choosing `epsilon`
@@ -87,8 +85,6 @@ the most disparate a users interests, and the less connected their neighborhood,
 - Connected graph assumption, what results look like when we violate this assumption
 - Sampling is one node at a time
 
-<<<<<<< Updated upstream
-=======
 ## Speed ideas
 
 compute is not an issue relative to actually getting data
@@ -107,7 +103,6 @@ TODO
 
 people have a right to choose how public / visible / discoverable their information is. if you come across interesting users who are not in the public eye, do not elevate them into the public eye or increase attention on their accounts without their permission.
 
->>>>>>> Stashed changes
 # References
 
 1. [Targeted sampling from massive Blockmodel graphs with personalized PageRank][chen]
