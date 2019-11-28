@@ -49,6 +49,18 @@ graph2 <- sample_pa(100)
 appr(graph2, seeds = "5")
 ```
 
+## Why should I use aPPR?
+
+- curious about nodes important to the community around a particular user who you wouldn't find without algorithmic help
+
+- 1 hop network is too small, 2-3 hop networks are too large (recall diameter of twitter graph is 3.7!!!)
+
+- want to study a particular community but don't know exactly which accounts to investigate, but you do have a good idea of one or two important accounts in that community
+
+## `aPPR` calculates an *approximation*
+
+comment on `p = 0` versus `p != 0`
+
 ## Find the personalized pagerank of a Twitter user using `rtweet`
 
 ```{r rtweet-example, eval = FALSE}
@@ -57,11 +69,45 @@ graph <- rtweet_graph()
 appr(graph, "fchen365", epsilon = 1e-4, )
 ```
 
+## Advice on choosing `epsilon`
+
+Number of unique visits as a function of `epsilon`, wait times, runtime proportion to `1 / (alpha * epsilon)`, etc, etc
+
+speaking strictly in terms of the `p != 0` nodes
+
+1e-4 and 1e-5: finishes quickly, neighbors with high degree get visited
+1e-6: visits most of 1-hop neighborhood. finishes in several hours for accounts who follow thousands of people with ~10 tokens.
+1e-7: visits beyond the 1-hop neighbor by ???. takes a couple days to run with ~10 tokens.
+1e-8: visits *a lot* beyond the 1-hop neighbor, presumably the important people in the 2-hop neighbor, ???
+
+the most disparate a users interests, and the less connected their neighborhood, the longer it will take to run aPPR
+
 ## Limitations
 
 - Connected graph assumption, what results look like when we violate this assumption
 - Sampling is one node at a time
 
+<<<<<<< Updated upstream
+=======
+## Speed ideas
+
+compute is not an issue relative to actually getting data
+
+Compute time ~ access from Ram time << access from disk time << access from network time.
+
+Make requests to API in bulk, memoize everything, cache / write to disk in a separate process?
+
+General pattern: cache on disk, and also in RAM
+
+## Working with `Tracker` objects
+
+TODO
+
+## Ethical considerations
+
+people have a right to choose how public / visible / discoverable their information is. if you come across interesting users who are not in the public eye, do not elevate them into the public eye or increase attention on their accounts without their permission.
+
+>>>>>>> Stashed changes
 # References
 
 1. [Targeted sampling from massive Blockmodel graphs with personalized PageRank][chen]

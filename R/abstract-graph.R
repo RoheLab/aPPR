@@ -43,3 +43,7 @@ out_degree <- function(graph, node) {
 neighborhood <- function(graph, node) {
   UseMethod("neighborhood")
 }
+
+# memoized versions, these are what actually get used
+memo_neighborhood <- memoise::memoise(neighborhood)
+memo_check <- memoise::memoise(check)

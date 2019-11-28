@@ -41,6 +41,9 @@ Tracker <- R6Class("Tracker", list(
   #' calculation.
   #'
   print = function() {
+
+    cat("A Tracker R6 object with PPR table: \n\n")
+
     print(self$stats)
     invisible(self)
   },
