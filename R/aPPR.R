@@ -99,7 +99,7 @@ appr <- function(graph, seeds, ..., alpha = 0.15, epsilon = 1e-6, tau = NULL,
   if (epsilon <= 0 || epsilon >= 1)
     stop("`epsilon` must be strictly between zero and one.", call. = FALSE)
 
-  if (tau < 0)
+  if (!is.null(tau) && tau < 0)
     stop("`tau` must be greater than zero.", call. = FALSE)
 
   UseMethod("appr")
@@ -117,9 +117,6 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
   alpha_prime <- alpha / (2 - alpha)
 
   tracker <- Tracker$new()
-
-  memo_neighborhood <- memoise::memoise(neighborhood)
-  memo_check <- memoise::memoise(check)
 
   for (seed in seeds) {
 
@@ -191,9 +188,7 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
         )
       )
     }
-
   }
-
 
   if (verbose)
     message(Sys.time(), " aPPR sampling finished.")

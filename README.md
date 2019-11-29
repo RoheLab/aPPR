@@ -38,27 +38,88 @@ set.seed(27)
 
 graph2 <- sample_pa(100)
 
-appr(graph2, seeds = "5")
-#> # A tibble: 3 x 7
+appr(graph2, seeds = "5", verbose = TRUE)
+#> # A tibble: 2 x 7
 #>   name            r     p in_degree out_degree degree_adjusted regularized
 #>   <chr>       <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
-#> 1 5     0.000000833 0.150         2          1         0.0750      0.0105 
-#> 2 4     0.000000579 0.127         4          1         0.0319      0.00781
-#> 3 1     0           0.108        31          0         0.00350     0.00250
+#> 1 5     0.000000833 0.150         2          1          0.0750      0.0300
+#> 2 4     0.000000537 0.127         4          1          0.0319      0.0182
 ```
+
+## Why should I use aPPR?
+
+  - curious about nodes important to the community around a particular
+    user who you wouldn’t find without algorithmic help
+
+  - 1 hop network is too small, 2-3 hop networks are too large (recall
+    diameter of twitter graph is 3.7\!\!\!)
+
+  - want to study a particular community but don’t know exactly which
+    accounts to investigate, but you do have a good idea of one or two
+    important accounts in that community
+
+## `aPPR` calculates an *approximation*
+
+comment on `p = 0` versus `p != 0`
 
 ## Find the personalized pagerank of a Twitter user using `rtweet`
 
 ``` r
-graph <- rtweet_graph()
-
-appr(graph, "alexpghayes")
+appr_rtweet(graph, "fchen365", epsilon = 1e-4, verbose = TRUE)
 ```
+
+## Advice on choosing `epsilon`
+
+Number of unique visits as a function of `epsilon`, wait times, runtime
+proportion to `1 / (alpha * epsilon)`, etc, etc
+
+speaking strictly in terms of the `p != 0` nodes
+
+1e-4 and 1e-5: finishes quickly, neighbors with high degree get visited
+1e-6: visits most of 1-hop neighborhood. finishes in several hours for
+accounts who follow thousands of people with \~10 tokens. 1e-7: visits
+beyond the 1-hop neighbor by ???. takes a couple days to run with \~10
+tokens. 1e-8: visits *a lot* beyond the 1-hop neighbor, presumably the
+important people in the 2-hop neighbor, ???
+
+the most disparate a users interests, and the less connected their
+neighborhood, the longer it will take to run aPPR
+
+## Limitations
+
+  - Connected graph assumption, what results look like when we violate
+    this assumption
+  - Sampling is one node at a time
+
+## Speed ideas
+
+compute is not an issue relative to actually getting data
+
+Compute time \~ access from Ram time \<\< access from disk time \<\<
+access from network time.
+
+Make requests to API in bulk, memoize everything, cache / write to disk
+in a separate process?
+
+General pattern: cache on disk, and also in RAM
+
+## Working with `Tracker` objects
+
+TODO
+
+## Ethical considerations
+
+people have a right to choose how public / visible / discoverable their
+information is. if you come across interesting users who are not in the
+public eye, do not elevate them into the public eye or increase
+attention on their accounts without their permission.
 
 # References
 
-1.  Targeted sampling from massive Blockmodel graphs with personalized
-    PageRank
+1.  Andersen, R., Chung, F. & Lang, K. *Local Graph Partitioning using
+    PageRank Vectors*. 2006.
+    [pdf](http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf)
 
-2.  [Local Graph Partitioning using PageRank
-    Vectors](http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf)
+2.  Chen, F., Zhang, Y. & Rohe, K. *Targeted sampling from massive
+    Blockmodel graphs with personalized PageRank*. 2019.
+    [pdf](https://arxiv.org/abs/1910.12937)

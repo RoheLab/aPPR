@@ -105,9 +105,9 @@ people have a right to choose how public / visible / discoverable their informat
 
 # References
 
-1. [Targeted sampling from massive Blockmodel graphs with personalized PageRank][chen]
+1. Andersen, R., Chung, F. & Lang, K. *Local Graph Partitioning using PageRank Vectors*. 2006. [pdf][andersen]
 
-2. [Local Graph Partitioning using PageRank Vectors][andersen]
+2. Chen, F., Zhang, Y. & Rohe, K. *Targeted sampling from massive Blockmodel graphs with personalized PageRank*. 2019. [pdf][chen]
 
-[chen]: https://arxiv.org/abs/1910.12937
 [andersen]: http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf
+[chen]: https://arxiv.org/abs/1910.12937
