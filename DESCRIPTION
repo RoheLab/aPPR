@@ -26,7 +26,7 @@ Depends:
 Imports: 
     ellipsis,
     tibble,
-    socialsampler (>= 0.0.0.9000),
+    socialsampler (>= 0.0.0.9001),
     logger,
     glue
 Suggests: 
