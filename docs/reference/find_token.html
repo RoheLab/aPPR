@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>License • aPPR</title>
+<title>Find a token with remaining API requests — find_token • aPPR</title>
 
 
 <!-- jquery -->
@@ -29,13 +29,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script>
+<link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="License" />
+<meta property="og:title" content="Find a token with remaining API requests — find_token" />
+<meta property="og:description" content="Find a token with remaining API requests" />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -54,7 +56,7 @@
   </head>
 
   <body>
-    <div class="container template-title-body">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -66,7 +68,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">aPPR</a>
+        <a class="navbar-link" href="../index.html">aPPR</a>
         <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
       </span>
     </div>
@@ -74,13 +76,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
+  <a href="../index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -90,10 +92,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="articles/custom-graphs.html">Using aPPR with Custom Graphs</a>
+      <a href="../articles/custom-graphs.html">Using aPPR with Custom Graphs</a>
     </li>
     <li>
-      <a href="articles/mathematical-details.html">Mathematical Details</a>
+      <a href="../articles/mathematical-details.html">Mathematical Details</a>
     </li>
   </ul>
 </li>
@@ -116,18 +118,54 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>License</h1>
+    <h1>Find a token with remaining API requests</h1>
+    <small class="dont-index">Source: <a href='https://github.com/RoheLab/aPPR/blob/master/R/rtweet-utilities.R'><code>R/rtweet-utilities.R</code></a></small>
+    <div class="hidden name"><code>find_token.Rd</code></div>
     </div>
 
-<pre>We are deciding on an appropriate license for this package. At this moment, we retain copyright of this code and do not authorize any use.
-</pre>
+    <div class="ref-description">
+    <p>Find a token with remaining API requests</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>find_token</span>(<span class='no'>query</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>break_time</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"random"</span>)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>query</th>
+      <td><p>type of API request. options in clude ...</p></td>
+    </tr>
+    <tr>
+      <th>rate</th>
+      <td><p>rate limit to ask (for use)</p></td>
+    </tr>
+    <tr>
+      <th>break_time</th>
+      <td><p>time interval to wait, in minutes</p></td>
+    </tr>
+    <tr>
+      <th>strategy</th>
+      <td><p>'random' for uniformly at random,</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>TODO</p>
 
   </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
+    </ul>
 
+  </div>
 </div>
-
 
 
       <footer>

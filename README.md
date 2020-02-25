@@ -13,8 +13,8 @@ status](https://www.r-pkg.org/badges/version/aPPR)](https://CRAN.R-project.org/p
 
 `aPPR` helps you calculate approximate personalized pageranks from large
 graphs, including those that can only be queried via an API. `aPPR`
-additionally performs degree correction and regularization, allowing
-users to recover blocks from stochastic blockmodels.
+additionally performs degree correction and regularization, allowing you
+to recover blocks from stochastic blockmodels.
 
 ## Installation
 
@@ -28,22 +28,53 @@ devtools::install_github("RoheLab/aPPR")
 
 ## Find the personalized pagerank of a node in an `igraph` graph
 
-This is a basic example which shows you how to solve a common problem:
-
 ``` r
 library(aPPR)
 library(igraph)
 
 set.seed(27)
 
-graph2 <- sample_pa(100)
+erdos_renyi_graph <- sample_gnp(n = 100, p = 0.5)
 
-appr(graph2, seeds = "5", verbose = TRUE)
-#> # A tibble: 2 x 7
+erdos_tracker <- appr(
+  erdos_renyi_graph,   # the graph to work with
+  seeds = "5",         # name of seed node (character)
+  epsilon = 0.0005,    # convergence criterion (see below)
+  verbose = FALSE
+)
+
+erdos_tracker
+#> A Tracker R6 object with PPR table: 
+#> 
+#> # A tibble: 51 x 7
+#>    name       r     p in_degree out_degree degree_adjusted regularized
+#>    <chr>  <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
+#>  1 5     0.0205 0.147        50         50         0.00294     0.00147
+#>  2 3     0.0167 0            51         51         0           0      
+#>  3 6     0.0167 0            59         59         0           0      
+#>  4 8     0.0167 0            41         41         0           0      
+#>  5 15    0.0167 0            46         46         0           0      
+#>  6 16    0.0167 0            52         52         0           0      
+#>  7 17    0.0167 0            48         48         0           0      
+#>  8 19    0.0167 0            54         54         0           0      
+#>  9 20    0.0167 0            51         51         0           0      
+#> 10 21    0.0167 0            55         55         0           0      
+#> # ... with 41 more rows
+```
+
+## Sink nodes and unreachable nodes
+
+``` r
+citation_graph <- sample_pa(100)
+
+citation_tracker <- appr(citation_graph, seeds = "5")
+citation_tracker
+#> A Tracker R6 object with PPR table: 
+#> 
+#> # A tibble: 1 x 7
 #>   name            r     p in_degree out_degree degree_adjusted regularized
 #>   <chr>       <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
-#> 1 5     0.000000833 0.150         2          1          0.0750      0.0300
-#> 2 4     0.000000537 0.127         4          1          0.0319      0.0182
+#> 1 5     0.000000833 0.150         0          1             Inf         Inf
 ```
 
 ## Why should I use aPPR?
@@ -65,7 +96,28 @@ comment on `p = 0` versus `p != 0`
 ## Find the personalized pagerank of a Twitter user using `rtweet`
 
 ``` r
-appr_rtweet(graph, "fchen365", epsilon = 1e-4, verbose = TRUE)
+appr(
+  rtweet_graph(),
+  "fchen365",
+  epsilon = 1e-3,
+  verbose = TRUE
+)
+#> A Tracker R6 object with PPR table: 
+#> 
+#> # A tibble: 40 x 7
+#>    name                 r     p in_degree out_degree degree_adjusted regularized
+#>    <chr>            <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
+#>  1 77522577413145~ 0.0205 0.147        36         40         0.00408  0.00000132
+#>  2 20855386        0.0208 0           700        744         0        0         
+#>  3 14204987        0.0208 0          1955        919         0        0         
+#>  4 3239447303      0.0208 0            71        125         0        0         
+#>  5 24355706        0.0208 0          1220        901         0        0         
+#>  6 2347049341      0.0208 0        904769        283         0        0         
+#>  7 573817445       0.0208 0           784        262         0        0         
+#>  8 82424157570642~ 0.0208 0          2654       1076         0        0         
+#>  9 3729520335      0.0208 0          4762        211         0        0         
+#> 10 567273827       0.0208 0         61988       1387         0        0         
+#> # ... with 30 more rows
 ```
 
 ## Advice on choosing `epsilon`
@@ -116,10 +168,10 @@ attention on their accounts without their permission.
 
 # References
 
-1.  Andersen, R., Chung, F. & Lang, K. *Local Graph Partitioning using
-    PageRank Vectors*. 2006.
-    [pdf](http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf)
-
-2.  Chen, F., Zhang, Y. & Rohe, K. *Targeted sampling from massive
+1.  Chen, F., Zhang, Y. & Rohe, K. *Targeted sampling from massive
     Blockmodel graphs with personalized PageRank*. 2019.
     [pdf](https://arxiv.org/abs/1910.12937)
+
+2.  Andersen, R., Chung, F. & Lang, K. *Local Graph Partitioning using
+    PageRank Vectors*. 2006.
+    [pdf](http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf)

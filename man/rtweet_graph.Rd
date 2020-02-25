@@ -7,10 +7,12 @@
 rtweet_graph(attempts = 5)
 }
 \arguments{
-\item{attempts}{The number of times to attempt an API before
+\item{attempts}{The number of times to attempt an API request before
 moving on or erroring.}
 }
 \description{
 Signifies that we should query the Twitter friendship graph via
-`rtweet`.
+\code{rtweet}. In practice, we actually use \code{socialsampler}, so you
+can use multiple tokens at once. See \code{\link[socialsampler:register_token]{socialsampler::register_token()}}
+for details.
 }

@@ -7,15 +7,14 @@
 abstract_graph(subclass, ...)
 }
 \arguments{
-\item{subclass}{TODO}
+\item{subclass}{Desired subclass (character).}
 
-\item{...}{TODO}
-}
-\value{
-Returns `TRUE` if information on `node` is available, and
-  `node` has at least one outgoing edge.
+\item{...}{Other arguments to pass to \code{list()}. See
+\code{\link[=rtweet_graph]{rtweet_graph()}} for an example.}
 }
 \description{
 Could be an actual graph object, or a graph such as the Twitter
 following network defined implicitly via API requests, etc.
+The abstract graph is just a list with \code{abstract_graph} class
+and your desired subclass.
 }

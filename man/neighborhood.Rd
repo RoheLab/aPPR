@@ -9,15 +9,15 @@ neighborhood(graph, node)
 \arguments{
 \item{graph}{A graph object.}
 
-\item{nodes}{The name of a single node in `graph` as a character vector.}
+\item{nodes}{The name of a single node in \code{graph} as a character vector.}
 }
 \value{
-A character vector of all nodes in `graph` connected such that
-  there is an outgoing edge for `node` to those nodes. This should
-  never be empty, as `neighborhood()` should not be called on nodes
-  that fail `check()`.
+A character vector of all nodes in \code{graph} connected such that
+there is an outgoing edge for \code{node} to those nodes. This should
+never be empty, as \code{neighborhood()} should not be called on nodes
+that fail \code{check()}.
 }
 \description{
-That is, find all nodes connected to `node` by an outgoing edge.
+That is, find all nodes connected to \code{node} by an outgoing edge.
 This function is memorized to avoid making repeated API queries.
 }

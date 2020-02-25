@@ -8,21 +8,25 @@
 
 <title>R6 class to manage personalized pagerank calculations — Tracker • aPPR</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,11 +34,12 @@
 
 
 
-<meta property="og:title" content="R6 class to manage personalized pagerank calculations — Tracker" />
 
+<meta property="og:title" content="R6 class to manage personalized pagerank calculations — Tracker" />
 <meta property="og:description" content="R6 class to manage personalized pagerank calculations
 R6 class to manage personalized pagerank calculations" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -46,6 +51,7 @@ R6 class to manage personalized pagerank calculations" />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -64,7 +70,7 @@ R6 class to manage personalized pagerank calculations" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aPPR</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
       </span>
     </div>
 
@@ -72,7 +78,7 @@ R6 class to manage personalized pagerank calculations" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,11 +101,10 @@ R6 class to manage personalized pagerank calculations" />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/RoheLab/aPPR">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -110,6 +115,7 @@ R6 class to manage personalized pagerank calculations" />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -121,38 +127,48 @@ R6 class to manage personalized pagerank calculations" />
     </div>
 
     <div class="ref-description">
-    
     <p>R6 class to manage personalized pagerank calculations</p>
 <p>R6 class to manage personalized pagerank calculations</p>
-    
     </div>
 
-        
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Blargh blarh blargh</p>
-    
+
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl class='dl-horizontal'>
-<dt><code>stats</code></dt><dd><p>A [tibble::tibble()] with one row for each visited
-  node and the following columns:
-    - `name`: Name of a node (character).
-  - `r`: Current estimate of residual for a node.
-  - `p`: Current estimate of the pagerank for a node.
-  - `in_degree`: Number of incoming edges to a node.
-  - `out_degree`: Number of outcoming edges from a node.</p></dd>
+<dt><code>seeds</code></dt><dd><p>A character vector of the seed nodes.</p></dd>
+
+<dt><code>path</code></dt><dd><p>A character vector of nodes whose neighborhoods we
+examine.</p></dd>
+
+<dt><code>stats</code></dt><dd><p>A <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble::tibble()</a></code> with one row for each visited
+node and the following columns:
+<ul>
+<li><p><code>name</code>: Name of a node (character).</p></li>
+<li><p><code>r</code>: Current estimate of residual for a node.</p></li>
+<li><p><code>p</code>: Current estimate of the pagerank for a node.</p></li>
+<li><p><code>in_degree</code>: Number of incoming edges to a node.</p></li>
+<li><p><code>out_degree</code>: Number of outcoming edges from a node.</p></li>
+</ul></p></dd>
+
+<dt><code>failed</code></dt><dd><p>A character vector of nodes that could not be visited.</p></dd>
+
 </dl><p></div></p>
-    
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
-    <h3>Public methods</h3>
-    <ul>
+    
+<h3>Public methods</h3>
+
+<ul>
 <li><p><a href='#method-new'><code>Tracker$new()</code></a></p></li>
 <li><p><a href='#method-print'><code>Tracker$print()</code></a></p></li>
 <li><p><a href='#method-remaining'><code>Tracker$remaining()</code></a></p></li>
 <li><p><a href='#method-in_tracker'><code>Tracker$in_tracker()</code></a></p></li>
-<li><p><a href='#method-add_node'><code>Tracker$add_node()</code></a></p></li>
+<li><p><a href='#method-in_failed'><code>Tracker$in_failed()</code></a></p></li>
+<li><p><a href='#method-add_seed'><code>Tracker$add_seed()</code></a></p></li>
+<li><p><a href='#method-add_to_path'><code>Tracker$add_to_path()</code></a></p></li>
+<li><p><a href='#method-add_nodes'><code>Tracker$add_nodes()</code></a></p></li>
+<li><p><a href='#method-add_failed'><code>Tracker$add_failed()</code></a></p></li>
 <li><p><a href='#method-update_p'><code>Tracker$update_p()</code></a></p></li>
 <li><p><a href='#method-update_r_neighbor'><code>Tracker$update_r_neighbor()</code></a></p></li>
 <li><p><a href='#method-update_r_self'><code>Tracker$update_r_self()</code></a></p></li>
@@ -160,127 +176,184 @@ R6 class to manage personalized pagerank calculations" />
 </ul>
 <p><hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-    Create a new Tracker object.
-<h3>Usage</h3>
-    <div class="r"><pre>Tracker$new()</pre></div>
-    <h3>Returns</h3>
-    A new `Tracker` object.
-    <p><hr>
-<a id="method-print"></a></p><h3>Method <code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print()</a></code></h3>
-    Print the tibble containing the current state of the pagerank
-calculation.
-<h3>Usage</h3>
-    <div class="r"><pre>Tracker$print()</pre></div>
-    <p><hr>
+<p>Create a new Tracker object.</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$new()</pre><p></div></p>
+
+<h3>Returns</h3>
+<p>A new <code>Tracker</code> object.</p>
+<p><hr>
+<a id="method-print"></a></p><h3>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
+<p>Print the tibble containing the current state of the pagerank
+calculation.</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$print()</pre><p></div></p>
+
+<p><hr>
 <a id="method-remaining"></a></p><h3>Method <code>remaining()</code></h3>
-    Determine nodes that need to be visited
-<h3>Usage</h3>
-    <div class="r"><pre>Tracker$remaining(epsilon)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Determine nodes that need to be visited. Note that,
+if there is a node with zero out degree, you will always
+need to visit that node. So it is important to make sure
+we never add nodes with zero out degree into the tracker.</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$remaining(epsilon)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
 <dt><code>epsilon</code></dt><dd><p>The error tolerance / convergence parameter in
 Algorithm 3.</p></dd>
-</dl>
-</div>
-    <h3>Returns</h3>
-    A character vector of node names with current residuals
-  greater than `epsilon`.
-    <p><hr>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A character vector of node names with current residuals
+greater than <code>epsilon</code>.</p>
+<p><hr>
 <a id="method-in_tracker"></a></p><h3>Method <code>in_tracker()</code></h3>
-    Check if there is already a row for a particular node
-<h3>Usage</h3>
-    <div class="r"><pre>Tracker$in_tracker(node)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Check if there is already a row for a particular node</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$in_tracker(nodes)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>nodes</code></dt><dd><p>Character name of node(s) in the graph.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p><code>TRUE</code> if there is a row for <code>node</code>, <code>FALSE</code> if there
+is not a row for <code>node</code>.</p>
+<p><hr>
+<a id="method-in_failed"></a></p><h3>Method <code>in_failed()</code></h3>
+<p>Check if we previously failed to visit a node</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$in_failed(node)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
 <dt><code>node</code></dt><dd><p>Character name of a node in the graph.</p></dd>
-</dl>
-</div>
-    <h3>Returns</h3>
-    `TRUE` if there is a row for `node`, `FALSE` if there
-  is not a row for `node`.
-    <p><hr>
-<a id="method-add_node"></a></p><h3>Method <code>add_node()</code></h3>
-    Create an entry for `node` in the tracker. Assumes that
-`node` is not in the tracker yet, and does not check if
-this is the case.
-<h3>Usage</h3>
-    <div class="r"><pre>Tracker$add_node(graph, node, preference = 0)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p><code>TRUE</code> if we failed to visit <code>node</code>, <code>FALSE</code> otherwise.
+Note that this function will return <code>FALSE</code> if <code>node</code> is new
+and we haven't seen it before.</p>
+<p><hr>
+<a id="method-add_seed"></a></p><h3>Method <code>add_seed()</code></h3>
+<p>Create an entry for <code>node</code> in the tracker. Assumes that
+<code>node</code> is not in the tracker yet, and does not check if
+this is the case.</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$add_seed(graph, seeds, preference)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
 <dt><code>graph</code></dt><dd><p>The graph object.</p></dd>
-    <dt><code>node</code></dt><dd><p>The name of the node in the graph as a length 1
+
+<dt><code>seeds</code></dt><dd><p>The name of the node in the graph as a length 1
 character vector.</p></dd>
-    <dt><code>preference</code></dt><dd><p>TODO: recall what on earth this is.</p></dd>
-</dl>
-</div>
-    <p><hr>
-<a id="method-update_p"></a></p><h3>Method <code>update_p()</code></h3>
-    Update the estimate of the personalized pagerank for a given node
-<h3>Usage</h3>
-    <div class="r"><pre>Tracker$update_p(node, alpha_prime)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
-<dt><code>node</code></dt><dd><p>Character name of a node in the graph.</p></dd>
-    <dt><code>alpha_prime</code></dt><dd><p>Transformed teleportation constant from Algorithm 3.</p></dd>
-</dl>
-</div>
-    <p><hr>
-<a id="method-update_r_neighbor"></a></p><h3>Method <code>update_r_neighbor()</code></h3>
-    Update the residual of a node in the neighborhood of current node
-<h3>Usage</h3>
-    <div class="r"><pre>Tracker$update_r_neighbor(graph, u, v, alpha_prime)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+
+<dt><code>preference</code></dt><dd><p>TODO: recall what on earth this is.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-add_to_path"></a></p><h3>Method <code>add_to_path()</code></h3>
+<p>TODO</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$add_to_path(node)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>node</code></dt><dd><p>The name of the node in the graph as a length 1
+character vector.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-add_nodes"></a></p><h3>Method <code>add_nodes()</code></h3>
+<p>Create an entry for <code>node</code> in the tracker. Assumes that
+<code>node</code> is not in the tracker yet, and does not check if
+this is the case.</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$add_nodes(graph, nodes, preference = 0)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
 <dt><code>graph</code></dt><dd><p>The graph object.</p></dd>
-    <dt><code>u</code></dt><dd><p>Character name of the node we are currently visiting.</p></dd>
-    <dt><code>v</code></dt><dd><p>Character name of a neighborhor of `u`.</p></dd>
-    <dt><code>alpha_prime</code></dt><dd><p>Transformed teleportation constant from Algorithm 3.</p></dd>
-</dl>
-</div>
-    <p><hr>
+
+<dt><code>nodes</code></dt><dd><p>The name(s) of node(s) in the graph as a character vector.</p></dd>
+
+<dt><code>preference</code></dt><dd><p>TODO: recall what on earth this is.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-add_failed"></a></p><h3>Method <code>add_failed()</code></h3>
+<p>Add <code>node</code> to the list of nodes we failed to visit.
+Assumes that <code>node</code> is not in the failed list yet, and
+does not check if this is the case.</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$add_failed(nodes)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>nodes</code></dt><dd><p>The name of the node in the graph as a length 1
+character vector.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-update_p"></a></p><h3>Method <code>update_p()</code></h3>
+<p>Update the estimate of the personalized pagerank for a given node</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$update_p(node, alpha_prime)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>node</code></dt><dd><p>Character name of a node in the graph.</p></dd>
+
+<dt><code>alpha_prime</code></dt><dd><p>Transformed teleportation constant from Algorithm 3.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-update_r_neighbor"></a></p><h3>Method <code>update_r_neighbor()</code></h3>
+<p>Update the residual of a <em>good</em> node in the neighborhood of
+the current node, adding it to the tracker if necessary</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$update_r_neighbor(graph, u, v, alpha_prime)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>graph</code></dt><dd><p>The graph object.</p></dd>
+
+<dt><code>u</code></dt><dd><p>Character name of the node we are currently visiting.</p></dd>
+
+<dt><code>v</code></dt><dd><p>Names of neighbors of <code>u</code> as a character vector. Can
+contain multiple elements. Can also contain zero elements.</p></dd>
+
+<dt><code>alpha_prime</code></dt><dd><p>Transformed teleportation constant from Algorithm 3.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
 <a id="method-update_r_self"></a></p><h3>Method <code>update_r_self()</code></h3>
-    Update the residual of current node
-<h3>Usage</h3>
-    <div class="r"><pre>Tracker$update_r_self(node, alpha_prime)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Update the residual of current node</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$update_r_self(node, alpha_prime)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
 <dt><code>node</code></dt><dd><p>Character name of the node we are currently visiting.</p></dd>
-    <dt><code>alpha_prime</code></dt><dd><p>Transformed teleportation constant from Algorithm 3.</p></dd>
-</dl>
-</div>
-    <p><hr>
+
+<dt><code>alpha_prime</code></dt><dd><p>Transformed teleportation constant from Algorithm 3.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-    The objects of this class are cloneable with this method.
-<h3>Usage</h3>
-    <div class="r"><pre>Tracker$clone(deep = FALSE)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Tracker$clone(deep = FALSE)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
-</dl>
-</div>
-    
+
+</dl><p></div></p>
+
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#details">Details</a></li>
-
       <li><a href="#public-fields">Public fields</a></li>
-
       <li><a href="#methods">Methods</a></li>
-          </ul>
+    </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -288,13 +361,16 @@ character vector.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

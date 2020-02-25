@@ -9,13 +9,13 @@ node_degrees(graph, nodes)
 \arguments{
 \item{graph}{A graph object.}
 
-\item{nodes}{The name(s) of node(s) in `graph` as a character vector.}
+\item{nodes}{The name(s) of node(s) in \code{graph} as a character vector.}
 }
 \value{
-A [data.frame()] with one row for every node in `nodes` and
-  two columns: `in_degree` and `out_degree`.frame with one
+A \code{\link[=data.frame]{data.frame()}} with one row for every node in \code{nodes} and
+two columns: \code{in_degree} and \code{out_degree}.frame with one
 }
 \description{
-This function is only called nodes that have been [check()]'d. It is
-safe to assume that `nodes` is non-empty. (TODO: check this!)
+This function is only called nodes that have been \code{\link[=check]{check()}}'d. It is
+safe to assume that \code{nodes} is non-empty. (TODO: check this!)
 }

@@ -18,30 +18,38 @@ Description: aPPR helps you calculate approximate
     only be queried via an API.  aPPR additionally performs degree
     correction and regularization, allowing users to recover blocks from
     stochastic blockmodels.
-License: MIT + file LICENSE
+License: file LICENSE
 URL: https://github.com/RoheLab/aPPR
 BugReports: https://github.com/RoheLab/aPPR/issues
 Depends: 
     R6
 Imports: 
     ellipsis,
-    tibble
+    tibble,
+    socialsampler (>= 0.0.0.9000),
+    logger,
+    glue
 Suggests: 
-    testthat (>= 2.1.0),
-    twittercache,
+    igraph,
     knitr,
     rmarkdown,
     rtweet,
-    igraph
+    testthat (>= 2.1.0),
+    twittercache
+VignetteBuilder: 
+    knitr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.0
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.2
 Collate: 
+    'aPPR-package.R'
     'abstract-graph.R'
-    'appr.R'
+    'aPPR.R'
     'graph-igraph.R'
     'graph-rtweet.R'
     'graph-twittercache.R'
-    'rtweet-utilities.R'
     'tracker.R'
-VignetteBuilder: knitr
+    'update.R'
+Remotes: 
+    alexpghayes/socialsampler

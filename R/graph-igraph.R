@@ -12,7 +12,6 @@ appr.igraph <- function(graph, seeds, ...) {
   appr.abstract_graph(graph = graph, seeds = seeds, ...)
 }
 
-# TODO: use vectorized version blergh
 check.igraph <- function(graph, nodes) {
 
   node_names <- igraph::V(graph)$names

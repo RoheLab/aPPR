@@ -16,14 +16,15 @@ R6 class to manage personalized pagerank calculations
 \item{\code{path}}{A character vector of nodes whose neighborhoods we
 examine.}
 
-\item{\code{stats}}{A [tibble::tibble()] with one row for each visited
-  node and the following columns:
-
-  - `name`: Name of a node (character).
-  - `r`: Current estimate of residual for a node.
-  - `p`: Current estimate of the pagerank for a node.
-  - `in_degree`: Number of incoming edges to a node.
-  - `out_degree`: Number of outcoming edges from a node.}
+\item{\code{stats}}{A \code{\link[tibble:tibble]{tibble::tibble()}} with one row for each visited
+node and the following columns:
+\itemize{
+\item \code{name}: Name of a node (character).
+\item \code{r}: Current estimate of residual for a node.
+\item \code{p}: Current estimate of the pagerank for a node.
+\item \code{in_degree}: Number of incoming edges to a node.
+\item \code{out_degree}: Number of outcoming edges from a node.
+}}
 
 \item{\code{failed}}{A character vector of nodes that could not be visited.}
 }
@@ -56,7 +57,7 @@ Create a new Tracker object.
 }
 
 \subsection{Returns}{
-A new `Tracker` object.
+A new \code{Tracker} object.
 }
 }
 \if{html}{\out{<hr>}}
@@ -90,7 +91,7 @@ Algorithm 3.}
 }
 \subsection{Returns}{
 A character vector of node names with current residuals
-  greater than `epsilon`.
+greater than \code{epsilon}.
 }
 }
 \if{html}{\out{<hr>}}
@@ -109,8 +110,8 @@ Check if there is already a row for a particular node
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-`TRUE` if there is a row for `node`, `FALSE` if there
-  is not a row for `node`.
+\code{TRUE} if there is a row for \code{node}, \code{FALSE} if there
+is not a row for \code{node}.
 }
 }
 \if{html}{\out{<hr>}}
@@ -129,16 +130,16 @@ Check if we previously failed to visit a node
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-`TRUE` if we failed to visit `node`, `FALSE` otherwise.
-  Note that this function will return `FALSE` if `node` is new
-  and we haven't seen it before.
+\code{TRUE} if we failed to visit \code{node}, \code{FALSE} otherwise.
+Note that this function will return \code{FALSE} if \code{node} is new
+and we haven't seen it before.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_seed"></a>}}
 \subsection{Method \code{add_seed()}}{
-Create an entry for `node` in the tracker. Assumes that
-`node` is not in the tracker yet, and does not check if
+Create an entry for \code{node} in the tracker. Assumes that
+\code{node} is not in the tracker yet, and does not check if
 this is the case.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Tracker$add_seed(graph, seeds, preference)}\if{html}{\out{</div>}}
@@ -177,8 +178,8 @@ character vector.}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_nodes"></a>}}
 \subsection{Method \code{add_nodes()}}{
-Create an entry for `node` in the tracker. Assumes that
-`node` is not in the tracker yet, and does not check if
+Create an entry for \code{node} in the tracker. Assumes that
+\code{node} is not in the tracker yet, and does not check if
 this is the case.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Tracker$add_nodes(graph, nodes, preference = 0)}\if{html}{\out{</div>}}
@@ -199,8 +200,8 @@ this is the case.
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_failed"></a>}}
 \subsection{Method \code{add_failed()}}{
-Add `node` to the list of nodes we failed to visit.
-Assumes that `node` is not in the failed list yet, and
+Add \code{node} to the list of nodes we failed to visit.
+Assumes that \code{node} is not in the failed list yet, and
 does not check if this is the case.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Tracker$add_failed(nodes)}\if{html}{\out{</div>}}
@@ -236,7 +237,7 @@ Update the estimate of the personalized pagerank for a given node
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_r_neighbor"></a>}}
 \subsection{Method \code{update_r_neighbor()}}{
-Update the residual of a *good* node in the neighborhood of
+Update the residual of a \emph{good} node in the neighborhood of
 the current node, adding it to the tracker if necessary
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Tracker$update_r_neighbor(graph, u, v, alpha_prime)}\if{html}{\out{</div>}}
@@ -249,7 +250,7 @@ the current node, adding it to the tracker if necessary
 
 \item{\code{u}}{Character name of the node we are currently visiting.}
 
-\item{\code{v}}{Names of neighbors of `u` as a character vector. Can
+\item{\code{v}}{Names of neighbors of \code{u} as a character vector. Can
 contain multiple elements. Can also contain zero elements.}
 
 \item{\code{alpha_prime}}{Transformed teleportation constant from Algorithm 3.}

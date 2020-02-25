@@ -5,28 +5,23 @@
 \title{Check if a node an abstract graph is acceptable for inclusion in PPR}
 \usage{
 check(graph, nodes)
-
-check(graph, nodes)
 }
 \arguments{
 \item{graph}{A graph object.}
 
-\item{nodes}{The name(s) of node(s) in `graph` as a character vector.}
-
-\item{node}{The name of a node as a character vector.}
+\item{nodes}{The name(s) of node(s) in \code{graph} as a character vector.}
 }
 \value{
-Returns `TRUE` if information on `node` is available, and
-  `node` has at least one outgoing edge.
-
-The subset of `nodes` that are acceptable for inclusion. This
-  can be a character vector of length zero if necessary.
+The subset of \code{nodes} that are acceptable for inclusion. This
+can be a character vector of length zero if necessary.
 }
 \description{
 Inclusion criteria:
 }
 \details{
-- At least one outgoing edge
-  - Can get in degree and out degree of node
-  - Can get all nodes connected to `node` / the 1-hop neighbhorhood
+\itemize{
+\item At least one outgoing edge
+\item Can get in degree and out degree of node
+\item Can get all nodes connected to \code{node} / the 1-hop neighbhorhood
+}
 }

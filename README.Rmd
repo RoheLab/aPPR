@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/aPPR)](https://CRAN.R-project.org/package=aPPR)
 <!-- badges: end -->
 
-`aPPR` helps you calculate approximate personalized pageranks from large graphs, including those that can only be queried via an API. `aPPR` additionally performs degree correction and regularization, allowing users to recover blocks from stochastic blockmodels.
+`aPPR` helps you calculate approximate personalized pageranks from large graphs, including those that can only be queried via an API. `aPPR` additionally performs degree correction and regularization, allowing you to recover blocks from stochastic blockmodels.
 
 ## Installation
 
@@ -36,17 +36,31 @@ devtools::install_github("RoheLab/aPPR")
 
 ## Find the personalized pagerank of a node in an `igraph` graph
 
-This is a basic example which shows you how to solve a common problem:
-
 ```{r igraph-example}
 library(aPPR)
 library(igraph)
 
 set.seed(27)
 
-graph2 <- sample_pa(100)
+erdos_renyi_graph <- sample_gnp(n = 100, p = 0.5)
 
-appr(graph2, seeds = "5", verbose = TRUE)
+erdos_tracker <- appr(
+  erdos_renyi_graph,   # the graph to work with
+  seeds = "5",         # name of seed node (character)
+  epsilon = 0.0005,    # convergence criterion (see below)
+  verbose = FALSE
+)
+
+erdos_tracker
+```
+
+## Sink nodes and unreachable nodes
+
+```{r sink-nodes}
+citation_graph <- sample_pa(100)
+
+citation_tracker <- appr(citation_graph, seeds = "5")
+citation_tracker
 ```
 
 ## Why should I use aPPR?
@@ -63,8 +77,13 @@ comment on `p = 0` versus `p != 0`
 
 ## Find the personalized pagerank of a Twitter user using `rtweet`
 
-```{r rtweet-example, eval = FALSE}
-appr_rtweet(graph, "fchen365", epsilon = 1e-4, verbose = TRUE)
+```{r rtweet-example, warning = FALSE}
+appr(
+  rtweet_graph(),
+  "fchen365",
+  epsilon = 1e-3,
+  verbose = TRUE
+)
 ```
 
 ## Advice on choosing `epsilon`
@@ -105,9 +124,9 @@ people have a right to choose how public / visible / discoverable their informat
 
 # References
 
-1. Andersen, R., Chung, F. & Lang, K. *Local Graph Partitioning using PageRank Vectors*. 2006. [pdf][andersen]
+1. Chen, F., Zhang, Y. & Rohe, K. *Targeted sampling from massive Blockmodel graphs with personalized PageRank*. 2019. [pdf][chen]
 
-2. Chen, F., Zhang, Y. & Rohe, K. *Targeted sampling from massive Blockmodel graphs with personalized PageRank*. 2019. [pdf][chen]
+2. Andersen, R., Chung, F. & Lang, K. *Local Graph Partitioning using PageRank Vectors*. 2006. [pdf][andersen]
 
-[andersen]: http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf
 [chen]: https://arxiv.org/abs/1910.12937
+[andersen]: http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf

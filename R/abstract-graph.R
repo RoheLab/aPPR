@@ -2,12 +2,12 @@
 #'
 #' Could be an actual graph object, or a graph such as the Twitter
 #' following network defined implicitly via API requests, etc.
+#' The abstract graph is just a list with `abstract_graph` class
+#' and your desired subclass.
 #'
-#' @param subclass TODO
-#' @param ... TODO
-#'
-#' @return Returns `TRUE` if information on `node` is available, and
-#'   `node` has at least one outgoing edge.
+#' @param subclass Desired subclass (character).
+#' @param ... Other arguments to pass to `list()`. See
+#'   [rtweet_graph()] for an example.
 #'
 #' @export
 abstract_graph <- function(subclass, ...) {
@@ -75,4 +75,3 @@ neighborhood <- function(graph, node) {
 
 # memoized versions, these are what actually get used
 memo_neighborhood <- memoise::memoise(neighborhood)
-memo_check <- memoise::memoise(check)

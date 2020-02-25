@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Approximate Personalized Page Rank • aPPR</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Approximate Personalized Page Rank">
 <meta property="og:description" content="aPPR helps you calculate approximate
     personalized pageranks from large graphs, including those that can
@@ -22,7 +23,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -34,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">aPPR</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
       </span>
     </div>
 
@@ -42,7 +43,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -68,7 +69,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/RoheLab/aPPR">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -81,13 +82,10 @@
 <!--/.navbar -->
 
       
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    
 
-    
-    
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+      </header><div class="row">
+  <div class="contents col-md-9">
+
 <div id="appr" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#appr" class="anchor"></a>aPPR</h1></div>
@@ -99,44 +97,92 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"RoheLab/aPPR"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"RoheLab/aPPR"</span>)</a></code></pre></div>
 </div>
 <div id="find-the-personalized-pagerank-of-a-node-in-an-igraph-graph" class="section level2">
 <h2 class="hasAnchor">
 <a href="#find-the-personalized-pagerank-of-a-node-in-an-igraph-graph" class="anchor"></a>Find the personalized pagerank of a node in an <code>igraph</code> graph</h2>
 <p>This is a basic example which shows you how to solve a common problem:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(aPPR)</a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(igraph)</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(aPPR)</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(igraph)</a>
 <a class="sourceLine" id="cb2-3" title="3"></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">27</span>)</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">27</span>)</a>
 <a class="sourceLine" id="cb2-5" title="5"></a>
 <a class="sourceLine" id="cb2-6" title="6">graph2 &lt;-<span class="st"> </span><span class="kw">sample_pa</span>(<span class="dv">100</span>)</a>
 <a class="sourceLine" id="cb2-7" title="7"></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="kw"><a href="reference/appr.html">appr</a></span>(graph2, <span class="dt">seeds =</span> <span class="st">"5"</span>)</a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; # A tibble: 3 x 7</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="kw"><a href="reference/appr.html">appr</a></span>(graph2, <span class="dt">seeds =</span> <span class="st">"5"</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; # A tibble: 2 x 7</span></a>
 <a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt;   name            r     p in_degree out_degree degree_adjusted regularized</span></a>
 <a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;           &lt;dbl&gt;       &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt; 1 5     0.000000833 0.150         2          1         0.0750      0.0105 </span></a>
-<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt; 2 4     0.000000579 0.127         4          1         0.0319      0.00781</span></a>
-<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt; 3 1     0           0.108        31          0         0.00350     0.00250</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt; 1 5     0.000000833 0.150         2          1          0.0750      0.0300</span></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt; 2 4     0.000000537 0.127         4          1          0.0319      0.0182</span></a></code></pre></div>
+</div>
+<div id="why-should-i-use-appr" class="section level2">
+<h2 class="hasAnchor">
+<a href="#why-should-i-use-appr" class="anchor"></a>Why should I use aPPR?</h2>
+<ul>
+<li><p>curious about nodes important to the community around a particular user who you wouldn’t find without algorithmic help</p></li>
+<li><p>1 hop network is too small, 2-3 hop networks are too large (recall diameter of twitter graph is 3.7!!!)</p></li>
+<li><p>want to study a particular community but don’t know exactly which accounts to investigate, but you do have a good idea of one or two important accounts in that community</p></li>
+</ul>
+</div>
+<div id="appr-calculates-an-approximation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#appr-calculates-an-approximation" class="anchor"></a><code>aPPR</code> calculates an <em>approximation</em>
+</h2>
+<p>comment on <code>p = 0</code> versus <code>p != 0</code></p>
 </div>
 <div id="find-the-personalized-pagerank-of-a-twitter-user-using-rtweet" class="section level2">
 <h2 class="hasAnchor">
 <a href="#find-the-personalized-pagerank-of-a-twitter-user-using-rtweet" class="anchor"></a>Find the personalized pagerank of a Twitter user using <code>rtweet</code>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">graph &lt;-<span class="st"> </span><span class="kw"><a href="reference/rtweet_graph.html">rtweet_graph</a></span>()</a>
-<a class="sourceLine" id="cb3-2" title="2"></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="kw"><a href="reference/appr.html">appr</a></span>(graph, <span class="st">"alexpghayes"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="reference/appr_rtweet.html">appr_rtweet</a></span>(graph, <span class="st">"fchen365"</span>, <span class="dt">epsilon =</span> <span class="fl">1e-4</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+</div>
+<div id="advice-on-choosing-epsilon" class="section level2">
+<h2 class="hasAnchor">
+<a href="#advice-on-choosing-epsilon" class="anchor"></a>Advice on choosing <code>epsilon</code>
+</h2>
+<p>Number of unique visits as a function of <code>epsilon</code>, wait times, runtime proportion to <code>1 / (alpha * epsilon)</code>, etc, etc</p>
+<p>speaking strictly in terms of the <code>p != 0</code> nodes</p>
+<p>1e-4 and 1e-5: finishes quickly, neighbors with high degree get visited 1e-6: visits most of 1-hop neighborhood. finishes in several hours for accounts who follow thousands of people with ~10 tokens. 1e-7: visits beyond the 1-hop neighbor by ???. takes a couple days to run with ~10 tokens. 1e-8: visits <em>a lot</em> beyond the 1-hop neighbor, presumably the important people in the 2-hop neighbor, ???</p>
+<p>the most disparate a users interests, and the less connected their neighborhood, the longer it will take to run aPPR</p>
+</div>
+<div id="limitations" class="section level2">
+<h2 class="hasAnchor">
+<a href="#limitations" class="anchor"></a>Limitations</h2>
+<ul>
+<li>Connected graph assumption, what results look like when we violate this assumption</li>
+<li>Sampling is one node at a time</li>
+</ul>
+</div>
+<div id="speed-ideas" class="section level2">
+<h2 class="hasAnchor">
+<a href="#speed-ideas" class="anchor"></a>Speed ideas</h2>
+<p>compute is not an issue relative to actually getting data</p>
+<p>Compute time ~ access from Ram time &lt;&lt; access from disk time &lt;&lt; access from network time.</p>
+<p>Make requests to API in bulk, memoize everything, cache / write to disk in a separate process?</p>
+<p>General pattern: cache on disk, and also in RAM</p>
+</div>
+<div id="working-with-tracker-objects" class="section level2">
+<h2 class="hasAnchor">
+<a href="#working-with-tracker-objects" class="anchor"></a>Working with <code>Tracker</code> objects</h2>
+<p>TODO</p>
+</div>
+<div id="ethical-considerations" class="section level2">
+<h2 class="hasAnchor">
+<a href="#ethical-considerations" class="anchor"></a>Ethical considerations</h2>
+<p>people have a right to choose how public / visible / discoverable their information is. if you come across interesting users who are not in the public eye, do not elevate them into the public eye or increase attention on their accounts without their permission.</p>
 </div>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
-<ol style="list-style-type: decimal">
-<li><p>Targeted sampling from massive Blockmodel graphs with personalized PageRank</p></li>
-<li><p><a href="http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf">Local Graph Partitioning using PageRank Vectors</a></p></li>
+<ol>
+<li><p>Andersen, R., Chung, F. &amp; Lang, K. <em>Local Graph Partitioning using PageRank Vectors</em>. 2006. <a href="http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf">pdf</a></p></li>
+<li><p>Chen, F., Zhang, Y. &amp; Rohe, K. <em>Targeted sampling from massive Blockmodel graphs with personalized PageRank</em>. 2019. <a href="https://arxiv.org/abs/1910.12937">pdf</a></p></li>
 </ol>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -153,19 +199,19 @@
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small>file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Alex Hayes <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-4985-5160" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<li>Alex Hayes <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-4985-5160" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
 <li>Fan Chen <br><small class="roles"> Author </small>  </li>
 <li>Karl Rohe <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
-      <div class="dev-status">
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
@@ -173,7 +219,6 @@
 </ul>
 </div>
 </div>
-
 </div>
 
 
@@ -182,12 +227,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>
