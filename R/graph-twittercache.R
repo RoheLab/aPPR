@@ -18,6 +18,8 @@ twittercache_graph <- function(
 
   # TODO: allow user to specify number of sampling attempts to account for
   # API downtime and issues
+
+  # might be a bit weird with how twittercache and socialsampler interact
   abstract_graph("tc_graph", direction = direction)
 }
 
@@ -26,26 +28,63 @@ print.tc_graph <- function(x, ...) {
   cat("twittercache graph connection\n")
 }
 
-# user_ids rather than screennames
+#' @rdname appr
+#' @export
+#' @importFrom twittercache cache_lookup_users
+appr.tc_graph <- function(graph, seeds, ...) {
+
+  if (!requireNamespace("twittercache", quietly = TRUE)) {
+    stop(
+      "`twittercache` package must be installed to use `twittercache_graph()`",
+      call. = FALSE
+    )
+  }
+
+  seed_data <- cache_lookup_users(seeds)
+
+  if (any(seed_data$protected)) {
+    stop("Seed nodes should not be protected Twitter accounts.", call. = FALSE)
+  }
+
+  # convert seeds, potentially passed as screen names, to user ids
+  seeds <- seed_data$user_id
+
+  NextMethod()
+}
+
 # return character vector of all good nodes in the batch
+#' @importFrom twittercache cache_lookup_users
+#' @importFrom glue glue
 check.tc_graph <- function(graph, nodes) {
 
-  node_data <- twittercache::cache_lookup_users(nodes)
+  logger::log_debug(glue("Checking nodes"))
+
+  if (length(nodes) < 1)
+    return(character(0))
+
+  node_data <- cache_lookup_users(nodes)
 
   if (is.null(node_data) || nrow(node_data) < 1)
     return(character(0))
 
   good_nodes <- !node_data$protected & node_data$friends_count > 0
 
+  logger::log_debug(glue("Done checking nodes"))
+
   node_data$user_id[good_nodes]
 }
 
+#' @importFrom twittercache cache_lookup_users
 node_degrees.tc_graph <- function(graph, nodes) {
+
+  logger::log_debug(glue("Getting node degrees"))
 
   # assumes that you want any errors / empty rows when accessing this
   # data, i.e. that the nodes have already been checked
 
-  node_data <- twittercache::cache_lookup_users(nodes)
+  node_data <- cache_lookup_users(nodes)
+
+  logger::log_debug(glue("Done getting node degrees"))
 
   list(
     in_degree = node_data$followers_count,
@@ -53,36 +92,17 @@ node_degrees.tc_graph <- function(graph, nodes) {
   )
 }
 
+#' @importFrom twittercache cache_get_friends
 neighborhood.tc_graph <- function(graph, node) {
+
+  logger::log_debug(glue("Getting neighborhood: {node}"))
 
   # if a user doesn't follow anyone, safe_get_friends returns an empty
   # tibble, but instead it should return an empty character vector?
-  friends <- safe_get_friends(node, attempts = graph$attempts)
-  if (nrow(friends) < 1) character(0) else friends$user_id
+  friends <- cache_get_friends(node)
+
+  logger::log_debug(glue("Done getting neighborhood"))
+
+  if (nrow(friends) < 1) character(0) else friends$to
 }
 
-in_degree.tc_graph <- function(graph, node) {
-  twittercache::cache_lookup_users(node)$followers_count
-}
-
-out_degree.tc_graph <- function(graph, node) {
-  twittercache::cache_lookup_users(node)$followers_count
-}
-
-# character list of neighboring nodes
-neighborhood.tc_graph <- function(graph, node) {
-
-  direction <- graph$direction
-
-  if (direction == "following") {
-  } else if (direction == "followed-by") {
-    twittercache::cache_get_followers(node)$from
-  } else if (direction == "both") {
-    c(
-      twittercache::cache_get_friends(node)$to,
-      twittercache::cache_get_followers(node)$from
-    )
-  } else{
-    stop("This shouldn't happen.", call. = FALSE)
-  }
-}

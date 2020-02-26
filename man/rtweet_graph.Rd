@@ -11,8 +11,8 @@ rtweet_graph(attempts = 5)
 moving on or erroring.}
 }
 \description{
-Signifies that we should query the Twitter friendship graph via
-\code{rtweet}. In practice, we actually use \code{socialsampler}, so you
+Signifies that \code{aPPR} should query the Twitter friendship graph via
+\code{rtweet}. In practice, uses \code{socialsampler}, so you
 can use multiple tokens at once. See \code{\link[socialsampler:register_token]{socialsampler::register_token()}}
 for details.
 }

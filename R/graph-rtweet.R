@@ -14,19 +14,6 @@ rtweet_graph <- function(attempts = 5) {
   agraph
 }
 
-#' Convenience function to run aPPR via rtweet
-#'
-#' @param seeds Screen names or user IDs of seed nodes
-#'   in the Twitter graph, as a character vector.
-#'
-#' @inheritDotParams appr
-#'
-#' @export
-#'
-appr_rtweet <- function(seeds, ...) {
-  appr(rtweet_graph(), seeds, ...)
-}
-
 #' @rdname appr
 #' @export
 #' @importFrom socialsampler safe_lookup_users
