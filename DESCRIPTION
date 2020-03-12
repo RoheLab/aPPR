@@ -28,14 +28,14 @@ Imports:
     tibble,
     socialsampler (>= 0.0.0.9001),
     logger,
-    glue
+    glue,
+    twittercache (>= 0.2.0.9000)
 Suggests: 
     igraph,
     knitr,
     rmarkdown,
     rtweet,
-    testthat (>= 2.1.0),
-    twittercache
+    testthat (>= 2.1.0)
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
@@ -51,5 +51,6 @@ Collate:
     'graph-twittercache.R'
     'tracker.R'
     'update.R'
-Remotes: 
-    alexpghayes/socialsampler
+Remotes:  
+    alexpghayes/socialsampler,
+    alexpghayes/twittercache
