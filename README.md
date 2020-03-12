@@ -42,10 +42,24 @@ erdos_tracker <- appr(
   epsilon = 0.0005,    # convergence criterion (see below)
   verbose = FALSE
 )
-#> Error in as.igraph.vs(graph, v): 'list' object cannot be coerced to type 'double'
 
 erdos_tracker
-#> Error in eval(expr, envir, enclos): object 'erdos_tracker' not found
+#> A Tracker R6 object with PPR table: 
+#> 
+#> # A tibble: 51 x 7
+#>    name       r     p in_degree out_degree degree_adjusted regularized
+#>    <chr>  <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
+#>  1 5     0.0205 0.147        50         50         0.00294     0.00147
+#>  2 3     0.0167 0            51         51         0           0      
+#>  3 6     0.0167 0            59         59         0           0      
+#>  4 8     0.0167 0            41         41         0           0      
+#>  5 15    0.0167 0            46         46         0           0      
+#>  6 16    0.0167 0            52         52         0           0      
+#>  7 17    0.0167 0            48         48         0           0      
+#>  8 19    0.0167 0            54         54         0           0      
+#>  9 20    0.0167 0            51         51         0           0      
+#> 10 21    0.0167 0            55         55         0           0      
+#> # ... with 41 more rows
 ```
 
 ## Find the personalized pagerank of a Twitter user using `rtweet`
@@ -57,10 +71,22 @@ fchen365_ppr <- appr(
   epsilon = 1e-3,
   verbose = TRUE
 )
-#> Error in lookup_users_(users = list(attempts = 5), parse = TRUE, token = <environment>): is.atomic(users) is not TRUE
 
 fchen365_ppr$stats
-#> Error in eval(expr, envir, enclos): object 'fchen365_ppr' not found
+#> # A tibble: 41 x 7
+#>    name                 r     p in_degree out_degree degree_adjusted regularized
+#>    <chr>            <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
+#>  1 77522577413145~ 0.0205 0.147        38         41         0.00387  0.00000133
+#>  2 13712792        0.0203 0         73006        143         0        0         
+#>  3 20855386        0.0203 0           711        746         0        0         
+#>  4 14204987        0.0203 0          1960        933         0        0         
+#>  5 3239447303      0.0203 0            71        127         0        0         
+#>  6 24355706        0.0203 0          1270        935         0        0         
+#>  7 2347049341      0.0203 0        910840        282         0        0         
+#>  8 573817445       0.0203 0           803        265         0        0         
+#>  9 82424157570642~ 0.0203 0          2672       1086         0        0         
+#> 10 3729520335      0.0203 0          4849        225         0        0         
+#> # ... with 31 more rows
 ```
 
 ## Find the personalized pagerank of a Twitter user and cache the following network in the process
@@ -72,10 +98,22 @@ alexpghayes_ppr <- appr(
   epsilon = 1e-4,
   verbose = TRUE
 )
-#> Error: no such function: list
 
 alexpghayes_ppr$stats
-#> Error in eval(expr, envir, enclos): object 'alexpghayes_ppr' not found
+#> # A tibble: 1,150 x 7
+#>    name                 r     p in_degree out_degree degree_adjusted regularized
+#>    <chr>            <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
+#>  1 7804292688660~ 9.70e-2 0.135      3205       1147       0.0000423 0.000000853
+#>  2 1228948889694~ 6.69e-4 0            45        197       0         0          
+#>  3 705281586      6.69e-4 0          3030       2052       0         0          
+#>  4 358612981      6.69e-4 0         13312       1166       0         0          
+#>  5 853839421      6.69e-4 0           247        386       0         0          
+#>  6 1225800762447~ 6.69e-4 0          1256         43       0         0          
+#>  7 1053314314155~ 6.69e-4 0            21         68       0         0          
+#>  8 24340604       6.69e-4 0         73527        935       0         0          
+#>  9 8882821340198~ 6.69e-4 0            71         46       0         0          
+#> 10 547407850      6.69e-4 0          2222         42       0         0          
+#> # ... with 1,140 more rows
 ```
 
 **README beyond this point is really just scratch for myself**
@@ -86,9 +124,14 @@ alexpghayes_ppr$stats
 citation_graph <- sample_pa(100)
 
 citation_tracker <- appr(citation_graph, seeds = "5")
-#> Error in as.igraph.vs(graph, v): 'list' object cannot be coerced to type 'double'
 citation_tracker
-#> Error in eval(expr, envir, enclos): object 'citation_tracker' not found
+#> A Tracker R6 object with PPR table: 
+#> 
+#> # A tibble: 2 x 7
+#>   name            r     p in_degree out_degree degree_adjusted regularized
+#>   <chr>       <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
+#> 1 5     0.000000833 0.150         1          1          0.150       0.0273
+#> 2 2     0.000000837 0.127         8          1          0.0159      0.0102
 ```
 
 ## Why should I use aPPR?
