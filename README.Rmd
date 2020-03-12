@@ -54,6 +54,34 @@ erdos_tracker <- appr(
 erdos_tracker
 ```
 
+## Find the personalized pagerank of a Twitter user using `rtweet`
+
+```{r rtweet-example, warning = FALSE}
+fchen365_ppr <- appr(
+  rtweet_graph(),
+  "fchen365",
+  epsilon = 1e-3,
+  verbose = TRUE
+)
+
+fchen365_ppr$stats
+```
+
+## Find the personalized pagerank of a Twitter user and cache the following network in the process
+
+```{r twittercache-example, warning = FALSE}
+alexpghayes_ppr <- appr(
+  twittercache_graph(),
+  "alexpghayes",
+  epsilon = 1e-4,
+  verbose = TRUE
+)
+
+alexpghayes_ppr$stats
+```
+
+**README beyond this point is really just scratch for myself**
+
 ## Sink nodes and unreachable nodes
 
 ```{r sink-nodes}
@@ -75,16 +103,6 @@ citation_tracker
 
 comment on `p = 0` versus `p != 0`
 
-## Find the personalized pagerank of a Twitter user using `rtweet`
-
-```{r rtweet-example, warning = FALSE}
-appr(
-  rtweet_graph(),
-  "fchen365",
-  epsilon = 1e-3,
-  verbose = TRUE
-)
-```
 
 ## Advice on choosing `epsilon`
 
@@ -116,7 +134,7 @@ General pattern: cache on disk, and also in RAM
 
 ## Working with `Tracker` objects
 
-TODO
+See `?Tracker` for details.
 
 ## Ethical considerations
 

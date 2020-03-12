@@ -42,25 +42,43 @@ erdos_tracker <- appr(
   epsilon = 0.0005,    # convergence criterion (see below)
   verbose = FALSE
 )
+#> Error in as.igraph.vs(graph, v): 'list' object cannot be coerced to type 'double'
 
 erdos_tracker
-#> A Tracker R6 object with PPR table: 
-#> 
-#> # A tibble: 51 x 7
-#>    name       r     p in_degree out_degree degree_adjusted regularized
-#>    <chr>  <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
-#>  1 5     0.0205 0.147        50         50         0.00294     0.00147
-#>  2 3     0.0167 0            51         51         0           0      
-#>  3 6     0.0167 0            59         59         0           0      
-#>  4 8     0.0167 0            41         41         0           0      
-#>  5 15    0.0167 0            46         46         0           0      
-#>  6 16    0.0167 0            52         52         0           0      
-#>  7 17    0.0167 0            48         48         0           0      
-#>  8 19    0.0167 0            54         54         0           0      
-#>  9 20    0.0167 0            51         51         0           0      
-#> 10 21    0.0167 0            55         55         0           0      
-#> # ... with 41 more rows
+#> Error in eval(expr, envir, enclos): object 'erdos_tracker' not found
 ```
+
+## Find the personalized pagerank of a Twitter user using `rtweet`
+
+``` r
+fchen365_ppr <- appr(
+  rtweet_graph(),
+  "fchen365",
+  epsilon = 1e-3,
+  verbose = TRUE
+)
+#> Error in lookup_users_(users = list(attempts = 5), parse = TRUE, token = <environment>): is.atomic(users) is not TRUE
+
+fchen365_ppr$stats
+#> Error in eval(expr, envir, enclos): object 'fchen365_ppr' not found
+```
+
+## Find the personalized pagerank of a Twitter user and cache the following network in the process
+
+``` r
+alexpghayes_ppr <- appr(
+  twittercache_graph(),
+  "alexpghayes",
+  epsilon = 1e-4,
+  verbose = TRUE
+)
+#> Error: no such function: list
+
+alexpghayes_ppr$stats
+#> Error in eval(expr, envir, enclos): object 'alexpghayes_ppr' not found
+```
+
+**README beyond this point is really just scratch for myself**
 
 ## Sink nodes and unreachable nodes
 
@@ -68,13 +86,9 @@ erdos_tracker
 citation_graph <- sample_pa(100)
 
 citation_tracker <- appr(citation_graph, seeds = "5")
+#> Error in as.igraph.vs(graph, v): 'list' object cannot be coerced to type 'double'
 citation_tracker
-#> A Tracker R6 object with PPR table: 
-#> 
-#> # A tibble: 1 x 7
-#>   name            r     p in_degree out_degree degree_adjusted regularized
-#>   <chr>       <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
-#> 1 5     0.000000833 0.150         0          1             Inf         Inf
+#> Error in eval(expr, envir, enclos): object 'citation_tracker' not found
 ```
 
 ## Why should I use aPPR?
@@ -92,33 +106,6 @@ citation_tracker
 ## `aPPR` calculates an *approximation*
 
 comment on `p = 0` versus `p != 0`
-
-## Find the personalized pagerank of a Twitter user using `rtweet`
-
-``` r
-appr(
-  rtweet_graph(),
-  "fchen365",
-  epsilon = 1e-3,
-  verbose = TRUE
-)
-#> A Tracker R6 object with PPR table: 
-#> 
-#> # A tibble: 40 x 7
-#>    name                 r     p in_degree out_degree degree_adjusted regularized
-#>    <chr>            <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
-#>  1 77522577413145~ 0.0205 0.147        36         40         0.00408  0.00000132
-#>  2 20855386        0.0208 0           700        744         0        0         
-#>  3 14204987        0.0208 0          1955        919         0        0         
-#>  4 3239447303      0.0208 0            71        125         0        0         
-#>  5 24355706        0.0208 0          1220        901         0        0         
-#>  6 2347049341      0.0208 0        904769        283         0        0         
-#>  7 573817445       0.0208 0           784        262         0        0         
-#>  8 82424157570642~ 0.0208 0          2654       1076         0        0         
-#>  9 3729520335      0.0208 0          4762        211         0        0         
-#> 10 567273827       0.0208 0         61988       1387         0        0         
-#> # ... with 30 more rows
-```
 
 ## Advice on choosing `epsilon`
 
@@ -157,7 +144,7 @@ General pattern: cache on disk, and also in RAM
 
 ## Working with `Tracker` objects
 
-TODO
+See `?Tracker` for details.
 
 ## Ethical considerations
 

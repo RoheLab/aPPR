@@ -109,11 +109,7 @@ appr <- function(graph, seeds, ..., alpha = 0.15, epsilon = 1e-6, tau = NULL,
 appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
                                 epsilon = 1e-6, tau = NULL,
                                 verbose = FALSE) {
-
-  if (verbose)
-    message(Sys.time(), " Starting aPPR.")
-
-  tracker <- Tracker$new(alpha, epsilon, tau)
+  tracker <- Tracker$new(graph, alpha, epsilon, tau)
 
   for (seed in seeds) {
 
@@ -124,73 +120,14 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
       )
     }
 
-    tracker$add_seed(graph, seed, preference = 1 / length(seeds))
+    tracker$add_seed(seed, preference = 1 / length(seeds))
 
     if (verbose) {
       message(glue("Adding seed {seed} to tracker."))
     }
   }
 
-  remaining <- seeds
-
-  while (length(remaining) > 0) {
-
-    u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
-
-    tracker$update_p(u)
-
-    # here we come into contact with reality and must depart from the
-    # warm embrace of algorithm 3
-
-    # this is where we learn about new nodes. there are two kinds of new
-    # nodes: "good" nodes that we can visit, and "bad" nodes that we can't
-    # visit, such as protected Twitter accounts or nodes that the API fails
-    # to get for some reason. we want to:
-    #
-    #   - update the good nodes are we typically would
-    #   - pretend the bad nodes don't exist
-    #
-    # also note that we only want to *check* each node once
-
-    neighbors <- memo_neighborhood(graph, u)
-
-    tracker$add_to_path(u)
-
-    # first deal with the good neighbors we've already seen all
-    # at once
-
-    known_good <- neighbors[tracker$in_tracker(neighbors)]
-    known_bad <- neighbors[tracker$in_failed(neighbors)]
-
-    unknown <- setdiff(neighbors, c(known_good, known_bad))
-
-    new_good <- check(graph, unknown)
-    new_bad <- setdiff(unknown, new_good)
-
-    tracker$add_failed(new_bad)
-    tracker$update_r_neighbor(graph, u, known_good)
-    tracker$update_r_neighbor(graph, u, new_good)
-
-    tracker$update_r_self(u)
-
-    remaining <- tracker$remaining()
-
-    if (verbose) {
-      message(
-        paste0(
-          "Visits: ",
-          length(tracker$path), " total / ",
-          length(unique(tracker$path)), " unique / ",
-          length(remaining), " remaining"
-        )
-      )
-    }
-  }
-
-  if (verbose)
-    message(Sys.time(), " aPPR sampling finished.")
-
+  tracker$calculate_ppr(verbose)
   tracker$regularize()
-
   tracker
 }

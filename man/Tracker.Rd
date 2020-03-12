@@ -27,6 +27,16 @@ node and the following columns:
 }}
 
 \item{\code{failed}}{A character vector of nodes that could not be visited.}
+
+\item{\code{graph}}{An abstract graph object.}
+
+\item{\code{alpha}}{Teleportation constant from Algorithm 3.}
+
+\item{\code{alpha_prime}}{Transformed teleportation constant from Algorithm 3.}
+
+\item{\code{epsilon}}{Error tolerance.}
+
+\item{\code{tau}}{Regularization parameter used in Algorithm 4.}
 }
 \if{html}{\out{</div>}}
 }
@@ -45,6 +55,8 @@ node and the following columns:
 \item \href{#method-update_p}{\code{Tracker$update_p()}}
 \item \href{#method-update_r_neighbor}{\code{Tracker$update_r_neighbor()}}
 \item \href{#method-update_r_self}{\code{Tracker$update_r_self()}}
+\item \href{#method-regularize}{\code{Tracker$regularize()}}
+\item \href{#method-calculate_ppr}{\code{Tracker$calculate_ppr()}}
 \item \href{#method-clone}{\code{Tracker$clone()}}
 }
 }
@@ -53,9 +65,22 @@ node and the following columns:
 \subsection{Method \code{new()}}{
 Create a new Tracker object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$new(graph, alpha, epsilon, tau)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{graph}}{See \code{\link[=appr]{appr()}}.}
+
+\item{\code{alpha}}{See \code{\link[=appr]{appr()}}.}
+
+\item{\code{epsilon}}{See \code{\link[=appr]{appr()}}.}
+
+\item{\code{tau}}{See \code{\link[=appr]{appr()}}.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 A new \code{Tracker} object.
 }
@@ -74,21 +99,13 @@ calculation.
 \if{html}{\out{<a id="method-remaining"></a>}}
 \subsection{Method \code{remaining()}}{
 Determine nodes that need to be visited. Note that,
-if there is a node with zero out degree, you will always
-need to visit that node. So it is important to make sure
+if there is a node with zero out degree, you will never
+leave from that node. So it is important to make sure
 we never add nodes with zero out degree into the tracker.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$remaining(epsilon)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$remaining()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{epsilon}}{The error tolerance / convergence parameter in
-Algorithm 3.}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
 A character vector of node names with current residuals
 greater than \code{epsilon}.
@@ -142,14 +159,12 @@ Create an entry for \code{node} in the tracker. Assumes that
 \code{node} is not in the tracker yet, and does not check if
 this is the case.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$add_seed(graph, seeds, preference)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$add_seed(seeds, preference)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{graph}}{The graph object.}
-
 \item{\code{seeds}}{The name of the node in the graph as a length 1
 character vector.}
 
@@ -182,14 +197,12 @@ Create an entry for \code{node} in the tracker. Assumes that
 \code{node} is not in the tracker yet, and does not check if
 this is the case.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$add_nodes(graph, nodes, preference = 0)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$add_nodes(nodes, preference = 0)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{graph}}{The graph object.}
-
 \item{\code{nodes}}{The name(s) of node(s) in the graph as a character vector.}
 
 \item{\code{preference}}{TODO: recall what on earth this is.}
@@ -221,15 +234,13 @@ character vector.}
 \subsection{Method \code{update_p()}}{
 Update the estimate of the personalized pagerank for a given node
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$update_p(node, alpha_prime)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$update_p(node)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{node}}{Character name of a node in the graph.}
-
-\item{\code{alpha_prime}}{Transformed teleportation constant from Algorithm 3.}
 }
 \if{html}{\out{</div>}}
 }
@@ -240,20 +251,16 @@ Update the estimate of the personalized pagerank for a given node
 Update the residual of a \emph{good} node in the neighborhood of
 the current node, adding it to the tracker if necessary
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$update_r_neighbor(graph, u, v, alpha_prime)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$update_r_neighbor(u, v)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{graph}}{The graph object.}
-
 \item{\code{u}}{Character name of the node we are currently visiting.}
 
 \item{\code{v}}{Names of neighbors of \code{u} as a character vector. Can
 contain multiple elements. Can also contain zero elements.}
-
-\item{\code{alpha_prime}}{Transformed teleportation constant from Algorithm 3.}
 }
 \if{html}{\out{</div>}}
 }
@@ -263,15 +270,50 @@ contain multiple elements. Can also contain zero elements.}
 \subsection{Method \code{update_r_self()}}{
 Update the residual of current node
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$update_r_self(node, alpha_prime)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$update_r_self(node)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{node}}{Character name of the node we are currently visiting.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-regularize"></a>}}
+\subsection{Method \code{regularize()}}{
+Compute the degree-adjusted and regularized variants of personalized
+PageRank as in Algorithm 4, based on the outputs of Algorithm 3.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$regularize()}\if{html}{\out{</div>}}
+}
 
-\item{\code{alpha_prime}}{Transformed teleportation constant from Algorithm 3.}
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{node}}{Character name of the node we are currently visiting.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-calculate_ppr"></a>}}
+\subsection{Method \code{calculate_ppr()}}{
+Main driver function to perform the computations outlined in
+Algorithm 3.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$calculate_ppr(verbose = TRUE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{verbose}}{Logical indicating whether to report on the algorithms
+progress. Defaults to \code{TRUE}.}
+
+\item{\code{node}}{Character name of the node we are currently visiting.}
 }
 \if{html}{\out{</div>}}
 }

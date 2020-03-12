@@ -4,10 +4,20 @@
 \alias{update.Tracker}
 \title{Update a Tracker object}
 \usage{
-\method{update}{Tracker}(object, ..., epsilon, verbose = FALSE)
+\method{update}{Tracker}(object, ..., epsilon, verbose = TRUE)
 }
 \arguments{
-\item{...}{}
+\item{object}{The \code{Tracker} object to update.}
+
+\item{...}{Ignored. Passing arguments to \code{...} results in a warning.}
+
+\item{epsilon}{Desired accuracy of approximation. \code{epsilon} must be
+a valid probabilty; that is, between zero and one. Defaults to \code{1e-6}.
+Runtime is proportional to \code{1 / (epsilon * alpha)}, so small \code{epsilon}
+can result in long runtimes.}
+
+\item{verbose}{Logical indicating whether to report on the algorithms
+progress. Defaults to \code{TRUE}.}
 }
 \value{
 

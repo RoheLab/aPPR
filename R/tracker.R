@@ -23,6 +23,9 @@ Tracker <- R6Class("Tracker", list(
   #' @field failed A character vector of nodes that could not be visited.
   failed = character(0),
 
+  #' @field graph An abstract graph object.
+  graph = NULL,
+
   #' @field alpha Teleportation constant from Algorithm 3.
   alpha = numeric(0),
 
@@ -39,10 +42,16 @@ Tracker <- R6Class("Tracker", list(
   #'
   #' Create a new Tracker object.
   #'
+  #' @param graph See [appr()].
+  #' @param alpha See [appr()].
+  #' @param epsilon See [appr()].
+  #' @param tau See [appr()].
+  #'
   #' @return A new `Tracker` object.
   #'
-  initialize = function(alpha, epsilon, tau) {
+  initialize = function(graph, alpha, epsilon, tau) {
 
+    self$graph <- graph
     self$alpha <- alpha
     self$alpha_prime <- alpha / (2 - alpha)
     self$epsilon <- epsilon
@@ -73,16 +82,23 @@ Tracker <- R6Class("Tracker", list(
   #' @description
   #'
   #' Determine nodes that need to be visited. Note that,
-  #' if there is a node with zero out degree, you will always
-  #' need to visit that node. So it is important to make sure
+  #' if there is a node with zero out degree, you will never
+  #' leave from that node. So it is important to make sure
   #' we never add nodes with zero out degree into the tracker.
   #'
   #' @return A character vector of node names with current residuals
   #'   greater than `epsilon`.
   #'
   remaining = function() {
-    s <- self$stats
-    s[s$r > self$epsilon * s$out_degree, ]$name
+
+    # when we initialize, we need to initialize to the seeds
+    # here we check for initialization by consider the path
+    # of nodes we've visited so far. it's very important that
+    # we do not populate `path` when adding the seeds
+    if (length(self$path) < 1)
+      return(self$seeds)
+
+    self$stats[self$stats$r > self$epsilon * self$stats$out_degree, ]$name
   },
 
   #' @description
@@ -118,15 +134,14 @@ Tracker <- R6Class("Tracker", list(
   #' `node` is not in the tracker yet, and does not check if
   #' this is the case.
   #'
-  #' @param graph The graph object.
   #' @param seeds The name of the node in the graph as a length 1
   #'   character vector.
   #'
   #' @param preference TODO: recall what on earth this is.
   #'
-  add_seed = function(graph, seeds, preference) {
+  add_seed = function(seeds, preference) {
     self$seeds <- c(self$seeds, seeds)
-    self$add_nodes(graph = graph, nodes = seeds, preference = preference)
+    self$add_nodes(nodes = seeds, preference = preference)
   },
 
   #' @description
@@ -146,14 +161,13 @@ Tracker <- R6Class("Tracker", list(
   #' `node` is not in the tracker yet, and does not check if
   #' this is the case.
   #'
-  #' @param graph The graph object.
   #' @param nodes The name(s) of node(s) in the graph as a character vector.
   #'
   #' @param preference TODO: recall what on earth this is.
   #'
-  add_nodes = function(graph, nodes, preference = 0) {
+  add_nodes = function(nodes, preference = 0) {
 
-    degree <- node_degrees(graph, nodes)
+    degree <- node_degrees(self$graph, nodes)
 
     self$stats <- tibble::add_row(
       self$stats,
@@ -197,12 +211,11 @@ Tracker <- R6Class("Tracker", list(
   #' Update the residual of a *good* node in the neighborhood of
   #' the current node, adding it to the tracker if necessary
   #'
-  #' @param graph The graph object.
   #' @param u Character name of the node we are currently visiting.
   #' @param v Names of neighbors of `u` as a character vector. Can
   #'   contain multiple elements. Can also contain zero elements.
   #'
-  update_r_neighbor = function(graph, u, v) {
+  update_r_neighbor = function(u, v) {
 
     stopifnot(length(u) == 1)
 
@@ -212,7 +225,7 @@ Tracker <- R6Class("Tracker", list(
     new_nodes <- v[!self$in_tracker(v)]
 
     if (length(new_nodes) > 0)
-      self$add_nodes(graph, new_nodes)
+      self$add_nodes(new_nodes)
 
     u_index <- which(self$stats$name == u)
     v_index <- match(v, self$stats$name)
@@ -238,7 +251,7 @@ Tracker <- R6Class("Tracker", list(
   #' @description
   #'
   #' Compute the degree-adjusted and regularized variants of personalized
-  #' PageRank as in Algorithm 4.
+  #' PageRank as in Algorithm 4, based on the outputs of Algorithm 3.
   #'
   #' @param node Character name of the node we are currently visiting.
   #'
@@ -251,5 +264,79 @@ Tracker <- R6Class("Tracker", list(
     # might divide by 0 here
     self$stats$degree_adjusted <- self$stats$p / self$stats$in_degree
     self$stats$regularized <- self$stats$p / (self$stats$in_degree + tau)
+  },
+
+  #' @description
+  #'
+  #' Main driver function to perform the computations outlined in
+  #' Algorithm 3.
+  #'
+  #' @param node Character name of the node we are currently visiting.
+  #' @param verbose Logical indicating whether to report on the algorithms
+  #'   progress. Defaults to `TRUE`.
+  #'
+  calculate_ppr = function(verbose = TRUE) {
+
+    if (verbose)
+      message(Sys.time(), " Starting PPR calculations.")
+
+    remaining <- self$remaining()
+
+    while (length(remaining) > 0) {
+
+      u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
+
+      self$update_p(u)
+
+      # here we come into contact with reality and must depart from the
+      # warm embrace of algorithm 3
+
+      # this is where we learn about new nodes. there are two kinds of new
+      # nodes: "good" nodes that we can visit, and "bad" nodes that we can't
+      # visit, such as protected Twitter accounts or nodes that the API fails
+      # to get for some reason. we want to:
+      #
+      #   - update the good nodes are we typically would
+      #   - pretend the bad nodes don't exist
+      #
+      # also note that we only want to *check* each node once
+
+      neighbors <- memo_neighborhood(self$graph, u)
+
+      self$add_to_path(u)
+
+      # first deal with the good neighbors we've already seen all
+      # at once
+
+      known_good <- neighbors[self$in_tracker(neighbors)]
+      known_bad <- neighbors[self$in_failed(neighbors)]
+
+      unknown <- setdiff(neighbors, c(known_good, known_bad))
+
+      new_good <- check(self$graph, unknown)
+      new_bad <- setdiff(unknown, new_good)
+
+      self$add_failed(new_bad)
+      self$update_r_neighbor(u, known_good)
+      self$update_r_neighbor(u, new_good)
+
+      self$update_r_self(u)
+
+      remaining <- self$remaining()
+
+      if (verbose) {
+        message(
+          paste0(
+            "Visits: ",
+            length(self$path), " total / ",
+            length(unique(self$path)), " unique / ",
+            length(remaining), " remaining"
+          )
+        )
+      }
+    }
+
+    if (verbose)
+      message(Sys.time(), " PPR calculation finished.")
   }
 ))
