@@ -1,6 +1,6 @@
 Package: aPPR
 Title: Approximate Personalized Page Rank
-Version: 0.0.0.9001
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Alex",
              family = "Hayes",
