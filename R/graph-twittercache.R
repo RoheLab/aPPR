@@ -57,7 +57,7 @@ appr.tc_graph <- function(graph, seeds, ...) {
 #' @importFrom glue glue
 check.tc_graph <- function(graph, nodes) {
 
-  logger::log_debug(glue("Checking nodes"))
+  log_debug(glue("Checking nodes"))
 
   if (length(nodes) < 1)
     return(character(0))
@@ -69,7 +69,7 @@ check.tc_graph <- function(graph, nodes) {
 
   good_nodes <- !node_data$protected & node_data$friends_count > 0
 
-  logger::log_debug(glue("Done checking nodes"))
+  log_debug(glue("Done checking nodes"))
 
   node_data$user_id[good_nodes]
 }

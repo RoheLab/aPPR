@@ -113,9 +113,7 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
   if (verbose)
     message(Sys.time(), " Starting aPPR.")
 
-  alpha_prime <- alpha / (2 - alpha)
-
-  tracker <- Tracker$new()
+  tracker <- Tracker$new(alpha, epsilon, tau)
 
   for (seed in seeds) {
 
@@ -139,7 +137,7 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
 
     u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
 
-    tracker$update_p(u, alpha_prime)
+    tracker$update_p(u)
 
     # here we come into contact with reality and must depart from the
     # warm embrace of algorithm 3
@@ -170,12 +168,12 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
     new_bad <- setdiff(unknown, new_good)
 
     tracker$add_failed(new_bad)
-    tracker$update_r_neighbor(graph, u, known_good, alpha_prime)
-    tracker$update_r_neighbor(graph, u, new_good, alpha_prime)
+    tracker$update_r_neighbor(graph, u, known_good)
+    tracker$update_r_neighbor(graph, u, new_good)
 
-    tracker$update_r_self(u, alpha_prime)
+    tracker$update_r_self(u)
 
-    remaining <- tracker$remaining(epsilon)
+    remaining <- tracker$remaining()
 
     if (verbose) {
       message(
@@ -192,14 +190,7 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
   if (verbose)
     message(Sys.time(), " aPPR sampling finished.")
 
-  ppr <- tracker$stats
+  tracker$regularize()
 
-  if (is.null(tau)) {
-    tau <- mean(ppr$in_degree)
-  }
-
-  ppr$degree_adjusted <- ppr$p / ppr$in_degree  # might divide by 0 here
-  ppr$regularized <- ppr$p / (ppr$in_degree + tau)
-  tracker$stats <- ppr
   tracker
 }

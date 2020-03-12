@@ -23,13 +23,31 @@ Tracker <- R6Class("Tracker", list(
   #' @field failed A character vector of nodes that could not be visited.
   failed = character(0),
 
+  #' @field alpha Teleportation constant from Algorithm 3.
+  alpha = numeric(0),
+
+  #' @field alpha_prime Transformed teleportation constant from Algorithm 3.
+  alpha_prime = numeric(0),
+
+  #' @field epsilon Error tolerance.
+  epsilon = numeric(0),
+
+  #' @field tau Regularization parameter used in Algorithm 4.
+  tau = numeric(0),
+
   #' @description
   #'
   #' Create a new Tracker object.
   #'
   #' @return A new `Tracker` object.
   #'
-  initialize = function() {
+  initialize = function(alpha, epsilon, tau) {
+
+    self$alpha <- alpha
+    self$alpha_prime <- alpha / (2 - alpha)
+    self$epsilon <- epsilon
+    self$tau <- tau
+
     self$stats <- tibble::tibble(
       name = character(0),
       r = numeric(0),
@@ -59,15 +77,12 @@ Tracker <- R6Class("Tracker", list(
   #' need to visit that node. So it is important to make sure
   #' we never add nodes with zero out degree into the tracker.
   #'
-  #' @param epsilon The error tolerance / convergence parameter in
-  #'   Algorithm 3.
-  #'
   #' @return A character vector of node names with current residuals
   #'   greater than `epsilon`.
   #'
-  remaining = function(epsilon) {
+  remaining = function() {
     s <- self$stats
-    s[s$r > epsilon * s$out_degree, ]$name
+    s[s$r > self$epsilon * s$out_degree, ]$name
   },
 
   #' @description
@@ -169,13 +184,12 @@ Tracker <- R6Class("Tracker", list(
   #' Update the estimate of the personalized pagerank for a given node
   #'
   #' @param node Character name of a node in the graph.
-  #' @param alpha_prime Transformed teleportation constant from Algorithm 3.
   #'
-  update_p = function(node, alpha_prime) {
+  update_p = function(node) {
 
     node_index <- which(self$stats$name == node)
     self$stats[[node_index, "p"]] <- self$stats[[node_index, "p"]] +
-      alpha_prime * self$stats[[node_index, "r"]]
+      self$alpha_prime * self$stats[[node_index, "r"]]
   },
 
   #' @description
@@ -187,9 +201,8 @@ Tracker <- R6Class("Tracker", list(
   #' @param u Character name of the node we are currently visiting.
   #' @param v Names of neighbors of `u` as a character vector. Can
   #'   contain multiple elements. Can also contain zero elements.
-  #' @param alpha_prime Transformed teleportation constant from Algorithm 3.
   #'
-  update_r_neighbor = function(graph, u, v, alpha_prime) {
+  update_r_neighbor = function(graph, u, v) {
 
     stopifnot(length(u) == 1)
 
@@ -205,7 +218,7 @@ Tracker <- R6Class("Tracker", list(
     v_index <- match(v, self$stats$name)
 
     self$stats[v_index, "r"] <- self$stats[v_index, "r"] +
-      (1 - alpha_prime) * self$stats[[u_index, "r"]] /
+      (1 - self$alpha_prime) * self$stats[[u_index, "r"]] /
       (2 * self$stats[[u_index, "out_degree"]])
 
   },
@@ -215,11 +228,28 @@ Tracker <- R6Class("Tracker", list(
   #' Update the residual of current node
   #'
   #' @param node Character name of the node we are currently visiting.
-  #' @param alpha_prime Transformed teleportation constant from Algorithm 3.
   #'
-  update_r_self = function(node, alpha_prime) {
+  update_r_self = function(node) {
     node_index <- which(self$stats$name == node)
-    self$stats[[node_index, "r"]] <- (1 - alpha_prime) *
+    self$stats[[node_index, "r"]] <- (1 - self$alpha_prime) *
       self$stats[[node_index, "r"]] / 2
+  },
+
+  #' @description
+  #'
+  #' Compute the degree-adjusted and regularized variants of personalized
+  #' PageRank as in Algorithm 4.
+  #'
+  #' @param node Character name of the node we are currently visiting.
+  #'
+  regularize = function() {
+
+    if (is.null(self$tau)) {
+      tau <- mean(self$stats$in_degree)
+    }
+
+    # might divide by 0 here
+    self$stats$degree_adjusted <- self$stats$p / self$stats$in_degree
+    self$stats$regularized <- self$stats$p / (self$stats$in_degree + tau)
   }
 ))
