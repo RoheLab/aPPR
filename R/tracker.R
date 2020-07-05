@@ -326,8 +326,9 @@ Tracker <- R6Class("Tracker", list(
 
       if (verbose) {
         message(
+          Sys.time(),
           paste0(
-            "Visits: ",
+            " Visits: ",
             length(self$path), " total / ",
             length(unique(self$path)), " unique / ",
             length(remaining), " remaining"
