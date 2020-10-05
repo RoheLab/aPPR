@@ -1,4 +1,6 @@
-destination: docs
+authors:
+  Alex Hayes:
+    href: https://alexpghayes.com
 
 development:
   mode: auto

@@ -1,6 +1,6 @@
 Package: aPPR
 Title: Approximate Personalized Page Rank
-Version: 0.1.0
+Version: 0.0.9100
 Authors@R: 
     c(person(given = "Alex",
              family = "Hayes",
@@ -31,17 +31,18 @@ Imports:
     glue,
     twittercache (>= 0.2.0.9000)
 Suggests: 
-    igraph,
+    igraph (>= 1.2.5),
     knitr,
     rmarkdown,
     rtweet,
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    covr
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Collate: 
     'aPPR-package.R'
     'abstract-graph.R'
@@ -51,6 +52,6 @@ Collate:
     'graph-twittercache.R'
     'tracker.R'
     'update.R'
-Remotes:  
+Remotes: 
     alexpghayes/socialsampler,
     alexpghayes/twittercache

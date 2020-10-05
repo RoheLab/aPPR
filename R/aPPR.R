@@ -108,7 +108,7 @@ appr <- function(graph, seeds, ..., alpha = 0.15, epsilon = 1e-6, tau = NULL,
 #' @export
 appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
                                 epsilon = 1e-6, tau = NULL,
-                                verbose = FALSE) {
+                                verbose = TRUE) {
   tracker <- Tracker$new(graph, alpha, epsilon, tau)
 
   for (seed in seeds) {

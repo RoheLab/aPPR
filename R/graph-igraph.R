@@ -6,8 +6,8 @@ appr.igraph <- function(graph, seeds, ...) {
   if (!requireNamespace("igraph", quietly = TRUE))
     stop("`igraph` package must be installed to use igraphs.", call. = FALSE)
 
-  if (is.null(igraph::V(graph)$names))
-    igraph::V(graph)$names <- as.character(1:igraph::gorder(graph))
+  if (is.null(names(igraph::V(graph))))
+    names(igraph::V(graph)) <- as.character(1:igraph::gorder(graph))
 
   appr.abstract_graph(graph = graph, seeds = seeds, ...)
 }
@@ -35,6 +35,6 @@ neighborhood.igraph <- function(graph, node) {
   )
 
   nodes <- int_node_list[[1]]
-  igraph::V(graph)$names[nodes]
+  names(igraph::V(graph))[nodes]
 }
 

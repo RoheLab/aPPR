@@ -62,6 +62,7 @@ node and the following columns:
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new Tracker object.
 \subsection{Usage}{
@@ -87,6 +88,7 @@ A new \code{Tracker} object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 Print the tibble containing the current state of the pagerank
 calculation.
@@ -97,6 +99,7 @@ calculation.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-remaining"></a>}}
+\if{latex}{\out{\hypertarget{method-remaining}{}}}
 \subsection{Method \code{remaining()}}{
 Determine nodes that need to be visited. Note that,
 if there is a node with zero out degree, you will never
@@ -113,6 +116,7 @@ greater than \code{epsilon}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-in_tracker"></a>}}
+\if{latex}{\out{\hypertarget{method-in_tracker}{}}}
 \subsection{Method \code{in_tracker()}}{
 Check if there is already a row for a particular node
 \subsection{Usage}{
@@ -133,6 +137,7 @@ is not a row for \code{node}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-in_failed"></a>}}
+\if{latex}{\out{\hypertarget{method-in_failed}{}}}
 \subsection{Method \code{in_failed()}}{
 Check if we previously failed to visit a node
 \subsection{Usage}{
@@ -154,6 +159,7 @@ and we haven't seen it before.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_seed"></a>}}
+\if{latex}{\out{\hypertarget{method-add_seed}{}}}
 \subsection{Method \code{add_seed()}}{
 Create an entry for \code{node} in the tracker. Assumes that
 \code{node} is not in the tracker yet, and does not check if
@@ -175,6 +181,7 @@ character vector.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_to_path"></a>}}
+\if{latex}{\out{\hypertarget{method-add_to_path}{}}}
 \subsection{Method \code{add_to_path()}}{
 TODO
 \subsection{Usage}{
@@ -192,6 +199,7 @@ character vector.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_nodes"></a>}}
+\if{latex}{\out{\hypertarget{method-add_nodes}{}}}
 \subsection{Method \code{add_nodes()}}{
 Create an entry for \code{node} in the tracker. Assumes that
 \code{node} is not in the tracker yet, and does not check if
@@ -212,6 +220,7 @@ this is the case.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_failed"></a>}}
+\if{latex}{\out{\hypertarget{method-add_failed}{}}}
 \subsection{Method \code{add_failed()}}{
 Add \code{node} to the list of nodes we failed to visit.
 Assumes that \code{node} is not in the failed list yet, and
@@ -231,6 +240,7 @@ character vector.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_p"></a>}}
+\if{latex}{\out{\hypertarget{method-update_p}{}}}
 \subsection{Method \code{update_p()}}{
 Update the estimate of the personalized pagerank for a given node
 \subsection{Usage}{
@@ -247,6 +257,7 @@ Update the estimate of the personalized pagerank for a given node
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_r_neighbor"></a>}}
+\if{latex}{\out{\hypertarget{method-update_r_neighbor}{}}}
 \subsection{Method \code{update_r_neighbor()}}{
 Update the residual of a \emph{good} node in the neighborhood of
 the current node, adding it to the tracker if necessary
@@ -267,6 +278,7 @@ contain multiple elements. Can also contain zero elements.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_r_self"></a>}}
+\if{latex}{\out{\hypertarget{method-update_r_self}{}}}
 \subsection{Method \code{update_r_self()}}{
 Update the residual of current node
 \subsection{Usage}{
@@ -283,6 +295,7 @@ Update the residual of current node
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-regularize"></a>}}
+\if{latex}{\out{\hypertarget{method-regularize}{}}}
 \subsection{Method \code{regularize()}}{
 Compute the degree-adjusted and regularized variants of personalized
 PageRank as in Algorithm 4, based on the outputs of Algorithm 3.
@@ -300,6 +313,7 @@ PageRank as in Algorithm 4, based on the outputs of Algorithm 3.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-calculate_ppr"></a>}}
+\if{latex}{\out{\hypertarget{method-calculate_ppr}{}}}
 \subsection{Method \code{calculate_ppr()}}{
 Main driver function to perform the computations outlined in
 Algorithm 3.
@@ -320,6 +334,7 @@ progress. Defaults to \code{TRUE}.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
