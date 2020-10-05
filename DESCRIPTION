@@ -33,7 +33,7 @@ Imports:
     socialsampler (>= 0.0.0.9001),
     logger,
     glue,
-    twittercache (>= 0.2.0.9000)
+    twittercache (>= 0.0.0.9202)
 Suggests: 
     igraph (>= 1.2.5),
     knitr,
