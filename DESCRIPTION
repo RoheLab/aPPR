@@ -1,5 +1,5 @@
 Package: aPPR
-Title: Approximate Personalized Page Rank
+Title: Approximate Personalized PageRank
 Version: 0.0.9100
 Authors@R: 
     c(person(given = "Alex",
@@ -9,15 +9,19 @@ Authors@R:
              comment = c(ORCID = "0000-0002-4985-5160")),
       person(given = "Fan",
              family = "Chen",
-             role = "aut"),
+             role = "aut", 
+             email = "fan.chen@wisc.edu",
+             comment = c(ORCID = "0000-0003-4508-6023")),
       person(given = "Karl",
              family = "Rohe",
              role = "aut"))
-Description: aPPR helps you calculate approximate
-    personalized pageranks from large graphs, including those that can
-    only be queried via an API.  aPPR additionally performs degree
-    correction and regularization, allowing users to recover blocks from
-    stochastic blockmodels.
+Description: 
+    aPPR helps you approximate personalized PageRank 
+    vectors for massive graphs, including those that 
+    can only be queried via an API. 
+    aPPR additionally performs degree correction and 
+    regularization, allowing discovery of community 
+    structure under some stochastic block models.
 License: file LICENSE
 URL: https://github.com/RoheLab/aPPR
 BugReports: https://github.com/RoheLab/aPPR/issues
