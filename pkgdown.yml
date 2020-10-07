@@ -1,0 +1,8 @@
+pandoc: 2.7.3
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  custom-graphs: custom-graphs.html
+  mathematical-details: mathematical-details.html
+last_built: 2020-10-07T19:49Z
+
