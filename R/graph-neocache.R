@@ -7,41 +7,77 @@
 #'   moving on or erroring.
 #'
 #' @export
-neocache_graph <- function(attempts = 5) {
-  # TODO: Make sure the Neo4j Docker container is running. If it is not
-  #       then warn the user.
+#' @examples
+#'
+#' \dontrun{
+#'
+#'
+#' test_ids <- c("780429268866052096", "1191642560")
+#'
+#' graph <- neocache_graph()
+#'
+#' check(graph, test_ids)
+#' node_degrees(graph, test_ids)
+#' neighborhood(graph, test_ids[1])
+#'
+#'
+#' }
+#'
+neocache_graph <- function(cache_name = "aPPR", attempts = 5) {
 
-  agraph <- abstract_graph("neocache_graph", attempts = attempts)
+  if (!requireNamespace("neocache", quietly = TRUE)) {
+    stop(
+      "`neocache` package must be installed to use `neocache_graph()`",
+      call. = FALSE
+    )
+  }
+
+  if (!neocache::nc_cache_exists(cache_name)) {
+    neocache::nc_create_cache(cache_name = cache_name, http_port = 28491, bolt_port = 28492)
+  }
+
+  neocache::nc_activate_cache(cache_name)
+
+  agraph <- abstract_graph(
+    "neocache_graph",
+    cache_name = cache_name,
+    attempts = attempts
+  )
+
   agraph
 }
 
 #' @rdname appr
 #' @export
-#' @importFrom neocache lookup_users
 appr.neocache_graph <- function(graph, seeds, ...) {
 
-  if (!requireNamespace("rtweet", quietly = TRUE)) {
+  if (!requireNamespace("neocache", quietly = TRUE)) {
     stop(
-      "`rtweet` package must be installed to use `neocache_graph()`",
+      "`neocache` package must be installed to use `neocache_graph()`",
       call. = FALSE
     )
   }
 
-  seed_data <- lookup_users(seeds)
+  seed_data <- rtweet::lookup_users(seeds, retryonratelimit = TRUE)
+
+  # convert seeds, potentially passed as screen names, to user ids
+  seeds <- seed_data$user_id
+
+  # have to double call the API to get information safely into the cache
+  neocache::nc_lookup_users(seeds, cache_name = graph$cache_name, retryonratelimit = TRUE)
 
   if (any(seed_data$protected)) {
     stop("Seed nodes should not be protected Twitter accounts.", call. = FALSE)
   }
 
-  # convert seeds, potentially passed as screen names, to user ids
-  seeds <- seed_data$user_id
+
 
   NextMethod()
 }
 
 # return character vector of all good nodes in the batch
-#' @importFrom neocache lookup_users
 #' @importFrom glue glue
+#' @export
 check.neocache_graph <- function(graph, nodes) {
 
   logger::log_debug(glue("Checking nodes"))
@@ -49,7 +85,7 @@ check.neocache_graph <- function(graph, nodes) {
   if (length(nodes) < 1)
     return(character(0))
 
-  node_data <- lookup_users(nodes)
+  node_data <- neocache::nc_lookup_users(nodes, cache_name = graph$cache_name)
 
   if (is.null(node_data) || nrow(node_data) < 1)
     return(character(0))
@@ -61,7 +97,7 @@ check.neocache_graph <- function(graph, nodes) {
   node_data$user_id[good_nodes]
 }
 
-#' @importFrom neocache lookup_users
+#' @export
 node_degrees.neocache_graph <- function(graph, nodes) {
 
   logger::log_debug(glue("Getting node degrees"))
@@ -69,7 +105,7 @@ node_degrees.neocache_graph <- function(graph, nodes) {
   # assumes that you want any errors / empty rows when accessing this
   # data, i.e. that the nodes have already been checked
 
-  node_data <- lookup_users(nodes)
+  node_data <- neocache::nc_lookup_users(nodes, cache_name = graph$cache_name)
 
   logger::log_debug(glue("Done getting node degrees"))
 
@@ -79,14 +115,14 @@ node_degrees.neocache_graph <- function(graph, nodes) {
   )
 }
 
-#' @importFrom neocache get_friends
+#' @export
 neighborhood.neocache_graph <- function(graph, node) {
 
   logger::log_debug(glue("Getting neighborhood: {node}"))
 
   # if a user doesn't follow anyone, safe_get_friends returns an empty
   # tibble, but instead it should return an empty character vector?
-  friends <- get_friends(node)
+  friends <- neocache::nc_get_friends(node, cache_name = graph$cache_name)
 
   logger::log_debug(glue("Done getting neighborhood"))
 

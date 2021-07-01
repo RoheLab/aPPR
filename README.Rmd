@@ -72,8 +72,10 @@ fchen365_ppr$stats
 ## Find the personalized pagerank of a Twitter user and cache the following network in the process
 
 ```{r twittercache-example, warning = FALSE}
+option(rtweet.retryonratelimit = TRUE)  # temporary hack we shouldn't need for long
+
 alexpghayes_ppr <- appr(
-  twittercache_graph(),
+  neocache_graph(),
   "alexpghayes",
   epsilon = 1e-4,
   verbose = TRUE

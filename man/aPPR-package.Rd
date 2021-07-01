@@ -4,13 +4,13 @@
 \name{aPPR-package}
 \alias{aPPR}
 \alias{aPPR-package}
-\title{aPPR: Approximate Personalized Page Rank}
+\title{aPPR: Approximate Personalized PageRank}
 \description{
-aPPR helps you calculate approximate
-    personalized pageranks from large graphs, including those that can
-    only be queried via an API.  aPPR additionally performs degree
-    correction and regularization, allowing users to recover blocks from
-    stochastic blockmodels.
+aPPR helps you approximate personalized PageRank vectors for
+    massive graphs, including those that can only be queried via an API.
+    aPPR additionally performs degree correction and regularization,
+    allowing discovery of community structure under some stochastic block
+    models.
 }
 \seealso{
 Useful links:
@@ -25,7 +25,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Fan Chen
+  \item Fan Chen \email{fan.chen@wisc.edu} (\href{https://orcid.org/0000-0003-4508-6023}{ORCID})
   \item Karl Rohe
 }
 
