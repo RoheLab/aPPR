@@ -12,13 +12,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Approximate Personalized PageRank">
-<meta property="og:description" content="
-    aPPR helps you approximate personalized PageRank 
-    vectors for massive graphs, including those that 
-    can only be queried via an API. 
-    aPPR additionally performs degree correction and 
-    regularization, allowing discovery of community 
-    structure under some stochastic block models.">
+<meta property="og:description" content="aPPR helps you approximate personalized PageRank vectors for
+    massive graphs, including those that can only be queried via an API.
+    aPPR additionally performs degree correction and regularization,
+    allowing discovery of community structure under some stochastic block
+    models.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -45,7 +43,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -71,7 +69,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/RoheLab/aPPR/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -98,15 +96,15 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"RoheLab/aPPR"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"RoheLab/aPPR"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="find-the-personalized-pagerank-of-a-node-in-an-igraph-graph" class="section level2">
 <h2 class="hasAnchor">
 <a href="#find-the-personalized-pagerank-of-a-node-in-an-igraph-graph" class="anchor"></a>Find the personalized pagerank of a node in an <code>igraph</code> graph</h2>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RoheLab/aPPR">aPPR</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RoheLab/aPPR">aPPR</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">27</span><span class="op">)</span>
@@ -122,15 +120,15 @@
 <span class="co">#&gt; Error in igraph::`V&lt;-`(`*tmp*`, value = `*vtmp*`): invalid indexing</span>
 
 <span class="va">erdos_tracker</span>
-<span class="co">#&gt; Error in eval(expr, envir, enclos): object 'erdos_tracker' not found</span></pre></div>
+<span class="co">#&gt; Error in eval(expr, envir, enclos): object 'erdos_tracker' not found</span></code></pre></div>
 </div>
 <div id="find-the-personalized-pagerank-of-a-twitter-user-using-rtweet" class="section level2">
 <h2 class="hasAnchor">
 <a href="#find-the-personalized-pagerank-of-a-twitter-user-using-rtweet" class="anchor"></a>Find the personalized pagerank of a Twitter user using <code>rtweet</code>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">fchen365_ppr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
-  <span class="fu"><a href="reference/rtweet_graph.html">rtweet_graph</a></span><span class="op">(</span><span class="op">)</span>,
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fchen365_ppr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
+  <span class="fu">rtweet_graph</span><span class="op">(</span><span class="op">)</span>,
   <span class="st">"fchen365"</span>,
   epsilon <span class="op">=</span> <span class="fl">1e-3</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>
@@ -150,13 +148,13 @@
 <span class="co">#&gt;  8 165678616      0.00791 0         58259       1206         0       0          </span>
 <span class="co">#&gt;  9 9095302874905~ 0.00791 0           191        637         0       0          </span>
 <span class="co">#&gt; 10 16549997       0.00791 0         72320       1540         0       0          </span>
-<span class="co">#&gt; # ... with 84 more rows</span></pre></div>
+<span class="co">#&gt; # ... with 84 more rows</span></code></pre></div>
 </div>
 <div id="find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process" class="section level2">
 <h2 class="hasAnchor">
 <a href="#find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process" class="anchor"></a>Find the personalized pagerank of a Twitter user and cache the following network in the process</h2>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">alexpghayes_ppr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">alexpghayes_ppr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
   <span class="fu">twittercache_graph</span><span class="op">(</span><span class="op">)</span>,
   <span class="st">"alexpghayes"</span>,
   epsilon <span class="op">=</span> <span class="fl">1e-4</span>,
@@ -177,19 +175,19 @@
 <span class="co">#&gt;  8 3147524537     6.19e-4 0          1353        712       0         0          </span>
 <span class="co">#&gt;  9 43261106       6.19e-4 0          1317        723       0         0          </span>
 <span class="co">#&gt; 10 31241437       6.19e-4 0       4492431        215       0         0          </span>
-<span class="co">#&gt; # ... with 1,233 more rows</span></pre></div>
+<span class="co">#&gt; # ... with 1,233 more rows</span></code></pre></div>
 <p><strong>README beyond this point is really just scratch for myself</strong></p>
 </div>
 <div id="sink-nodes-and-unreachable-nodes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sink-nodes-and-unreachable-nodes" class="anchor"></a>Sink nodes and unreachable nodes</h2>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">citation_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/sample_pa.html">sample_pa</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">citation_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/sample_pa.html">sample_pa</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>
 
 <span class="va">citation_tracker</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span><span class="va">citation_graph</span>, seeds <span class="op">=</span> <span class="st">"5"</span><span class="op">)</span>
 <span class="co">#&gt; Error in igraph::`V&lt;-`(`*tmp*`, value = `*vtmp*`): invalid indexing</span>
 <span class="va">citation_tracker</span>
-<span class="co">#&gt; Error in eval(expr, envir, enclos): object 'citation_tracker' not found</span></pre></div>
+<span class="co">#&gt; Error in eval(expr, envir, enclos): object 'citation_tracker' not found</span></code></pre></div>
 </div>
 <div id="why-should-i-use-appr" class="section level2">
 <h2 class="hasAnchor">

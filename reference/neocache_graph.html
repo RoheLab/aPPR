@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the neighborhood of a node in a graph — neighborhood • aPPR</title>
+<title>Create an abstract representation of the Twitter friendship graph — neocache_graph • aPPR</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Get the neighborhood of a node in a graph — neighborhood" />
-<meta property="og:description" content="That is, find all nodes connected to node by an outgoing edge.
-This function is memorized to avoid making repeated API queries." />
+<meta property="og:title" content="Create an abstract representation of the Twitter friendship graph — neocache_graph" />
+<meta property="og:description" content="Signifies that aPPR should query the Twitter friendship graph via
+neocache." />
 
 
 
@@ -124,38 +124,46 @@ This function is memorized to avoid making repeated API queries." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get the neighborhood of a node in a graph</h1>
-    <small class="dont-index">Source: <a href='https://github.com/RoheLab/aPPR/blob/master/R/abstract-graph.R'><code>R/abstract-graph.R</code></a></small>
-    <div class="hidden name"><code>neighborhood.Rd</code></div>
+    <h1>Create an abstract representation of the Twitter friendship graph</h1>
+    <small class="dont-index">Source: <a href='https://github.com/RoheLab/aPPR/blob/master/R/graph-neocache.R'><code>R/graph-neocache.R</code></a></small>
+    <div class="hidden name"><code>neocache_graph.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>That is, find all nodes connected to <code>node</code> by an outgoing edge.
-This function is memorized to avoid making repeated API queries.</p>
+    <p>Signifies that <code>aPPR</code> should query the Twitter friendship graph via
+<code>neocache</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>neighborhood</span><span class='op'>(</span><span class='va'>graph</span>, <span class='va'>node</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>neocache_graph</span><span class='op'>(</span>cache_name <span class='op'>=</span> <span class='st'>"aPPR"</span>, attempts <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>graph</th>
-      <td><p>A graph object.</p></td>
-    </tr>
-    <tr>
-      <th>nodes</th>
-      <td><p>The name of a single node in <code>graph</code> as a character vector.</p></td>
+      <th>attempts</th>
+      <td><p>The number of times to attempt an API request before
+moving on or erroring.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A character vector of all nodes in <code>graph</code> connected such that
-there is an outgoing edge for <code>node</code> to those nodes. This should
-never be empty, as <code>neighborhood()</code> should not be called on nodes
-that fail <code><a href='check.html'>check()</a></code>.</p>
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 
+
+<span class='va'>test_ids</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"780429268866052096"</span>, <span class='st'>"1191642560"</span><span class='op'>)</span>
+
+<span class='va'>graph</span> <span class='op'>&lt;-</span> <span class='fu'>neocache_graph</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='fu'><a href='check.html'>check</a></span><span class='op'>(</span><span class='va'>graph</span>, <span class='va'>test_ids</span><span class='op'>)</span>
+<span class='fu'><a href='node_degrees.html'>node_degrees</a></span><span class='op'>(</span><span class='va'>graph</span>, <span class='va'>test_ids</span><span class='op'>)</span>
+<span class='fu'><a href='neighborhood.html'>neighborhood</a></span><span class='op'>(</span><span class='va'>graph</span>, <span class='va'>test_ids</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span>
+
+
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
