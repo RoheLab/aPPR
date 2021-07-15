@@ -10,3 +10,7 @@ NULL
 #' @import logger
 #' @importFrom glue glue
 NULL
+
+.onLoad <- function(libname, pkgname) {
+  log_formatter(formatter_pander, namespace = pkgname)
+}

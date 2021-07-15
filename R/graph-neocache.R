@@ -90,9 +90,9 @@ check.neocache_graph <- function(graph, nodes) {
   if (is.null(node_data) || nrow(node_data) < 1)
     return(character(0))
 
-  good_nodes <- !node_data$protected & node_data$friends_count > 0
+  good_nodes <- !is.na(node_data$protected) & !node_data$protected & node_data$friends_count > 0
 
-  logger::log_debug(glue("Done checking nodes"))
+  log_debug(glue("Done checking nodes"))
 
   node_data$user_id[good_nodes]
 }
@@ -100,10 +100,12 @@ check.neocache_graph <- function(graph, nodes) {
 #' @export
 node_degrees.neocache_graph <- function(graph, nodes) {
 
-  logger::log_debug(glue("Getting node degrees"))
+  log_debug(glue("Getting node degrees"))
 
   # assumes that you want any errors / empty rows when accessing this
   # data, i.e. that the nodes have already been checked
+
+  log_trace(glue("Getting node degree(s): {nodes}"))
 
   node_data <- neocache::nc_lookup_users(nodes, cache_name = graph$cache_name)
 

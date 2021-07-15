@@ -122,9 +122,7 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
 
     tracker$add_seed(seed, preference = 1 / length(seeds))
 
-    if (verbose) {
-      message(glue("Adding seed {seed} to tracker."))
-    }
+    log_info("Adding seed {seed} to tracker.")
   }
 
   tracker$calculate_ppr(verbose)
