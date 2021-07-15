@@ -167,6 +167,8 @@ Tracker <- R6Class("Tracker", list(
   #'
   add_nodes = function(nodes, preference = 0) {
 
+    log_trace(glue("Adding node(s) to tracker: {nodes}"))
+
     degree <- node_degrees(self$graph, nodes)
 
     self$stats <- tibble::add_row(
@@ -277,14 +279,17 @@ Tracker <- R6Class("Tracker", list(
   #'
   calculate_ppr = function(verbose = TRUE) {
 
-    if (verbose)
-      message(Sys.time(), " Starting PPR calculations.")
+    log_info("Approximating PPR ...")
 
     remaining <- self$remaining()
+
+    log_info("Visits: {length(self$path)} total / {length(unique(self$path))} unique / {length(remaining)} remaining.")
 
     while (length(remaining) > 0) {
 
       u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
+
+      log_trace(glue("Visting {u}"))
 
       self$update_p(u)
 
@@ -301,6 +306,8 @@ Tracker <- R6Class("Tracker", list(
       #
       # also note that we only want to *check* each node once
 
+      log_trace(glue("Getting the neighborhood of {u}"))
+
       neighbors <- memo_neighborhood(self$graph, u)
 
       self$add_to_path(u)
@@ -316,6 +323,21 @@ Tracker <- R6Class("Tracker", list(
       new_good <- check(self$graph, unknown)
       new_bad <- setdiff(unknown, new_good)
 
+      log_debug(
+        glue(
+          "{length(known_good)} known good / ",
+          "{length(known_bad)} known bad / ",
+          "{length(new_good)} new good / ",
+          "{length(new_bad)} new bad",
+          sep = " "
+        )
+      )
+
+      log_trace(glue("known good: {known_good}"))
+      log_trace(glue("known bad: {known_bad}"))
+      log_trace(glue("new good: {new_good}"))
+      log_trace(glue("new bad: {new_bad}"))
+
       self$add_failed(new_bad)
       self$update_r_neighbor(u, known_good)
       self$update_r_neighbor(u, new_good)
@@ -324,20 +346,9 @@ Tracker <- R6Class("Tracker", list(
 
       remaining <- self$remaining()
 
-      if (verbose) {
-        message(
-          Sys.time(),
-          paste0(
-            " Visits: ",
-            length(self$path), " total / ",
-            length(unique(self$path)), " unique / ",
-            length(remaining), " remaining"
-          )
-        )
-      }
+      log_info(glue("Visits: {length(self$path)} total / {length(unique(self$path))} unique / {length(remaining)} remaining."))
     }
 
-    if (verbose)
-      message(Sys.time(), " PPR calculation finished.")
+    log_info("Approximating PPR ... done")
   }
 ))
