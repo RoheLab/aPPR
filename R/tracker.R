@@ -222,7 +222,7 @@ Tracker <- R6Class("Tracker", list(
     stopifnot(length(u) == 1)
 
     if (length(v) < 1)
-      return(invisible())
+      return(invisible(NULL))
 
     new_nodes <- v[!self$in_tracker(v)]
 
@@ -283,7 +283,7 @@ Tracker <- R6Class("Tracker", list(
 
     remaining <- self$remaining()
 
-    log_info("Visits: {length(self$path)} total / {length(unique(self$path))} unique / {length(remaining)} remaining.")
+    log_info(glue("Visits: {length(self$path)} total / {length(unique(self$path))} unique / {length(remaining)} remaining."))
 
     while (length(remaining) > 0) {
 
@@ -305,8 +305,6 @@ Tracker <- R6Class("Tracker", list(
       #   - pretend the bad nodes don't exist
       #
       # also note that we only want to *check* each node once
-
-      log_trace(glue("Getting the neighborhood of {u}"))
 
       neighbors <- memo_neighborhood(self$graph, u)
 
