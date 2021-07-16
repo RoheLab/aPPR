@@ -64,7 +64,7 @@ appr.neocache_graph <- function(graph, seeds, ...) {
   seeds <- seed_data$user_id
 
   # have to double call the API to get information safely into the cache
-  neocache::nc_lookup_users(seeds, cache_name = graph$cache_name, retryonratelimit = TRUE)
+  neocache::nc_lookup_users(seeds, cache_name = graph$cache_name)
 
   if (any(seed_data$protected)) {
     stop("Seed nodes should not be protected Twitter accounts.", call. = FALSE)
