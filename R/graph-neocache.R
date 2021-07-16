@@ -70,8 +70,6 @@ appr.neocache_graph <- function(graph, seeds, ...) {
     stop("Seed nodes should not be protected Twitter accounts.", call. = FALSE)
   }
 
-
-
   NextMethod()
 }
 
