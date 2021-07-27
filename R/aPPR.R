@@ -111,18 +111,24 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
                                 verbose = TRUE) {
   tracker <- Tracker$new(graph, alpha, epsilon, tau)
 
+
+  log_trace("Checking seed nodes ... ")
+  good_seeds <- check(graph, seeds)
+  log_trace("Checking seed nodes ... done")
+
   for (seed in seeds) {
 
-    if (!(seed %in% check(graph, seed))) {
+    if (!(seed %in% good_seeds)) {
       stop(
         glue("Seed {seed} must be available and have positive out degree."),
         call. = FALSE
       )
     }
 
+    log_info(glue("Adding seed {seed} to tracker ..."))
     tracker$add_seed(seed, preference = 1 / length(seeds))
+    log_info(glue("Adding seed {seed} to tracker ... done"))
 
-    log_info(glue("Adding seed {seed} to tracker."))
   }
 
   tracker$calculate_ppr(verbose)
