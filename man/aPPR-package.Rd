@@ -6,11 +6,7 @@
 \alias{aPPR-package}
 \title{aPPR: Approximate Personalized PageRank}
 \description{
-aPPR helps you approximate personalized PageRank vectors for
-    massive graphs, including those that can only be queried via an API.
-    aPPR additionally performs degree correction and regularization,
-    allowing discovery of community structure under some stochastic block
-    models.
+aPPR helps you approximate personalized PageRank vectors for massive graphs, including those that can only be queried via an API. aPPR additionally performs degree correction and regularization, allowing discovery of community structure under some stochastic block models.
 }
 \seealso{
 Useful links:

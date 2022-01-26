@@ -4,7 +4,7 @@
 \alias{neocache_graph}
 \title{Create an abstract representation of the Twitter friendship graph}
 \usage{
-neocache_graph(cache_name = "aPPR", attempts = 5)
+neocache_graph(cache_name = "aPPR", retryonratelimit = TRUE)
 }
 \arguments{
 \item{attempts}{The number of times to attempt an API request before

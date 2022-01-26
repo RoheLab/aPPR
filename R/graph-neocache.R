@@ -23,7 +23,7 @@
 #'
 #' }
 #'
-neocache_graph <- function(cache_name = "aPPR", attempts = 5) {
+neocache_graph <- function(cache_name = "aPPR", retryonratelimit = TRUE) {
 
   if (!requireNamespace("neocache", quietly = TRUE)) {
     stop(
@@ -41,7 +41,7 @@ neocache_graph <- function(cache_name = "aPPR", attempts = 5) {
   agraph <- abstract_graph(
     "neocache_graph",
     cache_name = cache_name,
-    attempts = attempts
+    retryonratelimit = retryonratelimit,
   )
 
   agraph

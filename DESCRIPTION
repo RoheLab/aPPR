@@ -1,6 +1,6 @@
 Package: aPPR
 Title: Approximate Personalized PageRank
-Version: 0.0.0.9100
+Version: 0.0.0.9101
 Authors@R: 
     c(person(given = "Alex",
              family = "Hayes",
@@ -31,22 +31,23 @@ Imports:
     memoise,
     neocache (>= 0.0.0.9000),
     ellipsis,
-    tibble
+    tibble,
 Suggests: 
     covr,
     igraph (>= 1.2.5),
     knitr,
     rmarkdown,
-    rtweet,
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    rtweet (>= 0.7.0.9011)
 VignetteBuilder: 
     knitr
-Remotes: 
-    alexpghayes/neocache
+Remotes:  
+    alexpghayes/neocache,
+    ropensci/rtweet
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1.9001
+RoxygenNote: 7.1.2
 Collate: 
     'aPPR-package.R'
     'abstract-graph.R'
