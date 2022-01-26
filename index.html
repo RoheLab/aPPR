@@ -23,6 +23,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -35,18 +37,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">aPPR</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9100</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9101</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -68,7 +64,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/RoheLab/aPPR/">
+  <a href="https://github.com/RoheLab/aPPR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -86,30 +82,36 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="appr" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#appr" class="anchor"></a>aPPR</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="appr">aPPR<a class="anchor" aria-label="anchor" href="#appr"></a>
+</h1></div>
 <!-- badges: start -->
 
 <p><code>aPPR</code> helps you calculate approximate personalized pageranks from large graphs, including those that can only be queried via an API. <code>aPPR</code> additionally performs degree correction and regularization, allowing you to recover blocks from stochastic blockmodels.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<p>To learn more about <code>aPPR</code> you can:</p>
+<ol style="list-style-type: decimal">
+<li>Glance through slides the <a href="https://github.com/alexpghayes/JSM2021" class="external-link">JSM2021</a> talk</li>
+<li>Read the accompanying <a href="https://arxiv.org/abs/1910.12937" class="external-link">paper</a>
+</li>
+</ol>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"RoheLab/aPPR"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="find-the-personalized-pagerank-of-a-node-in-an-igraph-graph" class="section level2">
-<h2 class="hasAnchor">
-<a href="#find-the-personalized-pagerank-of-a-node-in-an-igraph-graph" class="anchor"></a>Find the personalized pagerank of a node in an <code>igraph</code> graph</h2>
+<div class="section level2">
+<h2 id="find-the-personalized-pagerank-of-a-node-in-an-igraph-graph">Find the personalized pagerank of a node in an <code>igraph</code> graph<a class="anchor" aria-label="anchor" href="#find-the-personalized-pagerank-of-a-node-in-an-igraph-graph"></a>
+</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RoheLab/aPPR">aPPR</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RoheLab/aPPR" class="external-link">aPPR</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org" class="external-link">igraph</a></span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">27</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">27</span><span class="op">)</span>
 
-<span class="va">erdos_renyi_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/sample_gnp.html">sample_gnp</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, p <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+<span class="va">erdos_renyi_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/sample_gnp.html" class="external-link">sample_gnp</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, p <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
 
 <span class="va">erdos_tracker</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
   <span class="va">erdos_renyi_graph</span>,   <span class="co"># the graph to work with</span>
@@ -117,135 +119,66 @@
   epsilon <span class="op">=</span> <span class="fl">0.0005</span>,    <span class="co"># convergence criterion (see below)</span>
   verbose <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span>
-<span class="co">#&gt; Error in igraph::`V&lt;-`(`*tmp*`, value = `*vtmp*`): invalid indexing</span>
 
 <span class="va">erdos_tracker</span>
-<span class="co">#&gt; Error in eval(expr, envir, enclos): object 'erdos_tracker' not found</span></code></pre></div>
+<span class="co">#&gt; A Tracker R6 object with PPR table: </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; # A tibble: 51 × 7</span>
+<span class="co">#&gt;    name       r     p in_degree out_degree degree_adjusted regularized</span>
+<span class="co">#&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;           &lt;dbl&gt;       &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 5     0.0205 0.147        50         50         0.00294     0.00147</span>
+<span class="co">#&gt;  2 3     0.0167 0            51         51         0           0      </span>
+<span class="co">#&gt;  3 6     0.0167 0            59         59         0           0      </span>
+<span class="co">#&gt;  4 8     0.0167 0            41         41         0           0      </span>
+<span class="co">#&gt;  5 15    0.0167 0            46         46         0           0      </span>
+<span class="co">#&gt;  6 16    0.0167 0            52         52         0           0      </span>
+<span class="co">#&gt;  7 17    0.0167 0            48         48         0           0      </span>
+<span class="co">#&gt;  8 19    0.0167 0            54         54         0           0      </span>
+<span class="co">#&gt;  9 20    0.0167 0            51         51         0           0      </span>
+<span class="co">#&gt; 10 21    0.0167 0            55         55         0           0      </span>
+<span class="co">#&gt; # … with 41 more rows</span></code></pre></div>
 </div>
-<div id="find-the-personalized-pagerank-of-a-twitter-user-using-rtweet" class="section level2">
-<h2 class="hasAnchor">
-<a href="#find-the-personalized-pagerank-of-a-twitter-user-using-rtweet" class="anchor"></a>Find the personalized pagerank of a Twitter user using <code>rtweet</code>
+<div class="section level2">
+<h2 id="find-the-personalized-pagerank-of-a-twitter-user-using-rtweet">Find the personalized pagerank of a Twitter user using <code>rtweet</code>
+<a class="anchor" aria-label="anchor" href="#find-the-personalized-pagerank-of-a-twitter-user-using-rtweet"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fchen365_ppr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
-  <span class="fu">rtweet_graph</span><span class="op">(</span><span class="op">)</span>,
-  <span class="st">"fchen365"</span>,
+<code class="sourceCode R"><span class="va">ftrevorc_ppr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
+  <span class="fu"><a href="reference/rtweet_graph.html">rtweet_graph</a></span><span class="op">(</span><span class="op">)</span>,
+  <span class="st">"ftrevorc"</span>,
   epsilon <span class="op">=</span> <span class="fl">1e-3</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span>
-
-<span class="va">fchen365_ppr</span><span class="op">$</span><span class="va">stats</span>
-<span class="co">#&gt; # A tibble: 94 x 7</span>
-<span class="co">#&gt;    name                 r     p in_degree out_degree degree_adjusted regularized</span>
-<span class="co">#&gt;    &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;           &lt;dbl&gt;       &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 7752257741314~ 0.0970  0.135        47         97         0.00288 0.000000116</span>
-<span class="co">#&gt;  2 759249         0.00791 0         13313       1359         0       0          </span>
-<span class="co">#&gt;  3 97505313       0.00791 0          1280       2551         0       0          </span>
-<span class="co">#&gt;  4 35109534       0.00791 0          1743        345         0       0          </span>
-<span class="co">#&gt;  5 1225146797049~ 0.00791 0             6         11         0       0          </span>
-<span class="co">#&gt;  6 7804292688660~ 0.00791 0          4159       1244         0       0          </span>
-<span class="co">#&gt;  7 14897792       0.00791 0         17836       5542         0       0          </span>
-<span class="co">#&gt;  8 165678616      0.00791 0         58259       1206         0       0          </span>
-<span class="co">#&gt;  9 9095302874905~ 0.00791 0           191        637         0       0          </span>
-<span class="co">#&gt; 10 16549997       0.00791 0         72320       1540         0       0          </span>
-<span class="co">#&gt; # ... with 84 more rows</span></code></pre></div>
+<span class="co">#&gt; Error in lookup_users(nodes, retryonratelimit = graph$retryonratelimit, : could not find function "lookup_users"</span>
+<span class="va">ftrevorc_ppr</span><span class="op">$</span><span class="va">stats</span>
+<span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ftrevorc_ppr' not found</span></code></pre></div>
 </div>
-<div id="find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process" class="section level2">
-<h2 class="hasAnchor">
-<a href="#find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process" class="anchor"></a>Find the personalized pagerank of a Twitter user and cache the following network in the process</h2>
+<div class="section level2">
+<h2 id="find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process">Find the personalized pagerank of a Twitter user and cache the following network in the process<a class="anchor" aria-label="anchor" href="#find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process"></a>
+</h2>
+<p><strong>NOTE</strong>: As of January 2022, the following does not work due to a change in the <code>rtweet</code> dev version that we have not yet updated <code>neocache</code> to accommodate.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alexpghayes_ppr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
-  <span class="fu">twittercache_graph</span><span class="op">(</span><span class="op">)</span>,
+  <span class="fu"><a href="reference/neocache_graph.html">neocache_graph</a></span><span class="op">(</span><span class="op">)</span>,
   <span class="st">"alexpghayes"</span>,
   epsilon <span class="op">=</span> <span class="fl">1e-4</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span>
 
-<span class="va">alexpghayes_ppr</span><span class="op">$</span><span class="va">stats</span>
-<span class="co">#&gt; # A tibble: 1,243 x 7</span>
-<span class="co">#&gt;    name                 r     p in_degree out_degree degree_adjusted regularized</span>
-<span class="co">#&gt;    &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;           &lt;dbl&gt;       &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 7804292688660~ 9.71e-2 0.135      4069       1241       0.0000333 0.000000909</span>
-<span class="co">#&gt;  2 628745609      6.19e-4 0           129        216       0         0          </span>
-<span class="co">#&gt;  3 780934633      6.19e-4 0         19471       2878       0         0          </span>
-<span class="co">#&gt;  4 20406724       6.19e-4 0         33816       8344       0         0          </span>
-<span class="co">#&gt;  5 1152655010871~ 6.19e-4 0           552       1150       0         0          </span>
-<span class="co">#&gt;  6 302667955      6.19e-4 0          3917       1724       0         0          </span>
-<span class="co">#&gt;  7 2768346873     6.19e-4 0          6304       1376       0         0          </span>
-<span class="co">#&gt;  8 3147524537     6.19e-4 0          1353        712       0         0          </span>
-<span class="co">#&gt;  9 43261106       6.19e-4 0          1317        723       0         0          </span>
-<span class="co">#&gt; 10 31241437       6.19e-4 0       4492431        215       0         0          </span>
-<span class="co">#&gt; # ... with 1,233 more rows</span></code></pre></div>
-<p><strong>README beyond this point is really just scratch for myself</strong></p>
+<span class="va">alexpghayes_ppr</span><span class="op">$</span><span class="va">stats</span></code></pre></div>
 </div>
-<div id="sink-nodes-and-unreachable-nodes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#sink-nodes-and-unreachable-nodes" class="anchor"></a>Sink nodes and unreachable nodes</h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">citation_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/sample_pa.html">sample_pa</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>
-
-<span class="va">citation_tracker</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span><span class="va">citation_graph</span>, seeds <span class="op">=</span> <span class="st">"5"</span><span class="op">)</span>
-<span class="co">#&gt; Error in igraph::`V&lt;-`(`*tmp*`, value = `*vtmp*`): invalid indexing</span>
-<span class="va">citation_tracker</span>
-<span class="co">#&gt; Error in eval(expr, envir, enclos): object 'citation_tracker' not found</span></code></pre></div>
-</div>
-<div id="why-should-i-use-appr" class="section level2">
-<h2 class="hasAnchor">
-<a href="#why-should-i-use-appr" class="anchor"></a>Why should I use aPPR?</h2>
-<ul>
-<li><p>curious about nodes important to the community around a particular user who you wouldn’t find without algorithmic help</p></li>
-<li><p>1 hop network is too small, 2-3 hop networks are too large (recall diameter of twitter graph is 3.7!!!)</p></li>
-<li><p>want to study a particular community but don’t know exactly which accounts to investigate, but you do have a good idea of one or two important accounts in that community</p></li>
-</ul>
-</div>
-<div id="appr-calculates-an-approximation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#appr-calculates-an-approximation" class="anchor"></a><code>aPPR</code> calculates an <em>approximation</em>
+<div class="section level2">
+<h2 id="ethical-considerations">Ethical considerations<a class="anchor" aria-label="anchor" href="#ethical-considerations"></a>
 </h2>
-<p>comment on <code>p = 0</code> versus <code>p != 0</code></p>
-</div>
-<div id="advice-on-choosing-epsilon" class="section level2">
-<h2 class="hasAnchor">
-<a href="#advice-on-choosing-epsilon" class="anchor"></a>Advice on choosing <code>epsilon</code>
-</h2>
-<p>Number of unique visits as a function of <code>epsilon</code>, wait times, runtime proportion to <code>1 / (alpha * epsilon)</code>, etc, etc</p>
-<p>speaking strictly in terms of the <code>p != 0</code> nodes</p>
-<p>1e-4 and 1e-5: finishes quickly, neighbors with high degree get visited 1e-6: visits most of 1-hop neighborhood. finishes in several hours for accounts who follow thousands of people with ~10 tokens. 1e-7: visits beyond the 1-hop neighbor by ???. takes a couple days to run with ~10 tokens. 1e-8: visits <em>a lot</em> beyond the 1-hop neighbor, presumably the important people in the 2-hop neighbor, ???</p>
-<p>the most disparate a users interests, and the less connected their neighborhood, the longer it will take to run aPPR</p>
-</div>
-<div id="limitations" class="section level2">
-<h2 class="hasAnchor">
-<a href="#limitations" class="anchor"></a>Limitations</h2>
-<ul>
-<li>Connected graph assumption, what results look like when we violate this assumption</li>
-<li>Sampling is one node at a time</li>
-</ul>
-</div>
-<div id="speed-ideas" class="section level2">
-<h2 class="hasAnchor">
-<a href="#speed-ideas" class="anchor"></a>Speed ideas</h2>
-<p>compute is not an issue relative to actually getting data</p>
-<p>Compute time ~ access from Ram time &lt;&lt; access from disk time &lt;&lt; access from network time.</p>
-<p>Make requests to API in bulk, memoize everything, cache / write to disk in a separate process?</p>
-<p>General pattern: cache on disk, and also in RAM</p>
-</div>
-<div id="working-with-tracker-objects" class="section level2">
-<h2 class="hasAnchor">
-<a href="#working-with-tracker-objects" class="anchor"></a>Working with <code>Tracker</code> objects</h2>
-<p>See <code><a href="reference/Tracker.html">?Tracker</a></code> for details.</p>
-</div>
-<div id="ethical-considerations" class="section level2">
-<h2 class="hasAnchor">
-<a href="#ethical-considerations" class="anchor"></a>Ethical considerations</h2>
-<p>people have a right to choose how public / visible / discoverable their information is. if you come across interesting users who are not in the public eye, do not elevate them into the public eye or increase attention on their accounts without their permission.</p>
+<p>People have a right to choose how public and discoverable their information is. <code>aPPR</code> will often lead you to accounts that interesting, but also small and out of sights. Do not change the public profile or attention towards these the people running these accounts, or any other accounts, without their permission.</p>
 </div>
 </div>
-<div id="references" class="section level1">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
-<ol>
-<li><p>Chen, F., Zhang, Y. &amp; Rohe, K. <em>Targeted sampling from massive Blockmodel graphs with personalized PageRank</em>. 2019. <a href="https://arxiv.org/abs/1910.12937">pdf</a></p></li>
-<li><p>Andersen, R., Chung, F. &amp; Lang, K. <em>Local Graph Partitioning using PageRank Vectors</em>. 2006. <a href="http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf">pdf</a></p></li>
+<div class="section level1">
+<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h1>
+<ol style="list-style-type: decimal">
+<li><p>Chen, F., Zhang, Y. &amp; Rohe, K. <em>Targeted sampling from massive Blockmodel graphs with personalized PageRank</em>. 2019. <a href="https://arxiv.org/abs/1910.12937" class="external-link">pdf</a></p></li>
+<li><p>Andersen, R., Chung, F. &amp; Lang, K. <em>Local Graph Partitioning using PageRank Vectors</em>. 2006. <a href="http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf" class="external-link">pdf</a></p></li>
 </ol>
 </div>
 
@@ -253,50 +186,61 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/RoheLab/aPPR/">https://​github.com/​RoheLab/​aPPR/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/RoheLab/aPPR/issues">https://​github.com/​RoheLab/​aPPR/​issues</a>
-</li>
+<li><a href="https://github.com/RoheLab/aPPR/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/RoheLab/aPPR/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>file <a href="LICENSE-text.html">LICENSE</a>
 </li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing aPPR</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://alexpghayes.com">Alex Hayes</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-4985-5160" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Fan Chen <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-4508-6023" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<a href="https://alexpghayes.com" class="external-link">Alex Hayes</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-4985-5160" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Fan Chen <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-4508-6023" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Karl Rohe <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://CRAN.R-project.org/package=aPPR"><img src="https://www.r-pkg.org/badges/version/aPPR" alt="CRAN status"></a></li>
-<li><a href="https://codecov.io/gh/RoheLab/aPPR?branch=master"><img src="https://codecov.io/gh/RoheLab/aPPR/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://github.com/RoheLab/aPPR/actions"><img src="https://github.com/RoheLab/aPPR/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://www.tidyverse.org/lifecycle/#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://CRAN.R-project.org/package=aPPR" class="external-link"><img src="https://www.r-pkg.org/badges/version/aPPR" alt="CRAN status"></a></li>
+<li><a href="https://codecov.io/gh/RoheLab/aPPR?branch=master" class="external-link"><img src="https://codecov.io/gh/RoheLab/aPPR/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/RoheLab/aPPR/actions" class="external-link"><img src="https://github.com/RoheLab/aPPR/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://alexpghayes.com">Alex Hayes</a>, Fan Chen, Karl Rohe.</p>
+  <p></p>
+<p>Developed by <a href="https://alexpghayes.com" class="external-link">Alex Hayes</a>, Fan Chen, Karl Rohe.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -304,6 +248,8 @@
 
   
 
+
+  
 
   </body>
 </html>
