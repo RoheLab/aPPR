@@ -27,6 +27,11 @@ knitr::opts_chunk$set(
 
 `aPPR` helps you calculate approximate personalized pageranks from large graphs, including those that can only be queried via an API. `aPPR` additionally performs degree correction and regularization, allowing you to recover blocks from stochastic blockmodels.
 
+To learn more about `aPPR` you can:
+
+1. Glance through slides the [JSM2021](https://github.com/alexpghayes/JSM2021) talk
+2. Read the accompanying [paper][chen]
+
 ## Installation
 
 You can install the development version from [GitHub](https://github.com/) with:
@@ -59,21 +64,21 @@ erdos_tracker
 ## Find the personalized pagerank of a Twitter user using `rtweet`
 
 ```{r rtweet-example, warning = FALSE}
-fchen365_ppr <- appr(
+ftrevorc_ppr <- appr(
   rtweet_graph(),
-  "fchen365",
+  "ftrevorc",
   epsilon = 1e-3,
   verbose = TRUE
 )
 
-fchen365_ppr$stats
+ftrevorc_ppr$stats
 ```
 
 ## Find the personalized pagerank of a Twitter user and cache the following network in the process
 
-```{r twittercache-example, warning = FALSE}
-options(rtweet.retryonratelimit = TRUE)  # temporary hack we shouldn't need for long
+**NOTE**: As of January 2022, the following does not work due to a change in the `rtweet` dev version that we have not yet updated `neocache` to accommodate.
 
+```{r twittercache-example, eval = FALSE}
 alexpghayes_ppr <- appr(
   neocache_graph(),
   "alexpghayes",
@@ -84,65 +89,9 @@ alexpghayes_ppr <- appr(
 alexpghayes_ppr$stats
 ```
 
-**README beyond this point is really just scratch for myself**
-
-## Sink nodes and unreachable nodes
-
-```{r sink-nodes}
-citation_graph <- sample_pa(100)
-
-citation_tracker <- appr(citation_graph, seeds = "5")
-citation_tracker
-```
-
-## Why should I use aPPR?
-
-- curious about nodes important to the community around a particular user who you wouldn't find without algorithmic help
-
-- 1 hop network is too small, 2-3 hop networks are too large (recall diameter of twitter graph is 3.7!!!)
-
-- want to study a particular community but don't know exactly which accounts to investigate, but you do have a good idea of one or two important accounts in that community
-
-## `aPPR` calculates an *approximation*
-
-comment on `p = 0` versus `p != 0`
-
-
-## Advice on choosing `epsilon`
-
-Number of unique visits as a function of `epsilon`, wait times, runtime proportion to `1 / (alpha * epsilon)`, etc, etc
-
-speaking strictly in terms of the `p != 0` nodes
-
-1e-4 and 1e-5: finishes quickly, neighbors with high degree get visited
-1e-6: visits most of 1-hop neighborhood. finishes in several hours for accounts who follow thousands of people with ~10 tokens.
-1e-7: visits beyond the 1-hop neighbor by ???. takes a couple days to run with ~10 tokens.
-1e-8: visits *a lot* beyond the 1-hop neighbor, presumably the important people in the 2-hop neighbor, ???
-
-the most disparate a users interests, and the less connected their neighborhood, the longer it will take to run aPPR
-
-## Limitations
-
-- Connected graph assumption, what results look like when we violate this assumption
-- Sampling is one node at a time
-
-## Speed ideas
-
-compute is not an issue relative to actually getting data
-
-Compute time ~ access from Ram time << access from disk time << access from network time.
-
-Make requests to API in bulk, memoize everything, cache / write to disk in a separate process?
-
-General pattern: cache on disk, and also in RAM
-
-## Working with `Tracker` objects
-
-See `?Tracker` for details.
-
 ## Ethical considerations
 
-people have a right to choose how public / visible / discoverable their information is. if you come across interesting users who are not in the public eye, do not elevate them into the public eye or increase attention on their accounts without their permission.
+People have a right to choose how public and discoverable their information is. `aPPR` will often lead you to accounts that interesting, but also small and out of sights. Do not change the public profile or attention towards these the people running these accounts, or any other accounts, without their permission.
 
 # References
 

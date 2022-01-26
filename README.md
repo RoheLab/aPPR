@@ -20,6 +20,12 @@ graphs, including those that can only be queried via an API. `aPPR`
 additionally performs degree correction and regularization, allowing you
 to recover blocks from stochastic blockmodels.
 
+To learn more about `aPPR` you can:
+
+1.  Glance through slides the
+    [JSM2021](https://github.com/alexpghayes/JSM2021) talk
+2.  Read the accompanying [paper](https://arxiv.org/abs/1910.12937)
+
 ## Installation
 
 You can install the development version from
@@ -46,140 +52,64 @@ erdos_tracker <- appr(
   epsilon = 0.0005,    # convergence criterion (see below)
   verbose = FALSE
 )
-#> Error in igraph::`V<-`(`*tmp*`, value = `*vtmp*`): invalid indexing
 
 erdos_tracker
-#> Error in eval(expr, envir, enclos): object 'erdos_tracker' not found
+#> A Tracker R6 object with PPR table: 
+#> 
+#> # A tibble: 51 × 7
+#>    name       r     p in_degree out_degree degree_adjusted regularized
+#>    <chr>  <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
+#>  1 5     0.0205 0.147        50         50         0.00294     0.00147
+#>  2 3     0.0167 0            51         51         0           0      
+#>  3 6     0.0167 0            59         59         0           0      
+#>  4 8     0.0167 0            41         41         0           0      
+#>  5 15    0.0167 0            46         46         0           0      
+#>  6 16    0.0167 0            52         52         0           0      
+#>  7 17    0.0167 0            48         48         0           0      
+#>  8 19    0.0167 0            54         54         0           0      
+#>  9 20    0.0167 0            51         51         0           0      
+#> 10 21    0.0167 0            55         55         0           0      
+#> # … with 41 more rows
 ```
 
 ## Find the personalized pagerank of a Twitter user using `rtweet`
 
 ``` r
-fchen365_ppr <- appr(
+ftrevorc_ppr <- appr(
   rtweet_graph(),
-  "fchen365",
+  "ftrevorc",
   epsilon = 1e-3,
   verbose = TRUE
 )
-
-fchen365_ppr$stats
-#> # A tibble: 94 x 7
-#>    name                 r     p in_degree out_degree degree_adjusted regularized
-#>    <chr>            <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
-#>  1 7752257741314~ 0.0970  0.135        47         97         0.00288 0.000000116
-#>  2 759249         0.00791 0         13313       1359         0       0          
-#>  3 97505313       0.00791 0          1280       2551         0       0          
-#>  4 35109534       0.00791 0          1743        345         0       0          
-#>  5 1225146797049~ 0.00791 0             6         11         0       0          
-#>  6 7804292688660~ 0.00791 0          4159       1244         0       0          
-#>  7 14897792       0.00791 0         17836       5542         0       0          
-#>  8 165678616      0.00791 0         58259       1206         0       0          
-#>  9 9095302874905~ 0.00791 0           191        637         0       0          
-#> 10 16549997       0.00791 0         72320       1540         0       0          
-#> # ... with 84 more rows
+#> Error in lookup_users(nodes, retryonratelimit = graph$retryonratelimit, : could not find function "lookup_users"
+ftrevorc_ppr$stats
+#> Error in eval(expr, envir, enclos): object 'ftrevorc_ppr' not found
 ```
 
 ## Find the personalized pagerank of a Twitter user and cache the following network in the process
 
+**NOTE**: As of January 2022, the following does not work due to a
+change in the `rtweet` dev version that we have not yet updated
+`neocache` to accommodate.
+
 ``` r
 alexpghayes_ppr <- appr(
-  twittercache_graph(),
+  neocache_graph(),
   "alexpghayes",
   epsilon = 1e-4,
   verbose = TRUE
 )
 
 alexpghayes_ppr$stats
-#> # A tibble: 1,243 x 7
-#>    name                 r     p in_degree out_degree degree_adjusted regularized
-#>    <chr>            <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
-#>  1 7804292688660~ 9.71e-2 0.135      4069       1241       0.0000333 0.000000909
-#>  2 628745609      6.19e-4 0           129        216       0         0          
-#>  3 780934633      6.19e-4 0         19471       2878       0         0          
-#>  4 20406724       6.19e-4 0         33816       8344       0         0          
-#>  5 1152655010871~ 6.19e-4 0           552       1150       0         0          
-#>  6 302667955      6.19e-4 0          3917       1724       0         0          
-#>  7 2768346873     6.19e-4 0          6304       1376       0         0          
-#>  8 3147524537     6.19e-4 0          1353        712       0         0          
-#>  9 43261106       6.19e-4 0          1317        723       0         0          
-#> 10 31241437       6.19e-4 0       4492431        215       0         0          
-#> # ... with 1,233 more rows
 ```
-
-**README beyond this point is really just scratch for myself**
-
-## Sink nodes and unreachable nodes
-
-``` r
-citation_graph <- sample_pa(100)
-
-citation_tracker <- appr(citation_graph, seeds = "5")
-#> Error in igraph::`V<-`(`*tmp*`, value = `*vtmp*`): invalid indexing
-citation_tracker
-#> Error in eval(expr, envir, enclos): object 'citation_tracker' not found
-```
-
-## Why should I use aPPR?
-
-  - curious about nodes important to the community around a particular
-    user who you wouldn’t find without algorithmic help
-
-  - 1 hop network is too small, 2-3 hop networks are too large (recall
-    diameter of twitter graph is 3.7\!\!\!)
-
-  - want to study a particular community but don’t know exactly which
-    accounts to investigate, but you do have a good idea of one or two
-    important accounts in that community
-
-## `aPPR` calculates an *approximation*
-
-comment on `p = 0` versus `p != 0`
-
-## Advice on choosing `epsilon`
-
-Number of unique visits as a function of `epsilon`, wait times, runtime
-proportion to `1 / (alpha * epsilon)`, etc, etc
-
-speaking strictly in terms of the `p != 0` nodes
-
-1e-4 and 1e-5: finishes quickly, neighbors with high degree get visited
-1e-6: visits most of 1-hop neighborhood. finishes in several hours for
-accounts who follow thousands of people with \~10 tokens. 1e-7: visits
-beyond the 1-hop neighbor by ???. takes a couple days to run with \~10
-tokens. 1e-8: visits *a lot* beyond the 1-hop neighbor, presumably the
-important people in the 2-hop neighbor, ???
-
-the most disparate a users interests, and the less connected their
-neighborhood, the longer it will take to run aPPR
-
-## Limitations
-
-  - Connected graph assumption, what results look like when we violate
-    this assumption
-  - Sampling is one node at a time
-
-## Speed ideas
-
-compute is not an issue relative to actually getting data
-
-Compute time \~ access from Ram time \<\< access from disk time \<\<
-access from network time.
-
-Make requests to API in bulk, memoize everything, cache / write to disk
-in a separate process?
-
-General pattern: cache on disk, and also in RAM
-
-## Working with `Tracker` objects
-
-See `?Tracker` for details.
 
 ## Ethical considerations
 
-people have a right to choose how public / visible / discoverable their
-information is. if you come across interesting users who are not in the
-public eye, do not elevate them into the public eye or increase
-attention on their accounts without their permission.
+People have a right to choose how public and discoverable their
+information is. `aPPR` will often lead you to accounts that interesting,
+but also small and out of sights. Do not change the public profile or
+attention towards these the people running these accounts, or any other
+accounts, without their permission.
 
 # References
 
