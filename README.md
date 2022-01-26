@@ -117,7 +117,7 @@ alexpghayes_ppr$stats
 
 People have a right to choose how public and discoverable their
 information is. `aPPR` will often lead you to accounts that interesting,
-but also small and out of sights. Do not change the public profile or
+but also small and out of sight. Do not change the public profile or
 attention towards these the people running these accounts, or any other
 accounts, without their permission.
 
