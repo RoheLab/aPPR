@@ -10,9 +10,10 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![CRAN
 status](https://www.r-pkg.org/badges/version/aPPR)](https://CRAN.R-project.org/package=aPPR)
 [![Codecov test
-coverage](https://codecov.io/gh/RoheLab/aPPR/branch/master/graph/badge.svg)](https://codecov.io/gh/RoheLab/aPPR?branch=master)
+coverage](https://codecov.io/gh/RoheLab/aPPR/branch/main/graph/badge.svg)](https://codecov.io/gh/RoheLab/aPPR?branch=main)
 [![R build
 status](https://github.com/RoheLab/aPPR/workflows/R-CMD-check/badge.svg)](https://github.com/RoheLab/aPPR/actions)
+[![R-CMD-check](https://github.com/RoheLab/aPPR/workflows/R-CMD-check/badge.svg)](https://github.com/RoheLab/aPPR/actions)
 <!-- badges: end -->
 
 `aPPR` helps you calculate approximate personalized pageranks from large
@@ -81,9 +82,22 @@ ftrevorc_ppr <- appr(
   epsilon = 1e-3,
   verbose = TRUE
 )
-#> Error in lookup_users(nodes, retryonratelimit = graph$retryonratelimit, : could not find function "lookup_users"
+
 ftrevorc_ppr$stats
-#> Error in eval(expr, envir, enclos): object 'ftrevorc_ppr' not found
+#> # A tibble: 112 × 7
+#>    name                 r     p in_degree out_degree degree_adjusted regularized
+#>    <chr>            <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
+#>  1 7752257741314… 0.0970  0.135        69        117         0.00196     7.67e-8
+#>  2 76228303       0.00656 0          7263       2266         0           0      
+#>  3 1024298722828… 0.00656 0           378        924         0           0      
+#>  4 1264590946144… 0.00656 0           110        183         0           0      
+#>  5 1107711818997… 0.00656 0          3234        395         0           0      
+#>  6 1217315090     0.00656 0         20635        402         0           0      
+#>  7 1120701503763… 0.00656 0           349        243         0           0      
+#>  8 661613         0.00656 0         21236       4569         0           0      
+#>  9 2492016278     0.00656 0          2604        430         0           0      
+#> 10 237572207      0.00656 0           511        188         0           0      
+#> # … with 102 more rows
 ```
 
 ## Find the personalized pagerank of a Twitter user and cache the following network in the process
