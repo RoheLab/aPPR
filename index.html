@@ -134,9 +134,22 @@
   epsilon <span class="op">=</span> <span class="fl">1e-3</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span>
-<span class="co">#&gt; Error in lookup_users(nodes, retryonratelimit = graph$retryonratelimit, : could not find function "lookup_users"</span>
+
 <span class="va">ftrevorc_ppr</span><span class="op">$</span><span class="va">stats</span>
-<span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ftrevorc_ppr' not found</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 112 × 7</span>
+<span class="co">#&gt;    name                 r     p in_degree out_degree degree_adjusted regularized</span>
+<span class="co">#&gt;    &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;           &lt;dbl&gt;       &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 7752257741314… 0.0970  0.135        69        117         0.00196     7.67e-8</span>
+<span class="co">#&gt;  2 76228303       0.00656 0          7263       2266         0           0      </span>
+<span class="co">#&gt;  3 1024298722828… 0.00656 0           378        924         0           0      </span>
+<span class="co">#&gt;  4 1264590946144… 0.00656 0           110        183         0           0      </span>
+<span class="co">#&gt;  5 1107711818997… 0.00656 0          3234        395         0           0      </span>
+<span class="co">#&gt;  6 1217315090     0.00656 0         20635        402         0           0      </span>
+<span class="co">#&gt;  7 1120701503763… 0.00656 0           349        243         0           0      </span>
+<span class="co">#&gt;  8 661613         0.00656 0         21236       4569         0           0      </span>
+<span class="co">#&gt;  9 2492016278     0.00656 0          2604        430         0           0      </span>
+<span class="co">#&gt; 10 237572207      0.00656 0           511        188         0           0      </span>
+<span class="co">#&gt; # … with 102 more rows</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process">Find the personalized pagerank of a Twitter user and cache the following network in the process<a class="anchor" aria-label="anchor" href="#find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process"></a>
@@ -207,10 +220,9 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.tidyverse.org/lifecycle/#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://github.com/RoheLab/aPPR/actions" class="external-link"><img src="https://github.com/RoheLab/aPPR/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://CRAN.R-project.org/package=aPPR" class="external-link"><img src="https://www.r-pkg.org/badges/version/aPPR" alt="CRAN status"></a></li>
-<li><a href="https://codecov.io/gh/RoheLab/aPPR?branch=master" class="external-link"><img src="https://codecov.io/gh/RoheLab/aPPR/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://github.com/RoheLab/aPPR/actions" class="external-link"><img src="https://github.com/RoheLab/aPPR/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 </ul>
 </div>
 
