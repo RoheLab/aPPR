@@ -26,7 +26,7 @@ appr(
 }
 \arguments{
 \item{graph}{An \code{\link[=abstract_graph]{abstract_graph()}} object, such as those created by
-\code{\link[=rtweet_graph]{rtweet_graph()}} and \code{\link[=twittercache_graph]{twittercache_graph()}}, and \code{\link[igraph:aaa-igraph-package]{igraph::igraph()}}
+\code{\link[=rtweet_graph]{rtweet_graph()}} and \code{\link[=neocache_graph]{neocache_graph()}}, and \code{\link[igraph:aaa-igraph-package]{igraph::igraph()}}
 object. This argument is required.}
 
 \item{seeds}{A character vector of seeds for the personalized pagerank.
@@ -77,7 +77,7 @@ in-degree plus \code{tau}.
 }
 
 When computing personalized pageranks for Twitter users (either
-via \code{\link[=rtweet_graph]{rtweet_graph()}} or \code{\link[=twittercache_graph]{twittercache_graph()}}), \code{name} is given
+via \code{\link[=rtweet_graph]{rtweet_graph()}} or \code{\link[=neocache_graph]{neocache_graph()}}), \code{name} is given
 as a user ID, not a screen name, regardless of how the seed nodes
 were specified.
 }

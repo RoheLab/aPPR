@@ -3,8 +3,8 @@
 #' Signifies that `aPPR` should query the Twitter friendship graph via
 #' `neocache`.
 #'
-#' @param attempts The number of times to attempt an API request before
-#'   moving on or erroring.
+#' @param cache_name The name of the `neocache` to use to save data into.
+#' @inheritParams rtweet::get_friends
 #'
 #' @export
 #' @examples
@@ -41,7 +41,7 @@ neocache_graph <- function(cache_name = "aPPR", retryonratelimit = TRUE) {
   agraph <- abstract_graph(
     "neocache_graph",
     cache_name = cache_name,
-    retryonratelimit = retryonratelimit,
+    retryonratelimit = retryonratelimit
   )
 
   agraph
@@ -58,10 +58,10 @@ appr.neocache_graph <- function(graph, seeds, ...) {
     )
   }
 
-  seed_data <- rtweet::lookup_users(seeds, retryonratelimit = TRUE)
+  seed_data <- rtweet::lookup_users(seeds, retryonratelimit = graph$retryonratelimit)
 
   # convert seeds, potentially passed as screen names, to user ids
-  seeds <- seed_data$user_id
+  seeds <- seed_data$id_str
 
   # have to double call the API to get information safely into the cache
   neocache::nc_lookup_users(seeds, cache_name = graph$cache_name)

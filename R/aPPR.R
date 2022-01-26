@@ -8,7 +8,7 @@
 #' multiple runs, decrease `epsilon`.
 #'
 #' @param graph An [abstract_graph()] object, such as those created by
-#'   [rtweet_graph()] and [twittercache_graph()], and [igraph::igraph()]
+#'   [rtweet_graph()] and [neocache_graph()], and [igraph::igraph()]
 #'   object. This argument is required.
 #'
 #' @param seeds A character vector of seeds for the personalized pagerank.
@@ -57,7 +57,7 @@
 #'     in-degree plus `tau`.
 #'
 #' When computing personalized pageranks for Twitter users (either
-#' via [rtweet_graph()] or [twittercache_graph()]), `name` is given
+#' via [rtweet_graph()] or [neocache_graph()]), `name` is given
 #' as a user ID, not a screen name, regardless of how the seed nodes
 #' were specified.
 #'

@@ -57,7 +57,7 @@ node_degrees <- function(graph, nodes) {
 #' This function is memorized to avoid making repeated API queries.
 #'
 #' @param graph A graph object.
-#' @param nodes The name of a single node in `graph` as a character vector.
+#' @param node The name of a single node in `graph` as a character vector.
 #'
 #' @return A character vector of all nodes in `graph` connected such that
 #'   there is an outgoing edge for `node` to those nodes. This should

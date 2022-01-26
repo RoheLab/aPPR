@@ -77,7 +77,7 @@ node_degrees.rtweet_graph <- function(graph, nodes) {
   # assumes that you want any errors / empty rows when accessing this
   # data, i.e. that the nodes have already been checked
 
-  node_data <- lookup_users(
+  node_data <- rtweet::lookup_users(
     nodes,
     retryonratelimit = graph$retryonratelimit,
     verbose = graph$verbose

@@ -20,7 +20,7 @@ can result in long runtimes.}
 progress. Defaults to \code{TRUE}.}
 }
 \value{
-
+A new \code{Tracker} object with a new value of \code{epsilon}.
 }
 \description{
 Typically because results are insufficiently precise.

@@ -23,15 +23,15 @@ Description: aPPR helps you approximate personalized PageRank vectors for
 License: file LICENSE
 URL: https://github.com/RoheLab/aPPR
 BugReports: https://github.com/RoheLab/aPPR/issues
-Depends: 
-    R6
 Imports: 
     glue,
     logger,
     memoise,
     neocache (>= 0.0.0.9000),
     ellipsis,
+    R6,
     tibble,
+    pander
 Suggests: 
     covr,
     igraph (>= 1.2.5),
@@ -41,7 +41,7 @@ Suggests:
     rtweet (>= 0.7.0.9011)
 VignetteBuilder: 
     knitr
-Remotes:  
+Remotes: 
     alexpghayes/neocache,
     ropensci/rtweet
 Encoding: UTF-8

@@ -10,7 +10,7 @@
 #'
 #' @inheritParams appr
 #'
-#' @return
+#' @return A new `Tracker` object with a new value of `epsilon`.
 #' @export
 #'
 update.Tracker <- function(object, ..., epsilon, verbose = TRUE) {

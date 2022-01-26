@@ -1,5 +1,7 @@
 #' R6 class to manage personalized pagerank calculations
 #'
+#' @importFrom R6 R6Class
+#'
 Tracker <- R6Class("Tracker", list(
 
   #' @field seeds A character vector of the seed nodes.

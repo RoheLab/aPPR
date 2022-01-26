@@ -7,8 +7,19 @@
 neocache_graph(cache_name = "aPPR", retryonratelimit = TRUE)
 }
 \arguments{
-\item{attempts}{The number of times to attempt an API request before
-moving on or erroring.}
+\item{cache_name}{The name of the \code{neocache} to use to save data into.}
+
+\item{retryonratelimit}{If \code{TRUE}, and a rate limit is exhausted, will wait
+until it refreshes. Most Twitter rate limits refresh every 15 minutes.
+If \code{FALSE}, and the rate limit is exceeded, the function will terminate
+early with a warning; you'll still get back all results received up to
+that point. The default value, \code{NULL}, consults the option
+\code{rtweet.retryonratelimit} so that you can globally set it to \code{TRUE},
+if desired.
+
+If you expect a query to take hours or days to perform, you should not
+rely soley on \code{retryonratelimit} because it does not handle other common
+failure modes like temporarily losing your internet connection.}
 }
 \description{
 Signifies that \code{aPPR} should query the Twitter friendship graph via

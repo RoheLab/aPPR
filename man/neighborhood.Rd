@@ -9,7 +9,7 @@ neighborhood(graph, node)
 \arguments{
 \item{graph}{A graph object.}
 
-\item{nodes}{The name of a single node in \code{graph} as a character vector.}
+\item{node}{The name of a single node in \code{graph} as a character vector.}
 }
 \value{
 A character vector of all nodes in \code{graph} connected such that
