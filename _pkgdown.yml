@@ -8,4 +8,4 @@ development:
 template:
   bootstrap: 5
   params:
-    bootswatch: sketchy
+    bootswatch: flatly

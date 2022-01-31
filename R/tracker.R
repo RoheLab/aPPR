@@ -315,7 +315,7 @@ Tracker <- R6Class("Tracker", list(
     remaining <- self$remaining()
     unique_visits_so_far <- length(unique(self$path))
 
-    log_info(glue("Visits: {length(self$path)} total / {unique_visits_so_far} unique / {length(remaining)} remaining."))
+    log_info(glue("Visits: {length(self$path)} total / {unique_visits_so_far} unique out of max of {self$max_visits} / {length(remaining)} remaining."))
 
     while (length(remaining) > 0) {
 

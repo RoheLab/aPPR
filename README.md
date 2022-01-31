@@ -23,7 +23,7 @@ To learn more about `aPPR` you can:
     [JSM2021](https://github.com/alexpghayes/JSM2021) talk
 2.  Read the accompanying [paper](https://arxiv.org/abs/1910.12937)
 
-## Installation
+### Installation
 
 You can install the development version from
 [GitHub](https://github.com/) with:
@@ -33,7 +33,7 @@ You can install the development version from
 devtools::install_github("RoheLab/aPPR")
 ```
 
-## Find the personalized pagerank of a node in an `igraph` graph
+### Find the personalized pagerank of a node in an `igraph` graph
 
 ``` r
 library(aPPR)
@@ -109,9 +109,9 @@ limited_visits_tracker <- appr(
   erdos_renyi_graph,   
   seeds = "5",         
   epsilon = 1e-10,     
-  max_visits = 20      # maximum number of unique nodes to visit during approximation
+  max_visits = 20      # max unique nodes to visit during approximation
 )
-
+#> Warning: Maximum visits reached. Finishing aPPR calculation early.
 limited_visits_tracker
 #> Personalized PageRank Approximator
 #> ----------------------------------
@@ -143,7 +143,7 @@ limited_visits_tracker
 #> # … with 90 more rows
 ```
 
-## Find the personalized pagerank of a Twitter user using `rtweet`
+### Find the personalized pagerank of a Twitter user using `rtweet`
 
 ``` r
 ftrevorc_ppr <- appr(
@@ -152,7 +152,7 @@ ftrevorc_ppr <- appr(
   epsilon = 1e-4,
   max_visits = 5
 )
-
+#> Warning: Maximum visits reached. Finishing aPPR calculation early.
 ftrevorc_ppr
 #> Personalized PageRank Approximator
 #> ----------------------------------
@@ -178,13 +178,13 @@ ftrevorc_ppr
 #>  5 1024298722828… 0.00563 0           378        927         0           0      
 #>  6 1264590946144… 0.00563 0           112        184         0           0      
 #>  7 1107711818997… 0.00563 0          3243        397         0           0      
-#>  8 1217315090     0.00563 0         20639        402         0           0      
+#>  8 1217315090     0.00563 0         20638        402         0           0      
 #>  9 1120701503763… 0.00563 0           349        243         0           0      
 #> 10 661613         0.00563 0         21315       4578         0           0      
 #> # … with 156 more rows
 ```
 
-## Find the personalized pagerank of a Twitter user and cache the following network in the process
+### Find the personalized pagerank of a Twitter user and cache the following network in the process
 
 **NOTE**: As of January 2022, the following does not work due to a
 change in the `rtweet` dev version that we have not yet updated
@@ -200,9 +200,9 @@ alexpghayes_ppr <- appr(
 alexpghayes_ppr$stats
 ```
 
-## Logging
+### Logging
 
-`aPPR` uses [`logger`](https://daroczig.github.io/logger/) and
+`aPPR` uses [`logger`](https://daroczig.github.io/logger/) for
 displaying information to the user. By default, `aPPR` is quite verbose.
 You can control verbosity by loading `logger` and setting the logging
 threshold.
@@ -213,42 +213,11 @@ library(logger)
 # hide basically all messages (not recommended)
 log_threshold(FATAL, namespace = "aPPR")
 
-ftrevorc_ppr <- appr(
-  rtweet_graph(),
-  "ftrevorc",
-  epsilon = 1e-4,
-  max_visits = 5
+appr(
+  erdos_renyi_graph,   # the graph to work with
+  seeds = "5",         # name of seed node (character)
+  epsilon = 0.0005     # desired approximation quality (see ?appr)
 )
-
-ftrevorc_ppr
-#> Personalized PageRank Approximator
-#> ----------------------------------
-#> 
-#>   - number of seeds: 1
-#>   - visits so far: 5
-#>   - unique nodes visited so far: 5 out of maximum of 5
-#>   - bad nodes so far: 8
-#> 
-#>   - teleportation constant (alpha): 0.15
-#>   - desired approximation error (epsilon): 1e-04
-#>   - achieved bound on approximation error: 0.00386100386100386
-#>   - current length of to-visit list: 6
-#> 
-#> PPR table (see $stats field):
-#> # A tibble: 194 × 7
-#>    name                r      p in_degree out_degree degree_adjusted regularized
-#>    <chr>           <dbl>  <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
-#>  1 775225774131… 0.459   0.0811        69        119         0.00118     2.97e-8
-#>  2 938120895872… 0.00386 0            371        179         0           0      
-#>  3 135900375606… 0.00386 0            229        115         0           0      
-#>  4 76228303      0.00386 0           7257       2270         0           0      
-#>  5 102429872282… 0.00386 0            378        927         0           0      
-#>  6 126459094614… 0.00386 0            112        184         0           0      
-#>  7 110771181899… 0.00386 0           3243        397         0           0      
-#>  8 1217315090    0.00386 0          20639        402         0           0      
-#>  9 112070150376… 0.00386 0            349        243         0           0      
-#> 10 661613        0.00386 0          21315       4578         0           0      
-#> # … with 184 more rows
 ```
 
 If you submit a bug report, please please please include a log file
@@ -272,7 +241,7 @@ tracker <- appr(
 )
 ```
 
-## Ethical considerations
+### Ethical considerations
 
 People have a right to choose how public and discoverable their
 information is. `aPPR` will often lead you to accounts that interesting,
@@ -280,11 +249,14 @@ but also small and out of sight. Do not change the public profile or
 attention towards these the people running these accounts, or any other
 accounts, without their permission.
 
-# References
+### References
 
-1.  Chen, F., Zhang, Y. & Rohe, K. *Targeted sampling from massive
-    Blockmodel graphs with personalized PageRank*. 2019.
-    [pdf](https://arxiv.org/abs/1910.12937)
+1.  Chen, Fan, Yini Zhang, and Karl Rohe. “Targeted Sampling from
+    Massive Block Model Graphs with Personalized PageRank.” Journal of
+    the Royal Statistical Society: Series B (Statistical Methodology)
+    82, no. 1 (February 2020): 99–126.
+    <https://doi.org/10.1111/rssb.12349>. [arxiv
+    pdf](https://arxiv.org/abs/1910.12937)
 
 2.  Andersen, R., Chung, F. & Lang, K. *Local Graph Partitioning using
     PageRank Vectors*. 2006.
