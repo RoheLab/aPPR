@@ -6,5 +6,6 @@ development:
   mode: auto
 
 template:
+  bootstrap: 5
   params:
     bootswatch: paper
