@@ -30,7 +30,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
     
     <a class="navbar-brand me-2" href="index.html">aPPR</a>
 
@@ -77,17 +77,17 @@
 <li>Read the accompanying <a href="https://arxiv.org/abs/1910.12937" class="external-link">paper</a>
 </li>
 </ol>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
+<div class="section level3">
+<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h3>
 <p>You can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"RoheLab/aPPR"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="find-the-personalized-pagerank-of-a-node-in-an-igraph-graph">Find the personalized pagerank of a node in an <code>igraph</code> graph<a class="anchor" aria-label="anchor" href="#find-the-personalized-pagerank-of-a-node-in-an-igraph-graph"></a>
-</h2>
+<div class="section level3">
+<h3 id="find-the-personalized-pagerank-of-a-node-in-an-igraph-graph">Find the personalized pagerank of a node in an <code>igraph</code> graph<a class="anchor" aria-label="anchor" href="#find-the-personalized-pagerank-of-a-node-in-an-igraph-graph"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RoheLab/aPPR" class="external-link">aPPR</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org" class="external-link">igraph</a></span><span class="op">)</span>
@@ -154,9 +154,9 @@
   <span class="va">erdos_renyi_graph</span>,   
   seeds <span class="op">=</span> <span class="st">"5"</span>,         
   epsilon <span class="op">=</span> <span class="fl">1e-10</span>,     
-  max_visits <span class="op">=</span> <span class="fl">20</span>      <span class="co"># maximum number of unique nodes to visit during approximation</span>
+  max_visits <span class="op">=</span> <span class="fl">20</span>      <span class="co"># max unique nodes to visit during approximation</span>
 <span class="op">)</span>
-
+<span class="co">#&gt; Warning: Maximum visits reached. Finishing aPPR calculation early.</span>
 <span class="va">limited_visits_tracker</span>
 <span class="co">#&gt; Personalized PageRank Approximator</span>
 <span class="co">#&gt; ----------------------------------</span>
@@ -187,10 +187,10 @@
 <span class="co">#&gt; 10 21    0.0138 0            55         55         0           0      </span>
 <span class="co">#&gt; # … with 90 more rows</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="find-the-personalized-pagerank-of-a-twitter-user-using-rtweet">Find the personalized pagerank of a Twitter user using <code>rtweet</code>
+<div class="section level3">
+<h3 id="find-the-personalized-pagerank-of-a-twitter-user-using-rtweet">Find the personalized pagerank of a Twitter user using <code>rtweet</code>
 <a class="anchor" aria-label="anchor" href="#find-the-personalized-pagerank-of-a-twitter-user-using-rtweet"></a>
-</h2>
+</h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ftrevorc_ppr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
   <span class="fu"><a href="reference/rtweet_graph.html">rtweet_graph</a></span><span class="op">(</span><span class="op">)</span>,
@@ -198,7 +198,7 @@
   epsilon <span class="op">=</span> <span class="fl">1e-4</span>,
   max_visits <span class="op">=</span> <span class="fl">5</span>
 <span class="op">)</span>
-
+<span class="co">#&gt; Warning: Maximum visits reached. Finishing aPPR calculation early.</span>
 <span class="va">ftrevorc_ppr</span>
 <span class="co">#&gt; Personalized PageRank Approximator</span>
 <span class="co">#&gt; ----------------------------------</span>
@@ -224,14 +224,14 @@
 <span class="co">#&gt;  5 1024298722828… 0.00563 0           378        927         0           0      </span>
 <span class="co">#&gt;  6 1264590946144… 0.00563 0           112        184         0           0      </span>
 <span class="co">#&gt;  7 1107711818997… 0.00563 0          3243        397         0           0      </span>
-<span class="co">#&gt;  8 1217315090     0.00563 0         20639        402         0           0      </span>
+<span class="co">#&gt;  8 1217315090     0.00563 0         20638        402         0           0      </span>
 <span class="co">#&gt;  9 1120701503763… 0.00563 0           349        243         0           0      </span>
 <span class="co">#&gt; 10 661613         0.00563 0         21315       4578         0           0      </span>
 <span class="co">#&gt; # … with 156 more rows</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process">Find the personalized pagerank of a Twitter user and cache the following network in the process<a class="anchor" aria-label="anchor" href="#find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process"></a>
-</h2>
+<div class="section level3">
+<h3 id="find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process">Find the personalized pagerank of a Twitter user and cache the following network in the process<a class="anchor" aria-label="anchor" href="#find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process"></a>
+</h3>
 <p><strong>NOTE</strong>: As of January 2022, the following does not work due to a change in the <code>rtweet</code> dev version that we have not yet updated <code>neocache</code> to accommodate.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alexpghayes_ppr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
@@ -242,52 +242,21 @@
 
 <span class="va">alexpghayes_ppr</span><span class="op">$</span><span class="va">stats</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="logging">Logging<a class="anchor" aria-label="anchor" href="#logging"></a>
-</h2>
-<p><code>aPPR</code> uses <a href="https://daroczig.github.io/logger/" class="external-link"><code>logger</code></a> and displaying information to the user. By default, <code>aPPR</code> is quite verbose. You can control verbosity by loading <code>logger</code> and setting the logging threshold.</p>
+<div class="section level3">
+<h3 id="logging">Logging<a class="anchor" aria-label="anchor" href="#logging"></a>
+</h3>
+<p><code>aPPR</code> uses <a href="https://daroczig.github.io/logger/" class="external-link"><code>logger</code></a> for displaying information to the user. By default, <code>aPPR</code> is quite verbose. You can control verbosity by loading <code>logger</code> and setting the logging threshold.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daroczig.github.io/logger/" class="external-link">logger</a></span><span class="op">)</span>
 
 <span class="co"># hide basically all messages (not recommended)</span>
 <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_threshold.html" class="external-link">log_threshold</a></span><span class="op">(</span><span class="va">FATAL</span>, namespace <span class="op">=</span> <span class="st">"aPPR"</span><span class="op">)</span>
 
-<span class="va">ftrevorc_ppr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
-  <span class="fu"><a href="reference/rtweet_graph.html">rtweet_graph</a></span><span class="op">(</span><span class="op">)</span>,
-  <span class="st">"ftrevorc"</span>,
-  epsilon <span class="op">=</span> <span class="fl">1e-4</span>,
-  max_visits <span class="op">=</span> <span class="fl">5</span>
-<span class="op">)</span>
-
-<span class="va">ftrevorc_ppr</span>
-<span class="co">#&gt; Personalized PageRank Approximator</span>
-<span class="co">#&gt; ----------------------------------</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;   - number of seeds: 1</span>
-<span class="co">#&gt;   - visits so far: 5</span>
-<span class="co">#&gt;   - unique nodes visited so far: 5 out of maximum of 5</span>
-<span class="co">#&gt;   - bad nodes so far: 8</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;   - teleportation constant (alpha): 0.15</span>
-<span class="co">#&gt;   - desired approximation error (epsilon): 1e-04</span>
-<span class="co">#&gt;   - achieved bound on approximation error: 0.00386100386100386</span>
-<span class="co">#&gt;   - current length of to-visit list: 6</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; PPR table (see $stats field):</span>
-<span class="co">#&gt; # A tibble: 194 × 7</span>
-<span class="co">#&gt;    name                r      p in_degree out_degree degree_adjusted regularized</span>
-<span class="co">#&gt;    &lt;chr&gt;           &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;           &lt;dbl&gt;       &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 775225774131… 0.459   0.0811        69        119         0.00118     2.97e-8</span>
-<span class="co">#&gt;  2 938120895872… 0.00386 0            371        179         0           0      </span>
-<span class="co">#&gt;  3 135900375606… 0.00386 0            229        115         0           0      </span>
-<span class="co">#&gt;  4 76228303      0.00386 0           7257       2270         0           0      </span>
-<span class="co">#&gt;  5 102429872282… 0.00386 0            378        927         0           0      </span>
-<span class="co">#&gt;  6 126459094614… 0.00386 0            112        184         0           0      </span>
-<span class="co">#&gt;  7 110771181899… 0.00386 0           3243        397         0           0      </span>
-<span class="co">#&gt;  8 1217315090    0.00386 0          20639        402         0           0      </span>
-<span class="co">#&gt;  9 112070150376… 0.00386 0            349        243         0           0      </span>
-<span class="co">#&gt; 10 661613        0.00386 0          21315       4578         0           0      </span>
-<span class="co">#&gt; # … with 184 more rows</span></code></pre></div>
+<span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
+  <span class="va">erdos_renyi_graph</span>,   <span class="co"># the graph to work with</span>
+  seeds <span class="op">=</span> <span class="st">"5"</span>,         <span class="co"># name of seed node (character)</span>
+  epsilon <span class="op">=</span> <span class="fl">0.0005</span>     <span class="co"># desired approximation quality (see ?appr)</span>
+<span class="op">)</span></code></pre></div>
 <p>If you submit a bug report, please please please include a log file using the TRACE threshold. You can set up this kind of detailed logging via the following:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_appender.html" class="external-link">log_appender</a></span><span class="op">(</span>
@@ -305,21 +274,20 @@
   epsilon <span class="op">=</span> <span class="fl">1e-6</span>
 <span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="ethical-considerations">Ethical considerations<a class="anchor" aria-label="anchor" href="#ethical-considerations"></a>
-</h2>
+<div class="section level3">
+<h3 id="ethical-considerations">Ethical considerations<a class="anchor" aria-label="anchor" href="#ethical-considerations"></a>
+</h3>
 <p>People have a right to choose how public and discoverable their information is. <code>aPPR</code> will often lead you to accounts that interesting, but also small and out of sight. Do not change the public profile or attention towards these the people running these accounts, or any other accounts, without their permission.</p>
 </div>
-</div>
-<div class="section level1">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1>
+<div class="section level3">
+<h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h3>
 <ol style="list-style-type: decimal">
-<li><p>Chen, F., Zhang, Y. &amp; Rohe, K. <em>Targeted sampling from massive Blockmodel graphs with personalized PageRank</em>. 2019. <a href="https://arxiv.org/abs/1910.12937" class="external-link">pdf</a></p></li>
+<li><p>Chen, Fan, Yini Zhang, and Karl Rohe. “Targeted Sampling from Massive Block Model Graphs with Personalized PageRank.” Journal of the Royal Statistical Society: Series B (Statistical Methodology) 82, no. 1 (February 2020): 99–126. <a href="https://doi.org/10.1111/rssb.12349" class="external-link uri">https://doi.org/10.1111/rssb.12349</a>. <a href="https://arxiv.org/abs/1910.12937" class="external-link">arxiv pdf</a></p></li>
 <li><p>Andersen, R., Chung, F. &amp; Lang, K. <em>Local Graph Partitioning using PageRank Vectors</em>. 2006. <a href="http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf" class="external-link">pdf</a></p></li>
 </ol>
 </div>
-
+</div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -331,8 +299,8 @@
 <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li>file <a href="LICENSE-text.html">LICENSE</a>
-</li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
 

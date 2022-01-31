@@ -1,14 +1,21 @@
 @font-face {
-  font-family: 'Cabin Sketch';
-  font-style: normal;
+  font-family: 'Lato';
+  font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url(fonts/QGYpz_kZZAGCONcK2A4bGOj8mNhL.woff) format('woff');
+  src: url(fonts/S6u8w4BMUTPHjxswWA.woff) format('woff');
 }
 @font-face {
-  font-family: 'Neucha';
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(fonts/q5uGsou0JOdh94bfvQlr.woff) format('woff');
+  src: url(fonts/S6uyw4BMUTPHvxo.woff) format('woff');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/S6u9w4BMUTPHh6UVeww.woff) format('woff');
 }
