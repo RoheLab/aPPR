@@ -20,7 +20,7 @@ Description: aPPR helps you approximate personalized PageRank vectors for
     aPPR additionally performs degree correction and regularization,
     allowing discovery of community structure under some stochastic block
     models.
-License: file LICENSE
+License: MIT + file LICENSE
 URL: https://github.com/RoheLab/aPPR
 BugReports: https://github.com/RoheLab/aPPR/issues
 Imports: 
