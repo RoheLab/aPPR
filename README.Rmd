@@ -123,6 +123,9 @@ appr(
 If you submit a bug report, please please please include a log file using the TRACE threshold. You can set up this kind of detailed logging via the following:
 
 ```{r log-file-example, eval = FALSE}
+
+set.seed(528491)  # be sure to set seed for bug reports
+
 log_appender(
   appender_file(
     "/path/to/logfile.log"  ## TODO: choose a path to log to
