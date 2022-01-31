@@ -14,12 +14,12 @@ test_that("matches igraph calculations on connected graph", {
   g3 <- make_ring(10)
 
   # make every node a seed node to recover page rank
-  appr_ppr <- appr(g3, seeds = as.character(1:10), verbose = FALSE)
+  appr_ppr <- appr(g3, seeds = as.character(1:10))
 
   # close enough but currently failing
   expect_equal(sum(appr_ppr$stats$p), 1, tolerance = 1e-4)
 
-  appr_ppr2 <- appr(g3, seeds = "1", verbose = FALSE)
+  appr_ppr2 <- appr(g3, seeds = "1")
 
   igraph_ppr <- page_rank(g3, personalized = prefer(1, 10))$vector
 
@@ -36,12 +36,12 @@ test_that("matches igraph calculations on connected graph", {
 #   ig <- sample_pa(100)
 #
 #   # make every node a seed node to recover page rank
-#   appr_ppr <- appr(ig, seeds = as.character(2:10), verbose = FALSE)
+#   appr_ppr <- appr(ig, seeds = as.character(2:10))
 #
 #   # close enough but currently failing
 #   expect_equal(sum(appr_ppr$stats$p), 1, tolerance = 1e-5)
 #
-#   appr_ppr2 <- appr(ig, seeds = "1", verbose = FALSE)
+#   appr_ppr2 <- appr(ig, seeds = "1")
 #
 #   igraph_ppr <- page_rank(ig, personalized = prefer(1, 10))$vector
 #

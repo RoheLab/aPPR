@@ -6,7 +6,7 @@
 #' @inheritParams rtweet::get_friends
 #'
 #' @export
-rtweet_graph <- function(retryonratelimit = TRUE, verbose = FALSE, n = 5000) {
+rtweet_graph <- function(retryonratelimit = TRUE, verbose = TRUE, n = 5000) {
 
   agraph <- abstract_graph(
     "rtweet_graph",

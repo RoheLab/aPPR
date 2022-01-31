@@ -4,7 +4,7 @@
 \alias{rtweet_graph}
 \title{Create an abstract representation of the Twitter friendship graph}
 \usage{
-rtweet_graph(retryonratelimit = TRUE, verbose = FALSE, n = 5000)
+rtweet_graph(retryonratelimit = TRUE, verbose = TRUE, n = 5000)
 }
 \arguments{
 \item{retryonratelimit}{If \code{TRUE}, and a rate limit is exhausted, will wait

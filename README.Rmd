@@ -53,11 +53,29 @@ erdos_renyi_graph <- sample_gnp(n = 100, p = 0.5)
 erdos_tracker <- appr(
   erdos_renyi_graph,   # the graph to work with
   seeds = "5",         # name of seed node (character)
-  epsilon = 0.0005,    # convergence criterion (see below)
-  verbose = FALSE
+  epsilon = 0.0005     # desired approximation quality (see ?appr)
 )
 
 erdos_tracker
+```
+
+You can access the Personalized PageRanks themselves via the `stats` field of `Tracker` objects.
+
+```{r}
+erdos_tracker$stats
+```
+
+Sometimes you may wish to limit computation time by limiting the number of nodes to visit, which you can do as follows:
+
+```{r igraph-example2}
+limited_visits_tracker <- appr(
+  erdos_renyi_graph,   
+  seeds = "5",         
+  epsilon = 1e-10,     
+  max_visits = 20      # maximum number of unique nodes to visit during approximation
+)
+
+limited_visits_tracker
 ```
 
 ## Find the personalized pagerank of a Twitter user using `rtweet`
@@ -66,11 +84,11 @@ erdos_tracker
 ftrevorc_ppr <- appr(
   rtweet_graph(),
   "ftrevorc",
-  epsilon = 1e-3,
-  verbose = TRUE
+  epsilon = 1e-4,
+  max_visits = 5
 )
 
-ftrevorc_ppr$stats
+ftrevorc_ppr
 ```
 
 ## Find the personalized pagerank of a Twitter user and cache the following network in the process
@@ -81,11 +99,49 @@ ftrevorc_ppr$stats
 alexpghayes_ppr <- appr(
   neocache_graph(),
   "alexpghayes",
-  epsilon = 1e-4,
-  verbose = TRUE
+  epsilon = 1e-4
 )
 
 alexpghayes_ppr$stats
+```
+
+## Logging
+
+`aPPR` uses [`logger`](https://daroczig.github.io/logger/) for displaying information to the user. By default, `aPPR` is quite verbose. You can control verbosity by loading `logger` and setting the logging threshold.
+
+```{r logging-example-1, warning = FALSE}
+library(logger)
+
+# hide basically all messages (not recommended)
+log_threshold(FATAL, namespace = "aPPR")
+
+ftrevorc_ppr <- appr(
+  rtweet_graph(),
+  "ftrevorc",
+  epsilon = 1e-4,
+  max_visits = 5
+)
+
+ftrevorc_ppr
+```
+
+If you submit a bug report, please please please include a log file using the TRACE threshold. You can set up this kind of detailed logging via the following:
+
+```{r log-file-example, eval = FALSE}
+log_appender(
+  appender_file(
+    "/path/to/logfile.log"  ## TODO: choose a path to log to
+  ),
+  namespace = "aPPR"
+)
+
+log_threshold(TRACE, namespace = "aPPR")
+
+tracker <- appr(
+  rtweet_graph(),
+  seed = c("hadleywickham", "gvanrossum"),
+  epsilon = 1e-6
+)
 ```
 
 ## Ethical considerations
@@ -94,7 +150,7 @@ People have a right to choose how public and discoverable their information is. 
 
 # References
 
-1. Chen, F., Zhang, Y. & Rohe, K. *Targeted sampling from massive Blockmodel graphs with personalized PageRank*. 2019. [pdf][chen]
+1. Chen, Fan, Yini Zhang, and Karl Rohe. “Targeted Sampling from Massive Block Model Graphs with Personalized PageRank.” Journal of the Royal Statistical Society: Series B (Statistical Methodology) 82, no. 1 (February 2020): 99–126. https://doi.org/10.1111/rssb.12349. [arxiv pdf][chen]
 
 2. Andersen, R., Chung, F. & Lang, K. *Local Graph Partitioning using PageRank Vectors*. 2006. [pdf][andersen]
 

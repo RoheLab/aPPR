@@ -15,7 +15,7 @@ appr(
   alpha = 0.15,
   epsilon = 1e-06,
   tau = NULL,
-  verbose = TRUE
+  max_visits = Inf
 )
 
 \method{appr}{igraph}(graph, seeds, ...)
@@ -46,9 +46,26 @@ to a dampening factor of \code{0.85}. Runtime is proportional to
 runtimes.}
 
 \item{epsilon}{Desired accuracy of approximation. \code{epsilon} must be
-a valid probabilty; that is, between zero and one. Defaults to \code{1e-6}.
-Runtime is proportional to \code{1 / (epsilon * alpha)}, so small \code{epsilon}
-can result in long runtimes.}
+a small positive number. Defaults to \code{1e-6}. \code{aPPR} guarantees that
+approximated personalized pageranks are uniformly within \code{epsilon} of
+their true value. That is, the approximation is guaranteed to be good
+in an L-infinity sense. This does not guarantee, however, that
+a ranking of nodes by aPPR is close to a ranking of nodes by PPR.
+
+For Twitter graphs, we recommend testing your code with \code{1e-4} or \code{1e-5},
+using \code{1e-6} for exploration, and \code{1e-7} to \code{1e-8} for final results,
+although these numbers are very rough. It also perfectly reasonable
+to run \code{aPPR} for a given number of steps (set via \code{max_visits}),
+and then note the approximation accuracy of your results. Internally,
+\code{aPPR} keeps a running estimate of achieved accuracy that is always valid.
+
+Anytime you would like to explore more of the graph, you can simply
+decrease \code{epsilon}. So you can start with \code{epsilon = 1e-5} and then
+gradually decrease \code{epsilon} until you have a sample of the graph
+that you are happy with.
+
+Also note that runtime is proportional to \code{1 / (epsilon * alpha)},
+so small \code{epsilon} can result in long runtimes.}
 
 \item{tau}{Regularization term. Additionally inflates the in-degree
 of each observation by this term by performing the degree
@@ -58,15 +75,21 @@ are described in \code{vignette("Mathematical details")}. Defaults to
 the observed nodes. In general, setting it's reasonable to
 set \code{tau} to the average in-degree of the graph.}
 
-\item{verbose}{Logical indicating whether to report on the algorithms
-progress. Defaults to \code{TRUE}.}
+\item{max_visits}{Maximum number of unique nodes to visit. Should be a
+positive integer. Defaults to \code{Inf}, such that there is no upper bound
+on the number of unique nodes to visit. Useful when you want to specify a
+fixed amount of computation (or API calls) to use rather than an
+error tolerance. We recommend debugging with \code{max_visits ~ 20},
+exploration with \code{max_visits} in the hundreds, and \code{max_visits} in the
+thousands to ten of thousands for precise results, although this is a
+very rough heuristic.}
 }
 \value{
 A \code{\link[=Tracker]{Tracker()}} object. Most relevant is the \code{stats} field,
 a \code{\link[tibble:tibble]{tibble::tibble()}} with the following columns:
 \itemize{
 \item \code{name}: Name of a node (character).
-\item \code{p}: Estimated personalized pagerank of a node.
+\item \code{p}: Current estimate of residual per out-degree for a node.
 \item \code{r}: Estimated error of pagerank estimate for a node.
 \item \code{in_degree}: Number of incoming edges to a node.
 \item \code{out_degree}: Number of outcoming edges from a node.

@@ -8,14 +8,14 @@ Tracker <- R6Class("Tracker", list(
   seeds = character(0),
 
   #' @field path A character vector of nodes whose neighborhoods we
-  #'   examine.
+  #'   examined.
   path = character(0),
 
   #' @field stats A [tibble::tibble()] with one row for each visited
   #'   node and the following columns:
   #'
   #'   - `name`: Name of a node (character).
-  #'   - `r`: Current estimate of residual for a node.
+  #'   - `r`: Current estimate of residual per out-degree for a node.
   #'   - `p`: Current estimate of the pagerank for a node.
   #'   - `in_degree`: Number of incoming edges to a node.
   #'   - `out_degree`: Number of outcoming edges from a node.
@@ -37,6 +37,9 @@ Tracker <- R6Class("Tracker", list(
   #' @field epsilon Error tolerance.
   epsilon = numeric(0),
 
+  #' @field max_visits Maximum number of nodes to visit before terminating.
+  max_visits = integer(0),
+
   #' @field tau Regularization parameter used in Algorithm 4.
   tau = numeric(0),
 
@@ -48,16 +51,18 @@ Tracker <- R6Class("Tracker", list(
   #' @param alpha See [appr()].
   #' @param epsilon See [appr()].
   #' @param tau See [appr()].
+  #' @param max_visits See [appr()].
   #'
   #' @return A new `Tracker` object.
   #'
-  initialize = function(graph, alpha, epsilon, tau) {
+  initialize = function(graph, alpha, epsilon, tau, max_visits) {
 
     self$graph <- graph
     self$alpha <- alpha
     self$alpha_prime <- alpha / (2 - alpha)
     self$epsilon <- epsilon
     self$tau <- tau
+    self$max_visits <- max_visits
 
     self$stats <- tibble::tibble(
       name = character(0),
@@ -75,7 +80,20 @@ Tracker <- R6Class("Tracker", list(
   #'
   print = function() {
 
-    cat("A Tracker R6 object with PPR table: \n\n")
+    cat("Personalized PageRank Approximator\n")
+    cat("----------------------------------\n\n")
+
+    cat(glue("  - number of seeds: {length(self$seeds)}\n", .trim = FALSE))
+    cat(glue("  - visits so far: {length(self$path)}\n", .trim = FALSE))
+    cat(glue("  - unique nodes visited so far: {length(unique(self$path))} out of maximum of {self$max_visits}\n", .trim = FALSE))
+    cat(glue("  - bad nodes so far: {length(self$failed)}\n\n", .trim = FALSE))
+
+    cat(glue("  - teleportation constant (alpha): {self$alpha}\n", .trim = FALSE))
+    cat(glue("  - desired approximation error (epsilon): {self$epsilon}\n", .trim = FALSE))
+    cat(glue("  - achieved bound on approximation error: {self$current_approximation_error()}\n", .trim = FALSE))
+    cat(glue("  - current length of to-visit list: {length(self$remaining())}\n\n", .trim = FALSE))
+
+    cat(glue("PPR table (see $stats field):\n\n"))
 
     print(self$stats)
     invisible(self)
@@ -101,6 +119,19 @@ Tracker <- R6Class("Tracker", list(
       return(self$seeds)
 
     self$stats[self$stats$r > self$epsilon * self$stats$out_degree, ]$name
+  },
+
+  #' @description
+  #'
+  #' Determine current quality of approximation.
+  #'
+  #' @return A numeric vector of length one with the current worst
+  #'   error bound.
+  #'
+  current_approximation_error = function() {
+
+    nodewise_approx_error <- self$stats$r / self$stats$out_degree
+    max(nodewise_approx_error)
   },
 
   #' @description
@@ -276,18 +307,22 @@ Tracker <- R6Class("Tracker", list(
   #' Algorithm 3.
   #'
   #' @param node Character name of the node we are currently visiting.
-  #' @param verbose Logical indicating whether to report on the algorithms
-  #'   progress. Defaults to `TRUE`.
   #'
-  calculate_ppr = function(verbose = TRUE) {
+  calculate_ppr = function() {
 
     log_info("Approximating PPR ...")
 
     remaining <- self$remaining()
+    unique_visits_so_far <- length(unique(self$path))
 
-    log_info(glue("Visits: {length(self$path)} total / {length(unique(self$path))} unique / {length(remaining)} remaining."))
+    log_info(glue("Visits: {length(self$path)} total / {unique_visits_so_far} unique / {length(remaining)} remaining."))
 
     while (length(remaining) > 0) {
+
+      if (unique_visits_so_far >= self$max_visits) {
+        warning("Maximum visits reached. Finishing aPPR calculation early.", call. = FALSE)
+        break
+      }
 
       u <- if (length(remaining) == 1) remaining else sample(remaining, size = 1)
 
@@ -345,8 +380,9 @@ Tracker <- R6Class("Tracker", list(
       self$update_r_self(u)
 
       remaining <- self$remaining()
+      unique_visits_so_far <- length(unique(self$path))
 
-      log_info(glue("Visits: {length(self$path)} total / {length(unique(self$path))} unique / {length(remaining)} remaining."))
+      log_info(glue("Visits: {length(self$path)} total / {unique_visits_so_far} unique out of max of {self$max_visits} / {length(remaining)} remaining."))
     }
 
     log_info("Approximating PPR ... done")

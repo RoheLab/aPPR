@@ -14,13 +14,13 @@ R6 class to manage personalized pagerank calculations
 \item{\code{seeds}}{A character vector of the seed nodes.}
 
 \item{\code{path}}{A character vector of nodes whose neighborhoods we
-examine.}
+examined.}
 
 \item{\code{stats}}{A \code{\link[tibble:tibble]{tibble::tibble()}} with one row for each visited
 node and the following columns:
 \itemize{
 \item \code{name}: Name of a node (character).
-\item \code{r}: Current estimate of residual for a node.
+\item \code{r}: Current estimate of residual per out-degree for a node.
 \item \code{p}: Current estimate of the pagerank for a node.
 \item \code{in_degree}: Number of incoming edges to a node.
 \item \code{out_degree}: Number of outcoming edges from a node.
@@ -36,6 +36,8 @@ node and the following columns:
 
 \item{\code{epsilon}}{Error tolerance.}
 
+\item{\code{max_visits}}{Maximum number of nodes to visit before terminating.}
+
 \item{\code{tau}}{Regularization parameter used in Algorithm 4.}
 }
 \if{html}{\out{</div>}}
@@ -46,6 +48,7 @@ node and the following columns:
 \item \href{#method-new}{\code{Tracker$new()}}
 \item \href{#method-print}{\code{Tracker$print()}}
 \item \href{#method-remaining}{\code{Tracker$remaining()}}
+\item \href{#method-current_approximation_error}{\code{Tracker$current_approximation_error()}}
 \item \href{#method-in_tracker}{\code{Tracker$in_tracker()}}
 \item \href{#method-in_failed}{\code{Tracker$in_failed()}}
 \item \href{#method-add_seed}{\code{Tracker$add_seed()}}
@@ -66,7 +69,7 @@ node and the following columns:
 \subsection{Method \code{new()}}{
 Create a new Tracker object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$new(graph, alpha, epsilon, tau)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$new(graph, alpha, epsilon, tau, max_visits)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -79,6 +82,8 @@ Create a new Tracker object.
 \item{\code{epsilon}}{See \code{\link[=appr]{appr()}}.}
 
 \item{\code{tau}}{See \code{\link[=appr]{appr()}}.}
+
+\item{\code{max_visits}}{See \code{\link[=appr]{appr()}}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -112,6 +117,20 @@ we never add nodes with zero out degree into the tracker.
 \subsection{Returns}{
 A character vector of node names with current residuals
 greater than \code{epsilon}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-current_approximation_error"></a>}}
+\if{latex}{\out{\hypertarget{method-current_approximation_error}{}}}
+\subsection{Method \code{current_approximation_error()}}{
+Determine current quality of approximation.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$current_approximation_error()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A numeric vector of length one with the current worst
+error bound.
 }
 }
 \if{html}{\out{<hr>}}
@@ -318,15 +337,12 @@ PageRank as in Algorithm 4, based on the outputs of Algorithm 3.
 Main driver function to perform the computations outlined in
 Algorithm 3.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Tracker$calculate_ppr(verbose = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Tracker$calculate_ppr()}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{verbose}}{Logical indicating whether to report on the algorithms
-progress. Defaults to \code{TRUE}.}
-
 \item{\code{node}}{Character name of the node we are currently visiting.}
 }
 \if{html}{\out{</div>}}

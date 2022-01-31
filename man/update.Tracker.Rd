@@ -4,7 +4,7 @@
 \alias{update.Tracker}
 \title{Update a Tracker object}
 \usage{
-\method{update}{Tracker}(object, ..., epsilon, verbose = TRUE)
+\method{update}{Tracker}(object, ..., epsilon, max_visits)
 }
 \arguments{
 \item{object}{The \code{Tracker} object to update.}
@@ -12,12 +12,35 @@
 \item{...}{Ignored. Passing arguments to \code{...} results in a warning.}
 
 \item{epsilon}{Desired accuracy of approximation. \code{epsilon} must be
-a valid probabilty; that is, between zero and one. Defaults to \code{1e-6}.
-Runtime is proportional to \code{1 / (epsilon * alpha)}, so small \code{epsilon}
-can result in long runtimes.}
+a small positive number. Defaults to \code{1e-6}. \code{aPPR} guarantees that
+approximated personalized pageranks are uniformly within \code{epsilon} of
+their true value. That is, the approximation is guaranteed to be good
+in an L-infinity sense. This does not guarantee, however, that
+a ranking of nodes by aPPR is close to a ranking of nodes by PPR.
 
-\item{verbose}{Logical indicating whether to report on the algorithms
-progress. Defaults to \code{TRUE}.}
+For Twitter graphs, we recommend testing your code with \code{1e-4} or \code{1e-5},
+using \code{1e-6} for exploration, and \code{1e-7} to \code{1e-8} for final results,
+although these numbers are very rough. It also perfectly reasonable
+to run \code{aPPR} for a given number of steps (set via \code{max_visits}),
+and then note the approximation accuracy of your results. Internally,
+\code{aPPR} keeps a running estimate of achieved accuracy that is always valid.
+
+Anytime you would like to explore more of the graph, you can simply
+decrease \code{epsilon}. So you can start with \code{epsilon = 1e-5} and then
+gradually decrease \code{epsilon} until you have a sample of the graph
+that you are happy with.
+
+Also note that runtime is proportional to \code{1 / (epsilon * alpha)},
+so small \code{epsilon} can result in long runtimes.}
+
+\item{max_visits}{Maximum number of unique nodes to visit. Should be a
+positive integer. Defaults to \code{Inf}, such that there is no upper bound
+on the number of unique nodes to visit. Useful when you want to specify a
+fixed amount of computation (or API calls) to use rather than an
+error tolerance. We recommend debugging with \code{max_visits ~ 20},
+exploration with \code{max_visits} in the hundreds, and \code{max_visits} in the
+thousands to ten of thousands for precise results, although this is a
+very rough heuristic.}
 }
 \value{
 A new \code{Tracker} object with a new value of \code{epsilon}.

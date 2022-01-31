@@ -13,10 +13,11 @@
 #' @return A new `Tracker` object with a new value of `epsilon`.
 #' @export
 #'
-update.Tracker <- function(object, ..., epsilon, verbose = TRUE) {
+update.Tracker <- function(object, ..., epsilon, max_visits) {
 
   object$epsilon <- epsilon
-  object$calculate_ppr(verbose)
+  object$max_visits <- max_visits
+  object$calculate_ppr()
   object$regularize()
   object
 }

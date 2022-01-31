@@ -26,9 +26,26 @@
 #'   runtimes.
 #'
 #' @param epsilon Desired accuracy of approximation. `epsilon` must be
-#'   a valid probabilty; that is, between zero and one. Defaults to `1e-6`.
-#'   Runtime is proportional to `1 / (epsilon * alpha)`, so small `epsilon`
-#'   can result in long runtimes.
+#'   a small positive number. Defaults to `1e-6`. `aPPR` guarantees that
+#'   approximated personalized pageranks are uniformly within `epsilon` of
+#'   their true value. That is, the approximation is guaranteed to be good
+#'   in an L-infinity sense. This does not guarantee, however, that
+#'   a ranking of nodes by aPPR is close to a ranking of nodes by PPR.
+#'
+#'   For Twitter graphs, we recommend testing your code with `1e-4` or `1e-5`,
+#'   using `1e-6` for exploration, and `1e-7` to `1e-8` for final results,
+#'   although these numbers are very rough. It also perfectly reasonable
+#'   to run `aPPR` for a given number of steps (set via `max_visits`),
+#'   and then note the approximation accuracy of your results. Internally,
+#'   `aPPR` keeps a running estimate of achieved accuracy that is always valid.
+#'
+#'   Anytime you would like to explore more of the graph, you can simply
+#'   decrease `epsilon`. So you can start with `epsilon = 1e-5` and then
+#'   gradually decrease `epsilon` until you have a sample of the graph
+#'   that you are happy with.
+#'
+#'   Also note that runtime is proportional to `1 / (epsilon * alpha)`,
+#'   so small `epsilon` can result in long runtimes.
 #'
 #' @param tau Regularization term. Additionally inflates the in-degree
 #'   of each observation by this term by performing the degree
@@ -38,16 +55,23 @@
 #'   the observed nodes. In general, setting it's reasonable to
 #'   set `tau` to the average in-degree of the graph.
 #'
-#' @param verbose Logical indicating whether to report on the algorithms
-#'   progress. Defaults to `TRUE`.
+#' @param max_visits Maximum number of unique nodes to visit. Should be a
+#'   positive integer. Defaults to `Inf`, such that there is no upper bound
+#'   on the number of unique nodes to visit. Useful when you want to specify a
+#'   fixed amount of computation (or API calls) to use rather than an
+#'   error tolerance. We recommend debugging with `max_visits ~ 20`,
+#'   exploration with `max_visits` in the hundreds, and `max_visits` in the
+#'   thousands to ten of thousands for precise results, although this is a
+#'   very rough heuristic.
 #'
 #' @param ... Ignored. Passing arguments to `...` results in a warning.
+#'
 #'
 #' @return A [Tracker()] object. Most relevant is the `stats` field,
 #'    a [tibble::tibble()] with the following columns:
 #'
 #'   - `name`: Name of a node (character).
-#'   - `p`: Estimated personalized pagerank of a node.
+#'   - `p`: Current estimate of residual per out-degree for a node.
 #'   - `r`: Estimated error of pagerank estimate for a node.
 #'   - `in_degree`: Number of incoming edges to a node.
 #'   - `out_degree`: Number of outcoming edges from a node.
@@ -89,7 +113,7 @@
 #' ppr_results$stats
 #'
 appr <- function(graph, seeds, ..., alpha = 0.15, epsilon = 1e-6, tau = NULL,
-                 verbose = TRUE) {
+                 max_visits = Inf) {
   ellipsis::check_dots_used()
 
   if (alpha <= 0 || alpha >= 1)
@@ -108,8 +132,8 @@ appr <- function(graph, seeds, ..., alpha = 0.15, epsilon = 1e-6, tau = NULL,
 #' @export
 appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
                                 epsilon = 1e-6, tau = NULL,
-                                verbose = TRUE) {
-  tracker <- Tracker$new(graph, alpha, epsilon, tau)
+                                max_visits = Inf) {
+  tracker <- Tracker$new(graph, alpha, epsilon, tau, max_visits)
 
 
   log_trace("Checking seed nodes ... ")
@@ -131,7 +155,7 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
 
   }
 
-  tracker$calculate_ppr(verbose)
+  tracker$calculate_ppr()
   tracker$regularize()
   tracker
 }
