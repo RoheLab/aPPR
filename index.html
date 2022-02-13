@@ -5,22 +5,20 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="aPPR helps you approximate personalized PageRank vectors for
-    massive graphs, including those that can only be queried via an API.
-    aPPR additionally performs degree correction and regularization,
-    allowing discovery of community structure under some stochastic block
-    models.">
+<meta name="description" content="Calculates approximate and regularized personalized PageRank
+    vectors for massive graphs, including those that can only be queried
+    via an API.  Regularization allows discovery of community structure
+    under some stochastic block models.">
 <title>Approximate Personalized PageRank • aPPR</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Approximate Personalized PageRank">
-<meta property="og:description" content="aPPR helps you approximate personalized PageRank vectors for
-    massive graphs, including those that can only be queried via an API.
-    aPPR additionally performs degree correction and regularization,
-    allowing discovery of community structure under some stochastic block
-    models.">
+<meta property="og:description" content="Calculates approximate and regularized personalized PageRank
+    vectors for massive graphs, including those that can only be queried
+    via an API.  Regularization allows discovery of community structure
+    under some stochastic block models.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -204,49 +202,36 @@
 <span class="co">#&gt; ----------------------------------</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   - number of seeds: 1</span>
-<span class="co">#&gt;   - visits so far: 7</span>
+<span class="co">#&gt;   - visits so far: 6</span>
 <span class="co">#&gt;   - unique nodes visited so far: 5 out of maximum of 5</span>
-<span class="co">#&gt;   - bad nodes so far: 8</span>
+<span class="co">#&gt;   - bad nodes so far: 10</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   - teleportation constant (alpha): 0.15</span>
 <span class="co">#&gt;   - desired approximation error (epsilon): 1e-04</span>
-<span class="co">#&gt;   - achieved bound on approximation error: 0.00258904422527505</span>
-<span class="co">#&gt;   - current length of to-visit list: 7</span>
+<span class="co">#&gt;   - achieved bound on approximation error: 0.00175980395529336</span>
+<span class="co">#&gt;   - current length of to-visit list: 5</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; PPR table (see $stats field):</span>
-<span class="co">#&gt; # A tibble: 166 × 7</span>
+<span class="co">#&gt; # A tibble: 210 × 7</span>
 <span class="co">#&gt;    name                 r     p in_degree out_degree degree_adjusted regularized</span>
 <span class="co">#&gt;    &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;           &lt;dbl&gt;       &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 7752257741314… 0.211   0.118        69        119         0.00171     4.05e-8</span>
-<span class="co">#&gt;  2 9381208958721… 0.00563 0           371        179         0           0      </span>
-<span class="co">#&gt;  3 1359003756063… 0.00563 0           229        115         0           0      </span>
-<span class="co">#&gt;  4 76228303       0.00563 0          7257       2270         0           0      </span>
-<span class="co">#&gt;  5 1024298722828… 0.00563 0           378        927         0           0      </span>
-<span class="co">#&gt;  6 1264590946144… 0.00563 0           112        184         0           0      </span>
-<span class="co">#&gt;  7 1107711818997… 0.00563 0          3243        397         0           0      </span>
-<span class="co">#&gt;  8 1217315090     0.00563 0         20638        402         0           0      </span>
-<span class="co">#&gt;  9 1120701503763… 0.00563 0           349        243         0           0      </span>
-<span class="co">#&gt; 10 661613         0.00563 0         21315       4578         0           0      </span>
-<span class="co">#&gt; # … with 156 more rows</span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process">Find the personalized pagerank of a Twitter user and cache the following network in the process<a class="anchor" aria-label="anchor" href="#find-the-personalized-pagerank-of-a-twitter-user-and-cache-the-following-network-in-the-process"></a>
-</h3>
-<p><strong>NOTE</strong>: As of January 2022, the following does not work due to a change in the <code>rtweet</code> dev version that we have not yet updated <code>neocache</code> to accommodate.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">alexpghayes_ppr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/appr.html">appr</a></span><span class="op">(</span>
-  <span class="fu"><a href="reference/neocache_graph.html">neocache_graph</a></span><span class="op">(</span><span class="op">)</span>,
-  <span class="st">"alexpghayes"</span>,
-  epsilon <span class="op">=</span> <span class="fl">1e-4</span>
-<span class="op">)</span>
-
-<span class="va">alexpghayes_ppr</span><span class="op">$</span><span class="va">stats</span></code></pre></div>
+<span class="co">#&gt;  1 7752257741314… 0.211   0.118        69        120         0.00172     5.50e-8</span>
+<span class="co">#&gt;  2 17163639       0.00559 0         20033       1596         0           0      </span>
+<span class="co">#&gt;  3 9381208958721… 0.00559 0           372        179         0           0      </span>
+<span class="co">#&gt;  4 1359003756063… 0.00559 0           230        116         0           0      </span>
+<span class="co">#&gt;  5 76228303       0.00559 0          7253       2274         0           0      </span>
+<span class="co">#&gt;  6 1024298722828… 0.00559 0           382        829         0           0      </span>
+<span class="co">#&gt;  7 1264590946144… 0.00559 0           116        189         0           0      </span>
+<span class="co">#&gt;  8 1107711818997… 0.00559 0          3404        410         0           0      </span>
+<span class="co">#&gt;  9 1217315090     0.00559 0         20660        402         0           0      </span>
+<span class="co">#&gt; 10 1120701503763… 0.00559 0           354        243         0           0      </span>
+<span class="co">#&gt; # … with 200 more rows</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="logging">Logging<a class="anchor" aria-label="anchor" href="#logging"></a>
 </h3>
 <p><code>aPPR</code> uses <a href="https://daroczig.github.io/logger/" class="external-link"><code>logger</code></a> for displaying information to the user. By default, <code>aPPR</code> is quite verbose. You can control verbosity by loading <code>logger</code> and setting the logging threshold.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daroczig.github.io/logger/" class="external-link">logger</a></span><span class="op">)</span>
 
 <span class="co"># hide basically all messages (not recommended)</span>
@@ -258,8 +243,10 @@
   epsilon <span class="op">=</span> <span class="fl">0.0005</span>     <span class="co"># desired approximation quality (see ?appr)</span>
 <span class="op">)</span></code></pre></div>
 <p>If you submit a bug report, please please please include a log file using the TRACE threshold. You can set up this kind of detailed logging via the following:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_appender.html" class="external-link">log_appender</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">528491</span><span class="op">)</span>  <span class="co"># be sure to set seed for bug reports</span>
+
+<span class="fu"><a href="https://daroczig.github.io/logger/reference/log_appender.html" class="external-link">log_appender</a></span><span class="op">(</span>
   <span class="fu"><a href="https://daroczig.github.io/logger/reference/appender_file.html" class="external-link">appender_file</a></span><span class="op">(</span>
     <span class="st">"/path/to/logfile.log"</span>  <span class="co">## TODO: choose a path to log to</span>
   <span class="op">)</span>,
@@ -283,8 +270,8 @@
 <h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h3>
 <ol style="list-style-type: decimal">
-<li><p>Chen, Fan, Yini Zhang, and Karl Rohe. “Targeted Sampling from Massive Block Model Graphs with Personalized PageRank.” Journal of the Royal Statistical Society: Series B (Statistical Methodology) 82, no. 1 (February 2020): 99–126. <a href="https://doi.org/10.1111/rssb.12349" class="external-link uri">https://doi.org/10.1111/rssb.12349</a>. <a href="https://arxiv.org/abs/1910.12937" class="external-link">arxiv pdf</a></p></li>
-<li><p>Andersen, R., Chung, F. &amp; Lang, K. <em>Local Graph Partitioning using PageRank Vectors</em>. 2006. <a href="http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf" class="external-link">pdf</a></p></li>
+<li><p>Chen, Fan, Yini Zhang, and Karl Rohe. “Targeted Sampling from Massive Block Model Graphs with Personalized PageRank.” Journal of the Royal Statistical Society: Series B (Statistical Methodology) 82, no. 1 (February 2020): 99–126. <a href="https://doi.org/10.1111/rssb.12349" class="external-link uri">https://doi.org/10.1111/rssb.12349</a>. <a href="https://arxiv.org/abs/1910.12937" class="external-link">arxiv</a></p></li>
+<li><p>Andersen, Reid, Fan Chung, and Kevin Lang. “Local Graph Partitioning Using PageRank Vectors.” In 2006 47th Annual IEEE Symposium on Foundations of Computer Science (FOCS’06), 475–86. Berkeley, CA, USA: IEEE, 2006. <a href="https://doi.org/10.1109/FOCS.2006.44" class="external-link uri">https://doi.org/10.1109/FOCS.2006.44</a>.</p></li>
 </ol>
 </div>
 </div>
@@ -316,7 +303,7 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://alexpghayes.com" class="external-link">Alex Hayes</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-4985-5160" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<a href="https://alexpghayes.com" class="external-link">Alex Hayes</a> <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-4985-5160" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Fan Chen <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-4508-6023" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Karl Rohe <br><small class="roles"> Author </small>  </li>
 </ul>
@@ -326,8 +313,7 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/RoheLab/aPPR/actions" class="external-link"><img src="https://github.com/RoheLab/aPPR/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://CRAN.R-project.org/package=aPPR" class="external-link"><img src="https://www.r-pkg.org/badges/version/aPPR" alt="CRAN status"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://app.codecov.io/gh/RoheLab/aPPR?branch=main" class="external-link"><img src="https://codecov.io/gh/RoheLab/aPPR/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 
