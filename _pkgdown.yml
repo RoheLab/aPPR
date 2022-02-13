@@ -22,6 +22,6 @@ reference:
   contents:
   - appr
   - contains("Tracker")
-- title: "Compute Personalized PageRanks of Twitter user"
+- title: "Compute Personalized PageRanks of Twitter users"
   contents:
   - contains("rtweet")
