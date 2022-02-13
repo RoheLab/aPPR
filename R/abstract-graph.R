@@ -74,4 +74,5 @@ neighborhood <- function(graph, node) {
 }
 
 # memoized versions, these are what actually get used
+#' @importFrom memoise memoise
 memo_neighborhood <- memoise::memoise(neighborhood)

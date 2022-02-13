@@ -55,6 +55,8 @@ Tracker <- R6Class("Tracker", list(
   #'
   #' @return A new `Tracker` object.
   #'
+  #' @importFrom tibble tibble
+  #'
   initialize = function(graph, alpha, epsilon, tau, max_visits) {
 
     self$graph <- graph

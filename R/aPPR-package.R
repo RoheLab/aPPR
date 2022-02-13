@@ -11,6 +11,7 @@ NULL
 #' @importFrom glue glue
 NULL
 
+#' @import pander
 .onLoad <- function(libname, pkgname) {
   log_formatter(formatter_pander, namespace = pkgname)
 }
