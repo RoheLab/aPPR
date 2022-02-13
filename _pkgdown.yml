@@ -9,3 +9,19 @@ template:
   bootstrap: 5
   params:
     bootswatch: flatly
+
+
+reference:
+- title: "Define and interact with graphs"
+  contents:
+  - abstract_graph
+  - node_degrees
+  - check
+  - neighborhood
+- title: "Compute general aPPR results"
+  contents:
+  - appr
+  - contains("Tracker")
+- title: "Compute Personalized PageRanks of Twitter user"
+  contents:
+  - contains("rtweet")

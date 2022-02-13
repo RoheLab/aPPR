@@ -17,7 +17,7 @@ to recover blocks from stochastic blockmodels.
 
 To learn more about `aPPR` you can:
 
-1.  Glance through slides the
+1.  Glance through slides from the
     [JSM2021](https://github.com/alexpghayes/JSM2021) talk
 2.  Read the accompanying [paper](https://arxiv.org/abs/1910.12937)
 
