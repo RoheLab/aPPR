@@ -135,10 +135,10 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
                                 max_visits = Inf) {
   tracker <- Tracker$new(graph, alpha, epsilon, tau, max_visits)
 
-
-  log_trace("Checking seed nodes ... ")
+  log_debug("Checking seed nodes ... ")
   good_seeds <- check(graph, seeds)
-  log_trace("Checking seed nodes ... done")
+  log_debug("Checking seed nodes ... good_seeds: {good_seeds}")
+  log_debug("Checking seed nodes ... done")
 
   for (seed in seeds) {
 
