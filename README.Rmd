@@ -18,8 +18,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/RoheLab/aPPR/workflows/R-CMD-check/badge.svg)](https://github.com/RoheLab/aPPR/actions)
-[![CRAN status](https://www.r-pkg.org/badges/version/aPPR)](https://CRAN.R-project.org/package=aPPR)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Codecov test coverage](https://codecov.io/gh/RoheLab/aPPR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/RoheLab/aPPR?branch=main)
 <!-- badges: end -->
 
 `aPPR` helps you calculate approximate personalized pageranks from large graphs, including those that can only be queried via an API. `aPPR` additionally performs degree correction and regularization, allowing you to recover blocks from stochastic blockmodels.
@@ -89,20 +88,6 @@ ftrevorc_ppr <- appr(
 ftrevorc_ppr
 ```
 
-### Find the personalized pagerank of a Twitter user and cache the following network in the process
-
-**NOTE**: As of January 2022, the following does not work due to a change in the `rtweet` dev version that we have not yet updated `neocache` to accommodate.
-
-```{r neocache-example, eval = FALSE}
-alexpghayes_ppr <- appr(
-  neocache_graph(),
-  "alexpghayes",
-  epsilon = 1e-4
-)
-
-alexpghayes_ppr$stats
-```
-
 ### Logging
 
 `aPPR` uses [`logger`](https://daroczig.github.io/logger/) for displaying information to the user. By default, `aPPR` is quite verbose. You can control verbosity by loading `logger` and setting the logging threshold.
@@ -148,9 +133,8 @@ People have a right to choose how public and discoverable their information is. 
 
 ### References
 
-1. Chen, Fan, Yini Zhang, and Karl Rohe. “Targeted Sampling from Massive Block Model Graphs with Personalized PageRank.” Journal of the Royal Statistical Society: Series B (Statistical Methodology) 82, no. 1 (February 2020): 99–126. https://doi.org/10.1111/rssb.12349. [arxiv pdf][chen]
+1. Chen, Fan, Yini Zhang, and Karl Rohe. “Targeted Sampling from Massive Block Model Graphs with Personalized PageRank.” Journal of the Royal Statistical Society: Series B (Statistical Methodology) 82, no. 1 (February 2020): 99–126. https://doi.org/10.1111/rssb.12349. [arxiv][chen]
 
-2. Andersen, R., Chung, F. & Lang, K. *Local Graph Partitioning using PageRank Vectors*. 2006. [pdf][andersen]
+2. Andersen, Reid, Fan Chung, and Kevin Lang. “Local Graph Partitioning Using PageRank Vectors.” In 2006 47th Annual IEEE Symposium on Foundations of Computer Science (FOCS’06), 475–86. Berkeley, CA, USA: IEEE, 2006. https://doi.org/10.1109/FOCS.2006.44.
 
 [chen]: https://arxiv.org/abs/1910.12937
-[andersen]: http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf

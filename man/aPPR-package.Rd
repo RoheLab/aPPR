@@ -6,7 +6,7 @@
 \alias{aPPR-package}
 \title{aPPR: Approximate Personalized PageRank}
 \description{
-aPPR helps you approximate personalized PageRank vectors for massive graphs, including those that can only be queried via an API. aPPR additionally performs degree correction and regularization, allowing discovery of community structure under some stochastic block models.
+Calculates approximate and regularized personalized PageRank vectors for massive graphs, including those that can only be queried via an API. Regularization allows discovery of community structure under some stochastic block models.
 }
 \seealso{
 Useful links:
@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Alex Hayes \email{alexpghayes@gmail.com} (\href{https://orcid.org/0000-0002-4985-5160}{ORCID})
+\strong{Maintainer}: Alex Hayes \email{alexpghayes@gmail.com} (\href{https://orcid.org/0000-0002-4985-5160}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{

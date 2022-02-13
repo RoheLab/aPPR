@@ -22,7 +22,7 @@ rtweet_graph <- function(retryonratelimit = TRUE, verbose = TRUE, n = 5000) {
 #' @export
 appr.rtweet_graph <- function(graph, seeds, ...) {
 
-  if (!requireNamespace("neocache", quietly = TRUE)) {
+  if (!requireNamespace("rtweet", quietly = TRUE)) {
     stop(
       "`rtweet` package must be installed to use `rtweet_graph()`",
       call. = FALSE
@@ -50,6 +50,7 @@ appr.rtweet_graph <- function(graph, seeds, ...) {
 check.rtweet_graph <- function(graph, nodes) {
 
   logger::log_debug(glue("Checking nodes"))
+  logger::log_trace(glue("Checking nodes: {nodes}"))
 
   if (length(nodes) < 1)
     return(character(0))
@@ -73,6 +74,7 @@ check.rtweet_graph <- function(graph, nodes) {
 node_degrees.rtweet_graph <- function(graph, nodes) {
 
   logger::log_debug(glue("Getting node degrees"))
+  logger::log_trace(glue("Getting node degrees for node: {nodes}"))
 
   # assumes that you want any errors / empty rows when accessing this
   # data, i.e. that the nodes have already been checked

@@ -7,9 +7,8 @@
 #' These algorithms are randomized; if results are unstable across
 #' multiple runs, decrease `epsilon`.
 #'
-#' @param graph An [abstract_graph()] object, such as those created by
-#'   [rtweet_graph()] and [neocache_graph()], and [igraph::igraph()]
-#'   object. This argument is required.
+#' @param graph An [abstract_graph()] object, such as that created by
+#'   [rtweet_graph()]. This argument is required.
 #'
 #' @param seeds A character vector of seeds for the personalized pagerank.
 #'   The personalized pagerank will return to each of these seeds with
@@ -81,15 +80,16 @@
 #'     in-degree plus `tau`.
 #'
 #' When computing personalized pageranks for Twitter users (either
-#' via [rtweet_graph()] or [neocache_graph()]), `name` is given
+#' via [rtweet_graph()], `name` is given
 #' as a user ID, not a screen name, regardless of how the seed nodes
 #' were specified.
 #'
 #' @export
 #'
-#' @references Chen, F., Zhang, Y. & Rohe, K. Targeted sampling from massive Blockmodel graphs with personalized PageRank. 23. <http://arxiv.org/abs/1910.12937>
+#' @references
 #'
-#' Andersen, R., Chung, F. & Lang, K. Local Graph Partitioning using PageRank Vectors. in 2006 47th Annual IEEE Symposium on Foundations of Computer Science (FOCS’06) 475–486 (IEEE, 2006). doi:10.1109/FOCS.2006.44. <http://ieeexplore.ieee.org/document/4031383/>
+#' 1. Chen, Fan, Yini Zhang, and Karl Rohe. “Targeted Sampling from Massive Block Model Graphs with Personalized PageRank.” Journal of the Royal Statistical Society: Series B (Statistical Methodology) 82, no. 1 (February 2020): 99–126. https://doi.org/10.1111/rssb.12349.
+#' 2. Andersen, Reid, Fan Chung, and Kevin Lang. “Local Graph Partitioning Using PageRank Vectors.” In 2006 47th Annual IEEE Symposium on Foundations of Computer Science (FOCS’06), 475–86. Berkeley, CA, USA: IEEE, 2006. https://doi.org/10.1109/FOCS.2006.44.
 #'
 #' @examples
 #'

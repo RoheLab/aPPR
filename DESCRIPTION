@@ -1,48 +1,36 @@
 Package: aPPR
 Title: Approximate Personalized PageRank
 Version: 0.0.0.9102
-Authors@R: 
-    c(person(given = "Alex",
-             family = "Hayes",
-             role = c("aut", "cre"),
-             email = "alexpghayes@gmail.com",
-             comment = c(ORCID = "0000-0002-4985-5160")),
-      person(given = "Fan",
-             family = "Chen",
-             role = "aut",
-             email = "fan.chen@wisc.edu",
-             comment = c(ORCID = "0000-0003-4508-6023")),
-      person(given = "Karl",
-             family = "Rohe",
-             role = "aut"))
-Description: aPPR helps you approximate personalized PageRank vectors for
-    massive graphs, including those that can only be queried via an API.
-    aPPR additionally performs degree correction and regularization,
-    allowing discovery of community structure under some stochastic block
-    models.
+Authors@R: c(
+    person("Alex", "Hayes", , "alexpghayes@gmail.com", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0002-4985-5160")),
+    person("Fan", "Chen", , "fan.chen@wisc.edu", role = "aut",
+           comment = c(ORCID = "0000-0003-4508-6023")),
+    person("Karl", "Rohe", role = "aut")
+  )
+Description: Calculates approximate and regularized personalized PageRank
+    vectors for massive graphs, including those that can only be queried
+    via an API.  Regularization allows discovery of community structure
+    under some stochastic block models.
 License: MIT + file LICENSE
 URL: https://github.com/RoheLab/aPPR
 BugReports: https://github.com/RoheLab/aPPR/issues
 Imports: 
+    ellipsis,
     glue,
     logger,
     memoise,
-    neocache (>= 0.0.0.9000),
-    ellipsis,
+    pander,
     R6,
-    tibble,
-    pander
+    tibble
 Suggests: 
     covr,
     igraph (>= 1.2.5),
     knitr,
     rmarkdown,
-    testthat (>= 2.1.0),
-    rtweet (>= 0.7.0.9011)
-VignetteBuilder: 
-    knitr
+    rtweet (>= 0.7.0.9011),
+    testthat (>= 2.1.0)
 Remotes: 
-    alexpghayes/neocache,
     ropensci/rtweet
 Encoding: UTF-8
 LazyData: true
@@ -53,7 +41,6 @@ Collate:
     'abstract-graph.R'
     'aPPR.R'
     'graph-igraph.R'
-    'graph-neocache.R'
     'graph-rtweet.R'
     'tracker.R'
     'update.R'

@@ -6,10 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/RoheLab/aPPR/workflows/R-CMD-check/badge.svg)](https://github.com/RoheLab/aPPR/actions)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/aPPR)](https://CRAN.R-project.org/package=aPPR)
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Codecov test
+coverage](https://codecov.io/gh/RoheLab/aPPR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/RoheLab/aPPR?branch=main)
 <!-- badges: end -->
 
 `aPPR` helps you calculate approximate personalized pageranks from large
@@ -158,46 +156,30 @@ ftrevorc_ppr
 #> ----------------------------------
 #> 
 #>   - number of seeds: 1
-#>   - visits so far: 7
+#>   - visits so far: 6
 #>   - unique nodes visited so far: 5 out of maximum of 5
-#>   - bad nodes so far: 8
+#>   - bad nodes so far: 10
 #> 
 #>   - teleportation constant (alpha): 0.15
 #>   - desired approximation error (epsilon): 1e-04
-#>   - achieved bound on approximation error: 0.00258904422527505
-#>   - current length of to-visit list: 7
+#>   - achieved bound on approximation error: 0.00175980395529336
+#>   - current length of to-visit list: 5
 #> 
 #> PPR table (see $stats field):
-#> # A tibble: 166 × 7
+#> # A tibble: 210 × 7
 #>    name                 r     p in_degree out_degree degree_adjusted regularized
 #>    <chr>            <dbl> <dbl>     <dbl>      <dbl>           <dbl>       <dbl>
-#>  1 7752257741314… 0.211   0.118        69        119         0.00171     4.05e-8
-#>  2 9381208958721… 0.00563 0           371        179         0           0      
-#>  3 1359003756063… 0.00563 0           229        115         0           0      
-#>  4 76228303       0.00563 0          7257       2270         0           0      
-#>  5 1024298722828… 0.00563 0           378        927         0           0      
-#>  6 1264590946144… 0.00563 0           112        184         0           0      
-#>  7 1107711818997… 0.00563 0          3243        397         0           0      
-#>  8 1217315090     0.00563 0         20638        402         0           0      
-#>  9 1120701503763… 0.00563 0           349        243         0           0      
-#> 10 661613         0.00563 0         21315       4578         0           0      
-#> # … with 156 more rows
-```
-
-### Find the personalized pagerank of a Twitter user and cache the following network in the process
-
-**NOTE**: As of January 2022, the following does not work due to a
-change in the `rtweet` dev version that we have not yet updated
-`neocache` to accommodate.
-
-``` r
-alexpghayes_ppr <- appr(
-  neocache_graph(),
-  "alexpghayes",
-  epsilon = 1e-4
-)
-
-alexpghayes_ppr$stats
+#>  1 7752257741314… 0.211   0.118        69        120         0.00172     5.50e-8
+#>  2 17163639       0.00559 0         20033       1596         0           0      
+#>  3 9381208958721… 0.00559 0           372        179         0           0      
+#>  4 1359003756063… 0.00559 0           230        116         0           0      
+#>  5 76228303       0.00559 0          7253       2274         0           0      
+#>  6 1024298722828… 0.00559 0           382        829         0           0      
+#>  7 1264590946144… 0.00559 0           116        189         0           0      
+#>  8 1107711818997… 0.00559 0          3404        410         0           0      
+#>  9 1217315090     0.00559 0         20660        402         0           0      
+#> 10 1120701503763… 0.00559 0           354        243         0           0      
+#> # … with 200 more rows
 ```
 
 ### Logging
@@ -225,6 +207,8 @@ using the TRACE threshold. You can set up this kind of detailed logging
 via the following:
 
 ``` r
+set.seed(528491)  # be sure to set seed for bug reports
+
 log_appender(
   appender_file(
     "/path/to/logfile.log"  ## TODO: choose a path to log to
@@ -255,9 +239,10 @@ accounts, without their permission.
     Massive Block Model Graphs with Personalized PageRank.” Journal of
     the Royal Statistical Society: Series B (Statistical Methodology)
     82, no. 1 (February 2020): 99–126.
-    <https://doi.org/10.1111/rssb.12349>. [arxiv
-    pdf](https://arxiv.org/abs/1910.12937)
+    <https://doi.org/10.1111/rssb.12349>.
+    [arxiv](https://arxiv.org/abs/1910.12937)
 
-2.  Andersen, R., Chung, F. & Lang, K. *Local Graph Partitioning using
-    PageRank Vectors*. 2006.
-    [pdf](http://www.leonidzhukov.net/hse/2015/networks/papers/andersen06localgraph.pdf)
+2.  Andersen, Reid, Fan Chung, and Kevin Lang. “Local Graph Partitioning
+    Using PageRank Vectors.” In 2006 47th Annual IEEE Symposium on
+    Foundations of Computer Science (FOCS’06), 475–86. Berkeley, CA,
+    USA: IEEE, 2006. <https://doi.org/10.1109/FOCS.2006.44>.
