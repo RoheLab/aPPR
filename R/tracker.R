@@ -254,6 +254,8 @@ Tracker <- R6Class("Tracker", list(
   #'
   update_r_neighbor = function(u, v) {
 
+    log_trace(glue("update_r_neighbor({u}, {v})"))
+
     stopifnot(length(u) == 1)
 
     if (length(v) < 1)
