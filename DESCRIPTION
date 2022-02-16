@@ -29,7 +29,7 @@ Suggests:
     knitr,
     rmarkdown,
     rtweet (>= 0.7.0.9011),
-    testthat (>= 2.1.0)
+    testthat (>= 3.0.0)
 Remotes: 
     ropensci/rtweet
 Encoding: UTF-8
@@ -44,3 +44,4 @@ Collate:
     'graph-rtweet.R'
     'tracker.R'
     'update.R'
+Config/testthat/edition: 3
