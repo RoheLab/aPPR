@@ -68,10 +68,12 @@ Tracker <- R6Class("Tracker", list(
 
     self$stats <- tibble::tibble(
       name = character(0),
-      r = numeric(0),
+      regularized = numeric(0),
       p = numeric(0),
       in_degree = numeric(0),
-      out_degree = numeric(0)
+      out_degree = numeric(0),
+      degree_adjusted = numeric(0),
+      r = numeric(0)
     )
   },
 
@@ -86,14 +88,14 @@ Tracker <- R6Class("Tracker", list(
     cat("----------------------------------\n\n")
 
     cat(glue("  - number of seeds: {length(self$seeds)}\n", .trim = FALSE))
-    cat(glue("  - visits so far: {length(self$path)}\n", .trim = FALSE))
     cat(glue("  - unique nodes visited so far: {length(unique(self$path))} out of maximum of {self$max_visits}\n", .trim = FALSE))
+    cat(glue("  - total visits so far: {length(self$path)}\n", .trim = FALSE))
     cat(glue("  - bad nodes so far: {length(self$failed)}\n\n", .trim = FALSE))
 
     cat(glue("  - teleportation constant (alpha): {self$alpha}\n", .trim = FALSE))
     cat(glue("  - desired approximation error (epsilon): {self$epsilon}\n", .trim = FALSE))
     cat(glue("  - achieved bound on approximation error: {self$current_approximation_error()}\n", .trim = FALSE))
-    cat(glue("  - current length of to-visit list: {length(self$remaining())}\n\n", .trim = FALSE))
+    cat(glue("  - length of to visit list: {length(self$remaining())}\n\n", .trim = FALSE))
 
     cat(glue("PPR table (see $stats field):\n\n"))
 
@@ -208,11 +210,13 @@ Tracker <- R6Class("Tracker", list(
 
     self$stats <- tibble::add_row(
       self$stats,
-      name  = nodes,
+      name = nodes,
+      regularized = NA_real_,
       p = 0,
-      r = preference,
       in_degree = degree$in_degree,
-      out_degree = degree$out_degree
+      out_degree = degree$out_degree,
+      degree_adjusted = NA_real_,
+      r = preference
     )
 
   },
@@ -319,7 +323,13 @@ Tracker <- R6Class("Tracker", list(
     remaining <- self$remaining()
     unique_visits_so_far <- length(unique(self$path))
 
-    log_info(glue("Visits: {length(self$path)} total / {unique_visits_so_far} unique out of max of {self$max_visits} / {length(remaining)} remaining."))
+    log_info(glue(
+      "Visits: {length(self$path)} total / ",
+      "{unique_visits_so_far} unique (max {self$max_visits}) / ",
+      "{length(remaining)} to visit / ",
+      "current epsilon: {self$current_approximation_error()}.",
+      .trim = FALSE
+    ))
 
     while (length(remaining) > 0) {
 
@@ -386,7 +396,13 @@ Tracker <- R6Class("Tracker", list(
       remaining <- self$remaining()
       unique_visits_so_far <- length(unique(self$path))
 
-      log_info(glue("Visits: {length(self$path)} total / {unique_visits_so_far} unique out of max of {self$max_visits} / {length(remaining)} remaining."))
+      log_info(glue(
+        "Visits: {length(self$path)} total / ",
+        "{unique_visits_so_far} unique (max {self$max_visits}) / ",
+        "{length(remaining)} to visit / ",
+        "current epsilon: {self$current_approximation_error()}.",
+        .trim = FALSE
+      ))
     }
 
     log_info("Approximating PPR ... done")
