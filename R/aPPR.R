@@ -137,7 +137,7 @@ appr.abstract_graph <- function(graph, seeds, ..., alpha = 0.15,
 
   log_debug("Checking seed nodes ... ")
   good_seeds <- check(graph, seeds)
-  log_debug("Checking seed nodes ... good_seeds: {good_seeds}")
+  log_debug(glue("Checking seed nodes ... good_seeds: {good_seeds}"))
   log_debug("Checking seed nodes ... done")
 
   for (seed in seeds) {
