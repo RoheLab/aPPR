@@ -1,6 +1,6 @@
 Package: aPPR
 Title: Approximate Personalized PageRank
-Version: 0.0.0.9103
+Version: 0.0.0.9200
 Authors@R: c(
     person("Alex", "Hayes", , "alexpghayes@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-4985-5160")),
@@ -27,6 +27,7 @@ Suggests:
     covr,
     igraph (>= 1.2.5),
     knitr,
+    rentrez,
     rmarkdown,
     rtweet (>= 0.7.0.9011),
     testthat (>= 3.0.0)
