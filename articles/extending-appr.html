@@ -100,11 +100,12 @@ that returns a custom S3 graph object that subclasses
 authentication to begin using the API.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RoheLab/aPPR" class="external-link">aPPR</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daroczig.github.io/logger/" class="external-link">logger</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidyverse/glue" class="external-link">glue</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rentrez/" class="external-link">rentrez</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Constructor for PubMed graph object (defined over API)</span></span>
+<span><span class="co"># constructor for PubMed graph object (defined over API)</span></span>
 <span><span class="va">pubmed_graph</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">max_attempts</span> <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"rentrez"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span></span>
 <span>      <span class="st">"`rentrez` package must be installed to use `pubmed_graph()`"</span>,</span>
@@ -116,7 +117,7 @@ authentication to begin using the API.</p>
 <span>    subclass <span class="op">=</span> <span class="st">"pubmed"</span>,</span>
 <span>    max_attempts <span class="op">=</span> <span class="va">max_attempts</span></span>
 <span>  <span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="va">agraph</span></span>
 <span><span class="op">}</span></span>
 <span></span>
@@ -135,28 +136,32 @@ memoize the function, to avoid repeated calls to the API.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># one node at a time</span></span>
 <span><span class="va">get_pubmed_data</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span>, <span class="va">node</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
-<span>  <span class="co"># handle the case where only bad nodes are passed</span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">graph</span><span class="op">$</span><span class="va">max_attempts</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    </span>
-<span>    <span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_trace</a></span><span class="op">(</span><span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Attempt {i}/{graph$max_attempts} to get node degrees: {node}"</span><span class="op">)</span><span class="op">)</span></span>
-<span>    </span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>      <span class="va">cites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rentrez/reference/entrez_link.html" class="external-link">entrez_link</a></span><span class="op">(</span>dbfrom <span class="op">=</span> <span class="st">"pubmed"</span>, db <span class="op">=</span> <span class="st">"all"</span>, id <span class="op">=</span> <span class="va">node</span><span class="op">)</span></span>
-<span>      <span class="kw">break</span></span>
-<span>    <span class="op">}</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">cnd</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="kw">if</span> <span class="op">(</span><span class="va">i</span> <span class="op">==</span> <span class="va">graph</span><span class="op">$</span><span class="va">max_attempts</span><span class="op">)</span><span class="op">{</span></span>
-<span>        <span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Maximum attempts to find neighborhood met, could not find: {node}"</span><span class="op">)</span><span class="op">)</span></span>
-<span>        <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Couldn't pull data for node"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_trace</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Attempt {i}/{graph$max_attempts} to get node degrees: {node}"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
+<span>      <span class="op">{</span></span>
+<span>        <span class="va">cites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rentrez/reference/entrez_link.html" class="external-link">entrez_link</a></span><span class="op">(</span>dbfrom <span class="op">=</span> <span class="st">"pubmed"</span>, db <span class="op">=</span> <span class="st">"all"</span>, id <span class="op">=</span> <span class="va">node</span><span class="op">)</span></span>
+<span>        <span class="kw">break</span></span>
+<span>      <span class="op">}</span>,</span>
+<span>      error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">cnd</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="kw">if</span> <span class="op">(</span><span class="va">i</span> <span class="op">==</span> <span class="va">graph</span><span class="op">$</span><span class="va">max_attempts</span><span class="op">)</span> <span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span></span>
+<span>            <span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Maximum attempts to find neighborhood met, could not find: {node}"</span><span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>          <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Couldn't pull data for node"</span><span class="op">)</span></span>
+<span>        <span class="op">}</span></span>
 <span>      <span class="op">}</span></span>
-<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">cites</span><span class="op">$</span><span class="va">links</span><span class="op">$</span><span class="va">pubmed_pmc_refs</span><span class="op">)</span>,</span>
 <span>    citedby <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">cites</span><span class="op">$</span><span class="va">links</span><span class="op">$</span><span class="va">pubmed_pubmed_citedin</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="va">data</span><span class="op">$</span><span class="va">num_refs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">refs</span><span class="op">)</span></span>
 <span>  <span class="va">data</span><span class="op">$</span><span class="va">num_citedby</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">citedby</span><span class="op">)</span></span>
 <span>  <span class="va">data</span></span>
@@ -187,7 +192,7 @@ example.</p>
 <span><span class="co">#&gt; $num_citedby</span></span>
 <span><span class="co">#&gt; [1] 4</span></span>
 <span></span>
-<span><span class="co"># suspicious that the number of in-cites and out-cites matches, and that it </span></span>
+<span><span class="co"># suspicious that the number of in-cites and out-cites matches, and that it</span></span>
 <span><span class="co"># matches across both papers! TODO: investigate!</span></span>
 <span><span class="fu">memo_get_pubmed_data</span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $refs</span></span>
@@ -249,33 +254,31 @@ example.</p>
 <span><span class="co">#'   If `nodes` is the empty vector, returns the empty vector. Be sure to</span></span>
 <span><span class="co">#'   handle this edge case.</span></span>
 <span><span class="va">check.pubmed</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span>, <span class="va">nodes</span><span class="op">)</span> <span class="op">{</span></span>
-<span></span>
-<span>  <span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Checking nodes"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Checking nodes"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># handle the case where no nodes are passed</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="va">good_nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">node</span> <span class="kw">in</span> <span class="va">nodes</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    </span>
 <span>    <span class="va">node_data</span> <span class="op">&lt;-</span> <span class="fu">memo_get_pubmed_data</span><span class="op">(</span><span class="va">graph</span>, <span class="va">node</span><span class="op">)</span></span>
-<span>    </span>
+<span></span>
 <span>    <span class="co"># this is a sufficient check to see if (1) the node is in pubmed, (2)</span></span>
 <span>    <span class="co"># we can pull it's neighborhood, and (3) it has at least one</span></span>
 <span>    <span class="co"># incoming or outgoing citation</span></span>
-<span>    </span>
+<span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="va">node_data</span><span class="op">$</span><span class="va">num_refs</span> <span class="op">+</span> <span class="va">node_data</span><span class="op">$</span><span class="va">num_citedby</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_trace</a></span><span class="op">(</span><span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Checked node: {node} (good)"</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_trace</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Checked node: {node} (good)"</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="va">good_nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">good_nodes</span>, <span class="va">node</span><span class="op">)</span></span>
 <span>      <span class="kw">next</span></span>
 <span>    <span class="op">}</span></span>
-<span>    </span>
-<span>    <span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_trace</a></span><span class="op">(</span><span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Checked node: {node} (bad)"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_trace</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Checked node: {node} (bad)"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="va">good_nodes</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Now we test our implementation. To do this, we should give at least
@@ -298,40 +301,39 @@ should be returned.</p>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @return A list, with two elements, `in_degree` and `out_degree`. Both</span></span>
 <span><span class="co">#'   should be the same length as `nodes`, and match the order of `nodes`.</span></span>
-<span><span class="co">#'   </span></span>
+<span><span class="co">#'</span></span>
 <span><span class="va">node_degrees.pubmed</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span>, <span class="va">nodes</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Getting node degrees"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Getting node degrees"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
 <span>  <span class="va">degrees</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    in_degree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    out_degree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Getting node degrees for node: {nodes[i]}"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Getting node degrees for node: {nodes[i]}"</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="va">node_data</span> <span class="op">&lt;-</span> <span class="fu">memo_get_pubmed_data</span><span class="op">(</span><span class="va">graph</span>, <span class="va">nodes</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
-<span>    </span>
+<span></span>
 <span>    <span class="co"># must treat pubmed like an undirected graph. otherwise it's a citation</span></span>
 <span>    <span class="co"># network, and thus a tree, and thus no pair of nodes is mutually</span></span>
 <span>    <span class="co"># reachable, thus pagerank is not defined</span></span>
-<span>    </span>
+<span></span>
 <span>    <span class="va">degrees</span><span class="op">$</span><span class="va">in_degree</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">node_data</span><span class="op">$</span><span class="va">num_citedby</span> <span class="op">+</span> <span class="va">node_data</span><span class="op">$</span><span class="va">num_refs</span></span>
 <span>    <span class="va">degrees</span><span class="op">$</span><span class="va">out_degree</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">node_data</span><span class="op">$</span><span class="va">num_citedby</span> <span class="op">+</span> <span class="va">node_data</span><span class="op">$</span><span class="va">num_refs</span></span>
-<span>    </span>
-<span>    <span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_trace</a></span><span class="op">(</span><span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"In-degree for node: {degrees$in_degree[i]}"</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_trace</a></span><span class="op">(</span><span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Out-degree for node: {degrees$out_degree[i]}"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_trace</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"In-degree for node: {degrees$in_degree[i]}"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_trace</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Out-degree for node: {degrees$out_degree[i]}"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span></span>
-<span>  <span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Done getting node degrees"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
+<span>  <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Done getting node degrees"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
 <span>  <span class="va">degrees</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>To test this method, we should pass a character vector of several
 good node ids.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># test with a single node</span></span>
-<span><span class="fu"><a href="../reference/node_degrees.html">node_degrees</a></span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>  </span>
+<span><span class="fu"><a href="../reference/node_degrees.html">node_degrees</a></span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $in_degree</span></span>
 <span><span class="co">#&gt; [1] 8</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -340,7 +342,7 @@ good node ids.</p>
 <span></span>
 <span><span class="co"># test with multiple nodes! this is the key one! this is suspicious, and</span></span>
 <span><span class="co"># means we need to check if our function memo_get_pubmed_data() is working</span></span>
-<span><span class="fu"><a href="../reference/node_degrees.html">node_degrees</a></span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">)</span>     </span>
+<span><span class="fu"><a href="../reference/node_degrees.html">node_degrees</a></span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $in_degree</span></span>
 <span><span class="co">#&gt; [1]  8 36 36</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -357,14 +359,13 @@ good node ids.</p>
 <span><span class="co">#'   Should be a vector of length at least one (if the `check()` method was</span></span>
 <span><span class="co">#'   implemented correctly), and should not contain duplicates.</span></span>
 <span><span class="va">neighborhood.pubmed</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span>, <span class="va">node</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">node</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"`node` must be a character vector of length one."</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
-<span>  </span>
-<span>  <span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Getting neighborhood: {node}"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Getting neighborhood: {node}"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">node_data</span> <span class="op">&lt;-</span> <span class="fu">memo_get_pubmed_data</span><span class="op">(</span><span class="va">graph</span>, <span class="va">node</span><span class="op">)</span></span>
-<span>  <span class="fu">logger</span><span class="fu">::</span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Done getting neighborhood: {node}"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://daroczig.github.io/logger/reference/log_level.html" class="external-link">log_debug</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Done getting neighborhood: {node}"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">node_data</span><span class="op">$</span><span class="va">refs</span>, <span class="va">node_data</span><span class="op">$</span><span class="va">citedby</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -411,41 +412,41 @@ In our, we don’t seem to find any edge cases right away.</p>
 <span><span class="co"># log_threshold(TRACE)</span></span>
 <span></span>
 <span><span class="co"># set logging threshold for aPPR package functions, if desired</span></span>
-<span><span class="co"># log_threshold(DEBUG, namespace = "aPPR") </span></span>
+<span><span class="co"># log_threshold(DEBUG, namespace = "aPPR")</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/appr.html">appr</a></span><span class="op">(</span></span>
-<span>  <span class="va">graph</span>,                    <span class="co"># the graph to work with</span></span>
+<span>  <span class="va">graph</span>, <span class="co"># the graph to work with</span></span>
 <span>  seeds <span class="op">=</span> <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="co"># name of seed node (character)</span></span>
-<span>  epsilon <span class="op">=</span> <span class="fl">0.0005</span>          <span class="co"># desired approximation quality (see ?appr)</span></span>
+<span>  epsilon <span class="op">=</span> <span class="fl">0.0005</span> <span class="co"># desired approximation quality (see ?appr)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Personalized PageRank Approximator</span></span>
 <span><span class="co">#&gt; ----------------------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   - number of seeds: 1</span></span>
 <span><span class="co">#&gt;   - unique nodes visited so far: 7 out of maximum of Inf</span></span>
-<span><span class="co">#&gt;   - total visits so far: 27</span></span>
+<span><span class="co">#&gt;   - total visits so far: 25</span></span>
 <span><span class="co">#&gt;   - bad nodes so far: 20</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   - teleportation constant (alpha): 0.15</span></span>
 <span><span class="co">#&gt;   - desired approximation error (epsilon): 5e-04</span></span>
-<span><span class="co">#&gt;   - achieved bound on approximation error: 0.000407036960648791</span></span>
+<span><span class="co">#&gt;   - achieved bound on approximation error: 0.000410359734056409</span></span>
 <span><span class="co">#&gt;   - length of to visit list: 0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; PPR table (see $stats field):</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 11 × 7</span></span></span>
-<span><span class="co">#&gt;    name     regularized        p in_degree out_degree degree_adjusted        r</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 30345262  0.004<span style="text-decoration: underline;">49</span>    0.150            8          8       0.018<span style="text-decoration: underline;">7</span>    0.001<span style="text-decoration: underline;">99</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 9025043   0.000<span style="text-decoration: underline;">555</span>   0.015<span style="text-decoration: underline;">7</span>           3          3       0.005<span style="text-decoration: underline;">25</span>   0.001<span style="text-decoration: underline;">06</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 7074033   0.000<span style="text-decoration: underline;">179</span>   0.014<span style="text-decoration: underline;">0</span>          53         53       0.000<span style="text-decoration: underline;">265</span>  0.012<span style="text-decoration: underline;">5</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 7094328   0.000<span style="text-decoration: underline;">007</span>03 0.000<span style="text-decoration: underline;">185</span>         1          1       0.000<span style="text-decoration: underline;">185</span>  0.000<span style="text-decoration: underline;">265</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 4690170   0.000<span style="text-decoration: underline;">007</span>03 0.000<span style="text-decoration: underline;">185</span>         1          1       0.000<span style="text-decoration: underline;">185</span>  0.000<span style="text-decoration: underline;">265</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 1386135   0          0                4          4       0         0.001<span style="text-decoration: underline;">50</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 1152144   0          0              133        133       0         0.001<span style="text-decoration: underline;">50</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 186410    0          0               33         33       0         0.001<span style="text-decoration: underline;">50</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 179431    0.000<span style="text-decoration: underline;">003</span>77 0.000<span style="text-decoration: underline;">103</span>         2          2       0.000<span style="text-decoration: underline;">051</span>5 0.000<span style="text-decoration: underline;">814</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 98828     0          0               39         39       0         0.001<span style="text-decoration: underline;">50</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 97602     0.000<span style="text-decoration: underline;">003</span>77 0.000<span style="text-decoration: underline;">103</span>         2          2       0.000<span style="text-decoration: underline;">051</span>5 0.000<span style="text-decoration: underline;">814</span></span></span></code></pre></div>
+<span><span class="co">#&gt;    name     regularized         p in_degree out_degree degree_adjusted        r</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 30345262  0.004<span style="text-decoration: underline;">49</span>    0.150             8          8       0.018<span style="text-decoration: underline;">7</span>    0.001<span style="text-decoration: underline;">99</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 9025043   0.000<span style="text-decoration: underline;">555</span>   0.015<span style="text-decoration: underline;">8</span>            3          3       0.005<span style="text-decoration: underline;">25</span>   0.001<span style="text-decoration: underline;">01</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 7074033   0.000<span style="text-decoration: underline;">171</span>   0.013<span style="text-decoration: underline;">4</span>           53         53       0.000<span style="text-decoration: underline;">253</span>  0.016<span style="text-decoration: underline;">7</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 7094328   0.000<span style="text-decoration: underline;">006</span>74 0.000<span style="text-decoration: underline;">178</span>          1          1       0.000<span style="text-decoration: underline;">178</span>  0.000<span style="text-decoration: underline;">248</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 4690170   0.000<span style="text-decoration: underline;">006</span>00 0.000<span style="text-decoration: underline;">158</span>          1          1       0.000<span style="text-decoration: underline;">158</span>  0.000<span style="text-decoration: underline;">377</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 1386135   0          0                 4          4       0         0.001<span style="text-decoration: underline;">43</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 1152144   0          0               133        133       0         0.001<span style="text-decoration: underline;">43</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 186410    0          0                33         33       0         0.001<span style="text-decoration: underline;">43</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 179431    0.000<span style="text-decoration: underline;">004</span>24 0.000<span style="text-decoration: underline;">116</span>          2          2       0.000<span style="text-decoration: underline;">058</span>1 0.000<span style="text-decoration: underline;">658</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 98828     0          0                39         39       0         0.001<span style="text-decoration: underline;">43</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 97602     0.000<span style="text-decoration: underline;">003</span>35 0.000<span style="text-decoration: underline;">091</span>7         2          2       0.000<span style="text-decoration: underline;">045</span>9 0.000<span style="text-decoration: underline;">821</span></span></span></code></pre></div>
 </div>
   </main>
 </div>
