@@ -15,7 +15,10 @@ neighborhood(graph, node)
 A character vector of all nodes in \code{graph} connected such that
 there is an outgoing edge for \code{node} to those nodes. This should
 never be empty, as \code{neighborhood()} should not be called on nodes
-that fail \code{check()}.
+that fail \code{check()}, and \code{check()} enforces that nodes have out-degree
+of at least one. It is critical node names are duplicated in the
+output recommend calling \code{unique()} if there is any potential for
+for that to occur.
 }
 \description{
 That is, find all nodes connected to \code{node} by an outgoing edge.

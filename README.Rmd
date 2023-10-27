@@ -17,8 +17,9 @@ knitr::opts_chunk$set(
 # aPPR
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/RoheLab/aPPR/workflows/R-CMD-check/badge.svg)](https://github.com/RoheLab/aPPR/actions)
+[![R-CMD-check](https://github.com/RoheLab/aPPR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/RoheLab/aPPR/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/RoheLab/aPPR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/RoheLab/aPPR?branch=main)
+
 <!-- badges: end -->
 
 `aPPR` helps you calculate approximate personalized pageranks from large graphs, including those that can only be queried via an API. `aPPR` additionally performs degree correction and regularization, allowing you to recover blocks from stochastic blockmodels.

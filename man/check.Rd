@@ -13,7 +13,10 @@ check(graph, nodes)
 }
 \value{
 The subset of \code{nodes} that are acceptable for inclusion. This
-can be a character vector of length zero if necessary.
+can be a character vector of length zero if necessary. It is critical
+that no entries of \code{nodes} are duplicated in this output, so we
+recommend calling \code{unique()} if there is any potential for repeats
+in your checking good.
 }
 \description{
 Inclusion criteria:
@@ -22,6 +25,6 @@ Inclusion criteria:
 \itemize{
 \item At least one outgoing edge
 \item Can get in degree and out degree of node
-\item Can get all nodes connected to \code{node} / the 1-hop neighbhorhood
+\item Can get all nodes connected to \code{node} / the 1-hop neighborhood
 }
 }
