@@ -39,6 +39,8 @@ pubmed_graph <- function(max_attempts = 3) {
     )
   }
   
+  # TODO: separate outgoing citation types and incoming citation types?
+  
   # could make this into an argument if you wanted to let the user have
   # control over this
   citation_types_of_interest <- c(
@@ -81,9 +83,48 @@ check.pubmed <- function(graph, nodes) {
   logger::log_debug(glue::glue("Checking nodes"))
   logger::log_trace(glue::glue("Checking nodes: {nodes}"))
 
-  # handle the edge case where no nodes are passed
+  # handle the case where no nodes are passed
   if (length(nodes) < 1)
     return(character(0))
+  
+  # TODO: handle API failures
+  all_bad <- FALSE
+  
+  # handle the case where only bad nodes are passed
+  for (i in 1:graph$max_attempts) {
+    
+    if (all_bad) {
+      return(character(0))
+    }
+    
+    logger::log_trace(glue::glue("Attempt {i}/{graph$max_attempts} to check nodes: {nodes}"))
+    
+    tryCatch({
+      # suppressWarnings is to prevent the side effect of a warning being
+      # printed to screen when some nodes are not found. we deal with this
+      # is programmatically. be aware that this may suppress over important
+      # warnings that we do not handle programmatically
+      summ <- suppressWarnings(entrez_summary(db = "pubmed", id = nodes))
+      break
+    }, error = function(cnd) {
+      # if all nodes are bad, summ isn't created and we have to handle that
+      if (grepl("No esummary records", conditionMessage(cnd))) {
+        logger::log_debug(glue::glue("Done checking nodes (all were bad)"))
+        
+        # would prefer to return(character(0)) here but that doesn't seem
+        # to successfully return, so set a flag instead
+        all_bad <- TRUE
+      }
+      
+      if (i == graph$max_attempts){
+        logger::log_debug(glue::glue("Maximum attempts to find neighborhood met, could not find: {nodes}"))
+      }
+    })
+  }
+    
+  # todo: check if we can get node degrees for each of these suckers
+  # todo: check if we can get the neighborhood for each of these suckers
+  
   
   # TODO: check if we can get node degrees for each node in `nodes`
   # TODO: check if we can get the neighbor for each node in `nodes`
@@ -91,24 +132,30 @@ check.pubmed <- function(graph, nodes) {
   # pulling all of that information, normally we just want to check if an
   # item is in the database
   
+  logger::log_debug(glue::glue("Done checking nodes (at least some were good)"))
+  
   # if you're API is consistently reliable and there are no permission issues
   # you could conceivably not do any actual checking here to save on API
   # calls
   
-  logger::log_debug(glue::glue("Done checking nodes"))
-
   # TODO
-  nodes
+  names(summ)
 }
 ```
 
 Now we test our implementation. To do this, we should give at least one good node id, and at least one bad node id. Only the good node id should be returned.
 
 ```{r}
+library(logger)
+log_threshold(DEBUG)
+
 good_node_ids <- c("30345262", "29624432", "29867837")
 bad_node_id <- "I am a pumpkin"
+mixed_node_ids <- c(good_node_ids, bad_node_id)
 
-check(graph, c(good_node_ids, bad_node_id))
+check(graph, good_node_ids)
+check(graph, bad_node_id)
+check(graph, mixed_node_ids)
 ```
 
 Now we move on to the node degree method.
@@ -129,16 +176,35 @@ node_degrees.pubmed <- function(graph, nodes) {
 
   # assumes that you want any errors / empty rows when accessing this
   # data, i.e. that the nodes have already been checked
-
-  # at this point, all the nodes in `nodes` have been checked, so we should
-  # in theory be able to get node degrees for them
   
-  # TODO
+  # handle the case where only bad nodes are passed
+  for (i in 1:graph$max_attempts) {
+    
+    logger::log_trace(glue::glue("Attempt {i}/{graph$max_attempts} to get node degrees: {nodes}"))
+    
+    tryCatch({
+      
+      # TODO: i don't really trust this
+      cites <- entrez_link(dbfrom = "pubmed", db = "all", id = nodes)
+      break
+    }, error = function(cnd) {
+      if (i == graph$max_attempts){
+        logger::log_debug(glue::glue("Maximum attempts to find neighborhood met, could not find: {nodes}"))
+      }
+    })
+  }
+  
+  # TODO: compute in-degree for each node in nodes. unclear to me is cites is
+  #   collective across all nodes or somehow broken down at the individual node
+  #   level. the following is wrong!!
+  purrr::map_int(cites$link$pubmed_pubmed_citedin, \(x) length(unique(x)))
+  
+  # TODO: compute out-degree for each node in nodes
+  
+  # note that the order of the degree sequences must match the order of
+  # the input vector `nodes`
 
   logger::log_debug(glue::glue("Done getting node degrees"))
-
-  # if your graph is symmetric, set both in_degree and out_degree to the same
-  # thing
   
   list(
     in_degree = NULL,
@@ -150,7 +216,8 @@ node_degrees.pubmed <- function(graph, nodes) {
 To test this method, we should pass a character vector of several good node ids.
 
 ```{r}
-node_degrees(graph, good_node_ids)
+node_degrees(graph, good_node_ids[1])  # test with a single node
+node_degrees(graph, good_node_ids)     # test with multiple nodes! this is the key one!
 ```
 
 ```{r}
@@ -220,10 +287,14 @@ Find any errors, fix, and rinse and repeat until you've completed the likely unp
 ```{r}
 library(logger)
 
+# important if you use the logging format i did above to prevent
+# errors with glue::glue() and logging
+log_formatter(formatter_pander) 
+
 # hide basically all messages (not recommended)
 
 # set logging threshold for code you just wrote
-log_threshold(DEBUG)
+log_threshold(TRACE)
 
 # set logging threshold for aPPR package functions
 log_threshold(DEBUG, namespace = "aPPR") 
