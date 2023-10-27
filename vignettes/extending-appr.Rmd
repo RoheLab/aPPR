@@ -27,11 +27,12 @@ We demonstrate how to implement these methods below for a new, custom graph obje
 
 ```{r}
 library(aPPR)
+library(logger)
+library(glue)
 library(rentrez)
 
-# Constructor for PubMed graph object (defined over API)
+# constructor for PubMed graph object (defined over API)
 pubmed_graph <- function(max_attempts = 3) {
-  
   if (!requireNamespace("rentrez", quietly = TRUE)) {
     stop(
       "`rentrez` package must be installed to use `pubmed_graph()`",
@@ -43,7 +44,7 @@ pubmed_graph <- function(max_attempts = 3) {
     subclass = "pubmed",
     max_attempts = max_attempts
   )
-  
+
   agraph
 }
 
@@ -56,28 +57,32 @@ Now we want to implement S3 methods for the `pubmed` object. In some cases, you 
 ```{r}
 # one node at a time
 get_pubmed_data <- function(graph, node) {
-  
-  # handle the case where only bad nodes are passed
   for (i in 1:graph$max_attempts) {
-    
-    logger::log_trace(glue::glue("Attempt {i}/{graph$max_attempts} to get node degrees: {node}"))
-    
-    tryCatch({
-      cites <- entrez_link(dbfrom = "pubmed", db = "all", id = node)
-      break
-    }, error = function(cnd) {
-      if (i == graph$max_attempts){
-        logger::log_debug(glue::glue("Maximum attempts to find neighborhood met, could not find: {node}"))
-        stop("Couldn't pull data for node")
+    log_trace(
+      glue("Attempt {i}/{graph$max_attempts} to get node degrees: {node}")
+    )
+
+    tryCatch(
+      {
+        cites <- entrez_link(dbfrom = "pubmed", db = "all", id = node)
+        break
+      },
+      error = function(cnd) {
+        if (i == graph$max_attempts) {
+          log_debug(
+            glue("Maximum attempts to find neighborhood met, could not find: {node}")
+          )
+          stop("Couldn't pull data for node")
+        }
       }
-    })
+    )
   }
-  
+
   data <- list(
     refs = unique(cites$links$pubmed_pmc_refs),
     citedby = unique(cites$links$pubmed_pubmed_citedin)
   )
-  
+
   data$num_refs <- length(data$refs)
   data$num_citedby <- length(data$citedby)
   data
@@ -96,7 +101,7 @@ mixed_node_ids <- c(good_node_ids, bad_node_id)
 # this is suspicious to me, something seems wrong here
 memo_get_pubmed_data(graph, good_node_ids[1])
 
-# suspicious that the number of in-cites and out-cites matches, and that it 
+# suspicious that the number of in-cites and out-cites matches, and that it
 # matches across both papers! TODO: investigate!
 memo_get_pubmed_data(graph, good_node_ids[2])
 memo_get_pubmed_data(graph, good_node_ids[3])
@@ -119,33 +124,31 @@ memo_get_pubmed_data(graph, bad_node_id)
 #'   If `nodes` is the empty vector, returns the empty vector. Be sure to
 #'   handle this edge case.
 check.pubmed <- function(graph, nodes) {
-
-  logger::log_debug(glue::glue("Checking nodes"))
+  log_debug(glue("Checking nodes"))
 
   # handle the case where no nodes are passed
   if (length(nodes) < 1) {
     return(character(0))
   }
-  
+
   good_nodes <- character(0)
-  
+
   for (node in nodes) {
-    
     node_data <- memo_get_pubmed_data(graph, node)
-    
+
     # this is a sufficient check to see if (1) the node is in pubmed, (2)
     # we can pull it's neighborhood, and (3) it has at least one
     # incoming or outgoing citation
-    
+
     if (node_data$num_refs + node_data$num_citedby > 0) {
-      logger::log_trace(glue::glue("Checked node: {node} (good)"))
+      log_trace(glue("Checked node: {node} (good)"))
       good_nodes <- c(good_nodes, node)
       next
     }
-    
-    logger::log_trace(glue::glue("Checked node: {node} (bad)"))
+
+    log_trace(glue("Checked node: {node} (bad)"))
   }
-  
+
   good_nodes
 }
 ```
@@ -168,33 +171,32 @@ check(graph, mixed_node_ids)
 #'
 #' @return A list, with two elements, `in_degree` and `out_degree`. Both
 #'   should be the same length as `nodes`, and match the order of `nodes`.
-#'   
+#'
 node_degrees.pubmed <- function(graph, nodes) {
+  log_debug(glue("Getting node degrees"))
 
-  logger::log_debug(glue::glue("Getting node degrees"))
-  
   degrees <- list(
     in_degree = integer(length(nodes)),
     out_degree = integer(length(nodes))
   )
-  
+
   for (i in seq_along(nodes)) {
-    logger::log_debug(glue::glue("Getting node degrees for node: {nodes[i]}"))
+    log_debug(glue("Getting node degrees for node: {nodes[i]}"))
     node_data <- memo_get_pubmed_data(graph, nodes[i])
-    
+
     # must treat pubmed like an undirected graph. otherwise it's a citation
     # network, and thus a tree, and thus no pair of nodes is mutually
     # reachable, thus pagerank is not defined
-    
+
     degrees$in_degree[i] <- node_data$num_citedby + node_data$num_refs
     degrees$out_degree[i] <- node_data$num_citedby + node_data$num_refs
-    
-    logger::log_trace(glue::glue("In-degree for node: {degrees$in_degree[i]}"))
-    logger::log_trace(glue::glue("Out-degree for node: {degrees$out_degree[i]}"))
+
+    log_trace(glue("In-degree for node: {degrees$in_degree[i]}"))
+    log_trace(glue("Out-degree for node: {degrees$out_degree[i]}"))
   }
 
-  logger::log_debug(glue::glue("Done getting node degrees"))
-  
+  log_debug(glue("Done getting node degrees"))
+
   degrees
 }
 ```
@@ -203,11 +205,11 @@ To test this method, we should pass a character vector of several good node ids.
 
 ```{r}
 # test with a single node
-node_degrees(graph, good_node_ids[1])  
+node_degrees(graph, good_node_ids[1])
 
 # test with multiple nodes! this is the key one! this is suspicious, and
 # means we need to check if our function memo_get_pubmed_data() is working
-node_degrees(graph, good_node_ids)     
+node_degrees(graph, good_node_ids)
 ```
 
 ```{r}
@@ -221,14 +223,13 @@ node_degrees(graph, good_node_ids)
 #'   Should be a vector of length at least one (if the `check()` method was
 #'   implemented correctly), and should not contain duplicates.
 neighborhood.pubmed <- function(graph, node) {
-  
   if (length(node) > 1) {
     stop("`node` must be a character vector of length one.")
   }
-  
-  logger::log_debug(glue::glue("Getting neighborhood: {node}"))
+
+  log_debug(glue("Getting neighborhood: {node}"))
   node_data <- memo_get_pubmed_data(graph, node)
-  logger::log_debug(glue::glue("Done getting neighborhood: {node}"))
+  log_debug(glue("Done getting neighborhood: {node}"))
   unique(node_data$refs, node_data$citedby)
 }
 ```
@@ -260,13 +261,11 @@ library(logger)
 # log_threshold(TRACE)
 
 # set logging threshold for aPPR package functions, if desired
-# log_threshold(DEBUG, namespace = "aPPR") 
+# log_threshold(DEBUG, namespace = "aPPR")
 
 appr(
-  graph,                    # the graph to work with
+  graph, # the graph to work with
   seeds = good_node_ids[1], # name of seed node (character)
-  epsilon = 0.0005          # desired approximation quality (see ?appr)
+  epsilon = 0.0005 # desired approximation quality (see ?appr)
 )
 ```
-
-
