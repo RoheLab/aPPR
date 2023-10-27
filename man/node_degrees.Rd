@@ -14,7 +14,8 @@ Methods may assume that there are no repeated values in \code{nodes}.}
 }
 \value{
 A \code{\link[=data.frame]{data.frame()}} with one row for every node in \code{nodes} and
-two columns: \code{in_degree} and \code{out_degree}.
+two columns: \code{in_degree} and \code{out_degree}. In a symmetric graph,
+\code{in_degree} and \code{out_degree} should match.
 }
 \description{
 This function is only called nodes that have been \code{\link[=check]{check()}}'d. It is
