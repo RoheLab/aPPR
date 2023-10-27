@@ -8,6 +8,13 @@
 #' @export
 rtweet_graph <- function(retryonratelimit = TRUE, verbose = TRUE, n = 5000) {
 
+  if (!requireNamespace("rtweet", quietly = TRUE)) {
+    stop(
+      "`rtweet` package must be installed to use `rtweet_graph()`",
+      call. = FALSE
+    )
+  }
+
   agraph <- abstract_graph(
     "rtweet_graph",
     retryonratelimit = retryonratelimit,
@@ -21,13 +28,6 @@ rtweet_graph <- function(retryonratelimit = TRUE, verbose = TRUE, n = 5000) {
 #' @rdname appr
 #' @export
 appr.rtweet_graph <- function(graph, seeds, ...) {
-
-  if (!requireNamespace("rtweet", quietly = TRUE)) {
-    stop(
-      "`rtweet` package must be installed to use `rtweet_graph()`",
-      call. = FALSE
-    )
-  }
 
   seed_data <- rtweet::lookup_users(
     seeds,
@@ -92,6 +92,7 @@ node_degrees.rtweet_graph <- function(graph, nodes) {
     out_degree = node_data$friends_count
   )
 }
+
 neighborhood.rtweet_graph <- function(graph, node) {
 
   logger::log_debug(glue("Getting neighborhood: {node}"))
