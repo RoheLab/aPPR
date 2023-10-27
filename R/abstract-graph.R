@@ -48,7 +48,8 @@ check <- function(graph, nodes) {
 #'   Methods may assume that there are no repeated values in `nodes`.
 #'
 #' @return A [data.frame()] with one row for every node in `nodes` and
-#'   two columns: `in_degree` and `out_degree`.
+#'   two columns: `in_degree` and `out_degree`. In a symmetric graph,
+#'   `in_degree` and `out_degree` should match.
 #'
 #' @export
 node_degrees <- function(graph, nodes) {
