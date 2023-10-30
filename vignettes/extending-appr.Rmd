@@ -79,7 +79,7 @@ get_pubmed_data <- function(graph, node) {
   }
 
   data <- list(
-    refs = unique(cites$links$pubmed_pmc_refs),
+    refs = unique(cites$links$pubmed_pubmed_refs),
     citedby = unique(cites$links$pubmed_pubmed_citedin)
   )
 
@@ -258,14 +258,15 @@ Find any errors, fix, and rinse and repeat until you've completed the likely unp
 library(logger)
 
 # set logging threshold for code you just wrote, if desired
-# log_threshold(TRACE)
+log_threshold(TRACE)
 
 # set logging threshold for aPPR package functions, if desired
-# log_threshold(DEBUG, namespace = "aPPR")
+log_threshold(DEBUG, namespace = "aPPR")
 
 appr(
-  graph, # the graph to work with
-  seeds = good_node_ids[1], # name of seed node (character)
-  epsilon = 0.0005 # desired approximation quality (see ?appr)
+  graph,                     # the graph to work with
+  seeds = good_node_ids[1],  # name of seed node (character)
+  epsilon = 0.0005,          # desired approximation quality
+  max_visits = 10            # bound computation since this is an example
 )
 ```
