@@ -158,7 +158,7 @@ memoize the function, to avoid repeated calls to the API.</p>
 <span>  <span class="op">}</span></span>
 <span></span>
 <span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">cites</span><span class="op">$</span><span class="va">links</span><span class="op">$</span><span class="va">pubmed_pmc_refs</span><span class="op">)</span>,</span>
+<span>    refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">cites</span><span class="op">$</span><span class="va">links</span><span class="op">$</span><span class="va">pubmed_pubmed_refs</span><span class="op">)</span>,</span>
 <span>    citedby <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">cites</span><span class="op">$</span><span class="va">links</span><span class="op">$</span><span class="va">pubmed_pubmed_citedin</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
@@ -181,13 +181,20 @@ example.</p>
 <span><span class="co"># this is suspicious to me, something seems wrong here</span></span>
 <span><span class="fu">memo_get_pubmed_data</span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $refs</span></span>
-<span><span class="co">#&gt; [1] "9025043" "7666971" "7418336" "7074033"</span></span>
+<span><span class="co">#&gt;  [1] "29624432" "28956619" "27755345" "24936257" "24059552" "23149807"</span></span>
+<span><span class="co">#&gt;  [7] "22371471" "22128211" "20840052" "20836729" "20689101" "20036928"</span></span>
+<span><span class="co">#&gt; [13] "19879747" "19783003" "19718579" "18792926" "18477059" "18256996"</span></span>
+<span><span class="co">#&gt; [19] "17943776" "17920516" "17499247" "17127265" "16601269" "16556615"</span></span>
+<span><span class="co">#&gt; [25] "16061595" "15687416" "15665383" "15499145" "15177673" "14725946"</span></span>
+<span><span class="co">#&gt; [31] "12667636" "12496220" "11150646" "11041438" "10386225" "10225288"</span></span>
+<span><span class="co">#&gt; [37] "9768331"  "9691157"  "9227580"  "9145435"  "9131263"  "8525349" </span></span>
+<span><span class="co">#&gt; [43] "7999032"  "7733322"  "7720662"  "7603298"  "6607683"  "3029864" </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $citedby</span></span>
 <span><span class="co">#&gt; [1] "35455075" "33190629" "32785463" "31979022"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $num_refs</span></span>
-<span><span class="co">#&gt; [1] 4</span></span>
+<span><span class="co">#&gt; [1] 48</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $num_citedby</span></span>
 <span><span class="co">#&gt; [1] 4</span></span>
@@ -196,9 +203,7 @@ example.</p>
 <span><span class="co"># matches across both papers! TODO: investigate!</span></span>
 <span><span class="fu">memo_get_pubmed_data</span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $refs</span></span>
-<span><span class="co">#&gt;  [1] "10027347" "9997086"  "9839992"  "9602642"  "9480963"  "9264520" </span></span>
-<span><span class="co">#&gt;  [7] "9099816"  "8293422"  "8242104"  "8106526"  "7988860"  "7551425" </span></span>
-<span><span class="co">#&gt; [13] "6949891"  "6866159"  "6568295"  "6566440"  "6182067"  "6129589" </span></span>
+<span><span class="co">#&gt; NULL</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $citedby</span></span>
 <span><span class="co">#&gt;  [1] "36892193" "36293784" "36111739" "35799170" "35757994" "35565846"</span></span>
@@ -206,15 +211,24 @@ example.</p>
 <span><span class="co">#&gt; [13] "31236026" "31137691" "30882237" "30592165" "30345262" "30234121"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $num_refs</span></span>
-<span><span class="co">#&gt; [1] 18</span></span>
+<span><span class="co">#&gt; [1] 0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $num_citedby</span></span>
 <span><span class="co">#&gt; [1] 18</span></span>
 <span><span class="fu">memo_get_pubmed_data</span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $refs</span></span>
-<span><span class="co">#&gt;  [1] "10103489" "9623327"  "9525527"  "9301034"  "9056486"  "9031638" </span></span>
-<span><span class="co">#&gt;  [7] "8811466"  "7913308"  "7872774"  "7786570"  "6872673"  "6566440" </span></span>
-<span><span class="co">#&gt; [13] "6403467"  "6398389"  "6287107"  "6221984"  "6189300"  "6170621" </span></span>
+<span><span class="co">#&gt;  [1] "28418291" "28159212" "28135118" "28103607" "28088062" "27936476"</span></span>
+<span><span class="co">#&gt;  [7] "27889615" "27831549" "27755345" "27684560" "27566870" "27490567"</span></span>
+<span><span class="co">#&gt; [13] "26903304" "26741949" "26334428" "26238662" "26190380" "26116636"</span></span>
+<span><span class="co">#&gt; [19] "26086569" "25794697" "25769062" "25728542" "25313944" "24767058"</span></span>
+<span><span class="co">#&gt; [25] "24752468" "24376898" "24200019" "24169308" "24084373" "23805943"</span></span>
+<span><span class="co">#&gt; [31] "23769834" "23713111" "23274339" "23271066" "23178065" "23178060"</span></span>
+<span><span class="co">#&gt; [37] "22371471" "22245400" "21921811" "21638200" "21622093" "21247481"</span></span>
+<span><span class="co">#&gt; [43] "20946146" "20509779" "19832716" "19516191" "19414822" "19127217"</span></span>
+<span><span class="co">#&gt; [49] "18845249" "18477059" "18422617" "18419467" "17868474" "17661617"</span></span>
+<span><span class="co">#&gt; [55] "17517714" "16266685" "15886342" "14657823" "14633102" "12732956"</span></span>
+<span><span class="co">#&gt; [61] "11740876" "10791723" "10432587" "8489717"  "8274003"  "6323663" </span></span>
+<span><span class="co">#&gt; [67] "318682"  </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $citedby</span></span>
 <span><span class="co">#&gt;  [1] "37060103" "36330365" "36193380" "35874591" "35454995" "35127595"</span></span>
@@ -222,7 +236,7 @@ example.</p>
 <span><span class="co">#&gt; [13] "30873395" "30770541" "30560111" "30443539" "30356694" "30319659"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $num_refs</span></span>
-<span><span class="co">#&gt; [1] 18</span></span>
+<span><span class="co">#&gt; [1] 67</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $num_citedby</span></span>
 <span><span class="co">#&gt; [1] 18</span></span>
@@ -335,19 +349,19 @@ good node ids.</p>
 <code class="sourceCode R"><span><span class="co"># test with a single node</span></span>
 <span><span class="fu"><a href="../reference/node_degrees.html">node_degrees</a></span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $in_degree</span></span>
-<span><span class="co">#&gt; [1] 8</span></span>
+<span><span class="co">#&gt; [1] 52</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $out_degree</span></span>
-<span><span class="co">#&gt; [1] 8</span></span>
+<span><span class="co">#&gt; [1] 52</span></span>
 <span></span>
 <span><span class="co"># test with multiple nodes! this is the key one! this is suspicious, and</span></span>
 <span><span class="co"># means we need to check if our function memo_get_pubmed_data() is working</span></span>
 <span><span class="fu"><a href="../reference/node_degrees.html">node_degrees</a></span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $in_degree</span></span>
-<span><span class="co">#&gt; [1]  8 36 36</span></span>
+<span><span class="co">#&gt; [1] 52 18 85</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $out_degree</span></span>
-<span><span class="co">#&gt; [1]  8 36 36</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 52 18 85</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Neighborhood method for `pubmed` graph objects</span></span>
 <span><span class="co">#'</span></span>
@@ -370,15 +384,29 @@ good node ids.</p>
 <span><span class="op">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/neighborhood.html">neighborhood</a></span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "9025043" "7666971" "7418336" "7074033"</span></span>
+<span><span class="co">#&gt;  [1] "29624432" "28956619" "27755345" "24936257" "24059552" "23149807"</span></span>
+<span><span class="co">#&gt;  [7] "22371471" "22128211" "20840052" "20836729" "20689101" "20036928"</span></span>
+<span><span class="co">#&gt; [13] "19879747" "19783003" "19718579" "18792926" "18477059" "18256996"</span></span>
+<span><span class="co">#&gt; [19] "17943776" "17920516" "17499247" "17127265" "16601269" "16556615"</span></span>
+<span><span class="co">#&gt; [25] "16061595" "15687416" "15665383" "15499145" "15177673" "14725946"</span></span>
+<span><span class="co">#&gt; [31] "12667636" "12496220" "11150646" "11041438" "10386225" "10225288"</span></span>
+<span><span class="co">#&gt; [37] "9768331"  "9691157"  "9227580"  "9145435"  "9131263"  "8525349" </span></span>
+<span><span class="co">#&gt; [43] "7999032"  "7733322"  "7720662"  "7603298"  "6607683"  "3029864"</span></span>
 <span><span class="fu"><a href="../reference/neighborhood.html">neighborhood</a></span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "10027347" "9997086"  "9839992"  "9602642"  "9480963"  "9264520" </span></span>
-<span><span class="co">#&gt;  [7] "9099816"  "8293422"  "8242104"  "8106526"  "7988860"  "7551425" </span></span>
-<span><span class="co">#&gt; [13] "6949891"  "6866159"  "6568295"  "6566440"  "6182067"  "6129589"</span></span>
+<span><span class="co">#&gt; NULL</span></span>
 <span><span class="fu"><a href="../reference/neighborhood.html">neighborhood</a></span><span class="op">(</span><span class="va">graph</span>, <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "10103489" "9623327"  "9525527"  "9301034"  "9056486"  "9031638" </span></span>
-<span><span class="co">#&gt;  [7] "8811466"  "7913308"  "7872774"  "7786570"  "6872673"  "6566440" </span></span>
-<span><span class="co">#&gt; [13] "6403467"  "6398389"  "6287107"  "6221984"  "6189300"  "6170621"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] "28418291" "28159212" "28135118" "28103607" "28088062" "27936476"</span></span>
+<span><span class="co">#&gt;  [7] "27889615" "27831549" "27755345" "27684560" "27566870" "27490567"</span></span>
+<span><span class="co">#&gt; [13] "26903304" "26741949" "26334428" "26238662" "26190380" "26116636"</span></span>
+<span><span class="co">#&gt; [19] "26086569" "25794697" "25769062" "25728542" "25313944" "24767058"</span></span>
+<span><span class="co">#&gt; [25] "24752468" "24376898" "24200019" "24169308" "24084373" "23805943"</span></span>
+<span><span class="co">#&gt; [31] "23769834" "23713111" "23274339" "23271066" "23178065" "23178060"</span></span>
+<span><span class="co">#&gt; [37] "22371471" "22245400" "21921811" "21638200" "21622093" "21247481"</span></span>
+<span><span class="co">#&gt; [43] "20946146" "20509779" "19832716" "19516191" "19414822" "19127217"</span></span>
+<span><span class="co">#&gt; [49] "18845249" "18477059" "18422617" "18419467" "17868474" "17661617"</span></span>
+<span><span class="co">#&gt; [55] "17517714" "16266685" "15886342" "14657823" "14633102" "12732956"</span></span>
+<span><span class="co">#&gt; [61] "11740876" "10791723" "10432587" "8489717"  "8274003"  "6323663" </span></span>
+<span><span class="co">#&gt; [67] "318682"</span></span></code></pre></div>
 <p>Lastly, you can optionally implement an <code>appr</code> method for
 your abstract graph subclass. In the <code>appr</code> method for the
 subclass, you can do things like:</p>
@@ -409,44 +437,46 @@ In our, we don’t seem to find any edge cases right away.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daroczig.github.io/logger/" class="external-link">logger</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># set logging threshold for code you just wrote, if desired</span></span>
-<span><span class="co"># log_threshold(TRACE)</span></span>
+<span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_threshold.html" class="external-link">log_threshold</a></span><span class="op">(</span><span class="va">TRACE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># set logging threshold for aPPR package functions, if desired</span></span>
-<span><span class="co"># log_threshold(DEBUG, namespace = "aPPR")</span></span>
+<span><span class="fu"><a href="https://daroczig.github.io/logger/reference/log_threshold.html" class="external-link">log_threshold</a></span><span class="op">(</span><span class="va">DEBUG</span>, namespace <span class="op">=</span> <span class="st">"aPPR"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/appr.html">appr</a></span><span class="op">(</span></span>
-<span>  <span class="va">graph</span>, <span class="co"># the graph to work with</span></span>
-<span>  seeds <span class="op">=</span> <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="co"># name of seed node (character)</span></span>
-<span>  epsilon <span class="op">=</span> <span class="fl">0.0005</span> <span class="co"># desired approximation quality (see ?appr)</span></span>
+<span>  <span class="va">graph</span>,                     <span class="co"># the graph to work with</span></span>
+<span>  seeds <span class="op">=</span> <span class="va">good_node_ids</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,  <span class="co"># name of seed node (character)</span></span>
+<span>  epsilon <span class="op">=</span> <span class="fl">0.0005</span>,          <span class="co"># desired approximation quality</span></span>
+<span>  max_visits <span class="op">=</span> <span class="fl">10</span>            <span class="co"># bound computation since this is an example</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Maximum visits reached. Finishing aPPR calculation early.</span></span>
 <span><span class="co">#&gt; Personalized PageRank Approximator</span></span>
 <span><span class="co">#&gt; ----------------------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   - number of seeds: 1</span></span>
-<span><span class="co">#&gt;   - unique nodes visited so far: 7 out of maximum of Inf</span></span>
-<span><span class="co">#&gt;   - total visits so far: 25</span></span>
-<span><span class="co">#&gt;   - bad nodes so far: 20</span></span>
+<span><span class="co">#&gt;   - unique nodes visited so far: 10 out of maximum of 10</span></span>
+<span><span class="co">#&gt;   - total visits so far: 15</span></span>
+<span><span class="co">#&gt;   - bad nodes so far: 2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   - teleportation constant (alpha): 0.15</span></span>
 <span><span class="co">#&gt;   - desired approximation error (epsilon): 5e-04</span></span>
-<span><span class="co">#&gt;   - achieved bound on approximation error: 0.000410359734056409</span></span>
-<span><span class="co">#&gt;   - length of to visit list: 0</span></span>
+<span><span class="co">#&gt;   - achieved bound on approximation error: 0.0147606869666767</span></span>
+<span><span class="co">#&gt;   - length of to visit list: 24</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; PPR table (see $stats field):</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 11 × 7</span></span></span>
-<span><span class="co">#&gt;    name     regularized         p in_degree out_degree degree_adjusted        r</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 30345262  0.004<span style="text-decoration: underline;">49</span>    0.150             8          8       0.018<span style="text-decoration: underline;">7</span>    0.001<span style="text-decoration: underline;">99</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 9025043   0.000<span style="text-decoration: underline;">555</span>   0.015<span style="text-decoration: underline;">8</span>            3          3       0.005<span style="text-decoration: underline;">25</span>   0.001<span style="text-decoration: underline;">01</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 7074033   0.000<span style="text-decoration: underline;">171</span>   0.013<span style="text-decoration: underline;">4</span>           53         53       0.000<span style="text-decoration: underline;">253</span>  0.016<span style="text-decoration: underline;">7</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 7094328   0.000<span style="text-decoration: underline;">006</span>74 0.000<span style="text-decoration: underline;">178</span>          1          1       0.000<span style="text-decoration: underline;">178</span>  0.000<span style="text-decoration: underline;">248</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 4690170   0.000<span style="text-decoration: underline;">006</span>00 0.000<span style="text-decoration: underline;">158</span>          1          1       0.000<span style="text-decoration: underline;">158</span>  0.000<span style="text-decoration: underline;">377</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 1386135   0          0                 4          4       0         0.001<span style="text-decoration: underline;">43</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 1152144   0          0               133        133       0         0.001<span style="text-decoration: underline;">43</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 186410    0          0                33         33       0         0.001<span style="text-decoration: underline;">43</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 179431    0.000<span style="text-decoration: underline;">004</span>24 0.000<span style="text-decoration: underline;">116</span>          2          2       0.000<span style="text-decoration: underline;">058</span>1 0.000<span style="text-decoration: underline;">658</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 98828     0          0                39         39       0         0.001<span style="text-decoration: underline;">43</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 97602     0.000<span style="text-decoration: underline;">003</span>35 0.000<span style="text-decoration: underline;">091</span>7         2          2       0.000<span style="text-decoration: underline;">045</span>9 0.000<span style="text-decoration: underline;">821</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 47 × 7</span></span></span>
+<span><span class="co">#&gt;    name     regularized       p in_degree out_degree degree_adjusted       r</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 30345262  0.000<span style="text-decoration: underline;">867</span>   0.135          52         52       0.002<span style="text-decoration: underline;">60</span>   0.097<span style="text-decoration: underline;">0</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 29624432  0.000<span style="text-decoration: underline;">008</span>56 0.001<span style="text-decoration: underline;">05</span>        18         18       0.000<span style="text-decoration: underline;">058</span>1 0.007<span style="text-decoration: underline;">79</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 28956619  0          0               1          1       0         0.014<span style="text-decoration: underline;">8</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 27755345  0          0              32         32       0         0.014<span style="text-decoration: underline;">8</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 24936257  0          0              87         87       0         0.014<span style="text-decoration: underline;">8</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 24059552  0.000<span style="text-decoration: underline;">010</span>0  0.001<span style="text-decoration: underline;">20</span>        15         15       0.000<span style="text-decoration: underline;">079</span>8 0.006<span style="text-decoration: underline;">78</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 23149807  0          0              13         13       0         0.014<span style="text-decoration: underline;">8</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 22371471  0          0            <span style="text-decoration: underline;">1</span>231       <span style="text-decoration: underline;">1</span>231       0         0.014<span style="text-decoration: underline;">8</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 22128211  0          0              32         32       0         0.014<span style="text-decoration: underline;">8</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 20840052  0          0              52         52       0         0.014<span style="text-decoration: underline;">8</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 37 more rows</span></span></span></code></pre></div>
 </div>
   </main>
 </div>
